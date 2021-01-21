@@ -3,7 +3,7 @@
 #include <string>
 #include <numeric>
 
-namespace huh {
+namespace suffix {
 	void sa_is(const std::vector<int> &s, std::vector<int> &sa, int sigma) {
 		int n = int(s.size());
 		std::vector<int> b(sigma);
