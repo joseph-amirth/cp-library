@@ -3,7 +3,7 @@
 #include <string>
 #include <numeric>
 
-namespace suffix_array {
+namespace huh {
 	void sa_is(const std::vector<int> &s, std::vector<int> &sa, int sigma) {
 		int n = int(s.size());
 		std::vector<int> b(sigma);
