@@ -64,7 +64,7 @@ add_executable(ModularArithmetic "Number Theory/ModularArithmetic.cpp")
 add_executable(Sieve "Number Theory/Sieve.cpp")
 
 #numeric
-add_library(DynamicMint Numeric/DynamicMint.cpp)
+add_executable(DynamicMint Numeric/DynamicMint.cpp)
 add_executable(FFT Numeric/FFT.cpp)
 add_executable(GaussianElimination Numeric/GaussianElimination.cpp)
 add_executable(NTT Numeric/NTT.cpp)
