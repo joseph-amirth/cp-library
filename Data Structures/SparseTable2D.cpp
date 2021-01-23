@@ -1,7 +1,6 @@
 #include <functional>
 #include <cmath>
-
-#include "../Custom Datatype/Tensor.cpp"
+#include "../Custom Datatypes/Tensor.cpp"
 
 template<typename T>
 struct sparse_table_2d {
