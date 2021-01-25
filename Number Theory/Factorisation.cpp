@@ -46,7 +46,7 @@ std::vector<T> divisors(T n) {
 }
 
 template <typename T>
-T totient(T n) {
+T phi(T n) {
 	auto factors = prime_factors(n);
 	T ans = n;
 	for (auto&[p, c] : factors) {

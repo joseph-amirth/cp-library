@@ -1,5 +1,4 @@
 #include <vector>
-#include <tuple>
 
 constexpr int mod = 1'000'000'007;
 
@@ -14,13 +13,13 @@ namespace modular_arithmetic {
 	}
 
 	long long modinv(long long x, int m = mod) {
-	    return modexp(x, m - 2);
+	    return modexp(x, m - 2, m);
 	}
 
 	template <typename T>
 	T primitive_root(T n) {
 		std::vector<T> factors;
-		T x = totient(n);
+		T x = phi(n);
 		for (int i = 2; (T) i * i <= x; i++) {
 			if (x % i == 0) {
 				factors.push_back(i);

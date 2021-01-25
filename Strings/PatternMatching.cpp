@@ -2,7 +2,7 @@
 
 template<typename string_t>
 std::vector<int> lps(const string_t &t, int n = -1) {
-	if (n == -1) n = int(t.length());
+	if (n == -1) n = int(t.size());
 	std::vector<int> lps(n);
 	int len = 0, i = 1;
 	lps[0] = 0;
@@ -22,8 +22,8 @@ std::vector<int> lps(const string_t &t, int n = -1) {
 }
 
 template<typename string_t>
-std::vector<int> KMP(const string_t &s, int n, const string_t &t, int m) {
-	std::vector<int> lps = lps(t, m), match;
+std::vector<int> kmp(const string_t &s, int n, const string_t &t, int m) {
+	std::vector<int> l = lps(t, m), match;
 	int i = 0, j = 0;
 
 	while (i < n) {
@@ -33,10 +33,10 @@ std::vector<int> KMP(const string_t &s, int n, const string_t &t, int m) {
 		}
 		if (j == m) {
 			match.push_back(i - j);
-			j = lps[j - 1];
+			j = l[j - 1];
 		} else if (i < n and s[i] != t[j]) {
 			if (j != 0)
-				j = lps[j - 1];
+				j = l[j - 1];
 			else i += 1;
 		}
 	}
@@ -45,15 +45,15 @@ std::vector<int> KMP(const string_t &s, int n, const string_t &t, int m) {
 
 template<typename string_t>
 std::vector<std::vector<int>> prefix_automaton(const string_t &s, int n = -1) {
-	if (n == -1) n = int(s.length());
-	std::vector<int> lps = lps(s, n);
+	if (n == -1) n = int(s.size());
+	std::vector<int> l = lps(s, n);
 	std::vector<std::vector<int>> f(n, std::vector<int>(26));
 	for (int i = 0; i < n; i++) {
 		for (int j = 0; j < 26; j++) {
 			if (j == s[i] - 'a' or i == 0) {
 				f[i][j] = i;
 			} else {
-				f[i][j] = f[lps[j - 1]][j];
+				f[i][j] = f[l[j - 1]][j];
 			}
 		}
 	}

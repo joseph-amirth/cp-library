@@ -51,6 +51,7 @@ add_executable(Kruskal Graphs/Kruskal.cpp)
 add_executable(LCA Graphs/LCA.cpp)
 add_executable(PathQuery Graphs/PathQuery.cpp)
 add_executable(SCC Graphs/SCC.cpp)
+add_executable(SubtreeQuery Graphs/SubtreeQuery.cpp)
 add_executable(TopSort Graphs/TopSort.cpp)
 
 #miscellaneous

@@ -1,7 +1,7 @@
 #include <vector>
 #include <tuple>
 
-namespace euc {
+namespace extended_euclidean {
 	using big_int = long long;
 
 	template<typename T>
