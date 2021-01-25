@@ -1,4 +1,4 @@
-#include "GraphW.h"
+#include "../Graphs/GraphW.h"
 #include <functional>
 
 template<typename T>

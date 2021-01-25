@@ -46,12 +46,8 @@ add_executable(Diameter Graphs/Diameter.cpp)
 add_executable(Dijkstra Graphs/Dijkstra.cpp)
 add_executable(Eulerian Graphs/Eulerian.cpp)
 add_executable(FloydWarshall Graphs/FloydWarshall.cpp)
-add_executable(HeavyLight Graphs/HeavyLight.cpp)
 add_executable(Kruskal Graphs/Kruskal.cpp)
-add_executable(LCA Graphs/LCA.cpp)
-add_executable(PathQuery Graphs/PathQuery.cpp)
 add_executable(SCC Graphs/SCC.cpp)
-add_executable(SubtreeQuery Graphs/SubtreeQuery.cpp)
 add_executable(TopSort Graphs/TopSort.cpp)
 
 #miscellaneous
@@ -79,3 +75,9 @@ add_executable(StringHashing Strings/StringHashing.cpp)
 add_executable(SuffixArray Strings/SuffixArray.cpp)
 add_executable(SuffixAutomaton Strings/SuffixAutomaton.cpp)
 add_executable(SuffixTrie Strings/SuffixTrie.cpp)
+
+#trees
+add_executable(HeavyLight Trees/HeavyLight.cpp)
+add_executable(LCA Trees/LCA.cpp)
+add_executable(PathQuery Trees/PathQuery.cpp)
+add_executable(SubtreeQuery Trees/SubtreeQuery.cpp)

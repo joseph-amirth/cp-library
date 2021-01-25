@@ -1,4 +1,4 @@
-#include "Graph.h"
+#include "../Graphs/Graph.h"
 #include "../Data Structures/SparseTable.h"
 
 struct LCA {

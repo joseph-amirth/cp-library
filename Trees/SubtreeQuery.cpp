@@ -1,4 +1,4 @@
-#include "Graph.h"
+#include "../Graphs/Graph.h"
 #include <functional>
 
 template <typename T, typename S>
