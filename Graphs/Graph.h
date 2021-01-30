@@ -24,31 +24,31 @@ struct graph {
 };
 
 struct digraph {
-    struct edge {
-        int u, v;
-        edge(int u, int v): u(u), v(v) {}
-    };
+	struct edge {
+		int u, v;
+		edge(int u, int v): u(u), v(v) {}
+	};
 
-    int n, m;
-    std::vector<edge> edges;
-    std::vector<std::vector<int>> adj;
+	int n, m;
+	std::vector<edge> edges;
+	std::vector<std::vector<int>> adj;
 
-    digraph(): n(), m() {}
-    digraph(int n, int m = 0): n(n), m(), adj(n) {
-    	edges.reserve(m);
-    }
+	digraph(): n(), m() {}
+	digraph(int n, int m = 0): n(n), m(), adj(n) {
+		edges.reserve(m);
+	}
 
-    int add_edge(int u, int v) {
+	int add_edge(int u, int v) {
 		edges.emplace_back(u, v);
-        adj[u].push_back(m);
-        return m++;
-    }
+		adj[u].push_back(m);
+		return m++;
+	}
 
-    digraph transpose() const {
-        digraph rev(n);
-        for (auto&[u, v] : edges) {
+	digraph transpose() const {
+		digraph rev(n);
+		for (auto&[u, v] : edges) {
 			rev.add_edge(v, u);
-        }
-        return rev;
-    }
+		}
+		return rev;
+	}
 };
