@@ -4,9 +4,8 @@ template<typename string_t>
 std::vector<int> lps(const string_t &t, int n = -1) {
 	if (n == -1) n = int(t.size());
 	std::vector<int> lps(n);
-	int len = 0, i = 1;
 	lps[0] = 0;
-	while (i < n) {
+	for (int len = 0, i = 1; i < n;) {
 		if (t[i] == t[len]) {
 			len += 1;
 			lps[i] = len;
@@ -24,9 +23,7 @@ std::vector<int> lps(const string_t &t, int n = -1) {
 template<typename string_t>
 std::vector<int> kmp(const string_t &s, int n, const string_t &t, int m) {
 	std::vector<int> l = lps(t, m), match;
-	int i = 0, j = 0;
-
-	while (i < n) {
+	for (int i = 0, j = 0; i < n;) {
 		if (s[i] == t[j]) {
 			i += 1;
 			j += 1;
