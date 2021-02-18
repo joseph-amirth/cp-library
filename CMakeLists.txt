@@ -13,6 +13,7 @@ add_executable(Triple "Custom Datatypes/Triple.cpp")
 add_executable(Unsigned128 "Custom Datatypes/Unsigned128.cpp")
 
 #data structures
+add_executable(DisjointSparseTable "Data Structures/DisjointSparseTable.cpp")
 add_executable(FenwickTree "Data Structures/FenwickTree.cpp")
 add_executable(FenwickTree2D "Data Structures/FenwickTree2D.cpp")
 add_executable(SegmentTree "Data Structures/SegmentTree.cpp")
