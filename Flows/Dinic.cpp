@@ -16,7 +16,7 @@ T max_flow(flow_graph<T> &g, int s, int t) {
 			q.pop();
 			for (int i : g.adj[x]) {
 				const auto &e = g.edges[i];
-				if (lvl[e.v] == -1 && e.v - e.f > 0) {
+				if (lvl[e.v] == -1 && e.c - e.f > 0) {
 					lvl[e.v] = 1 + lvl[x];
 					q.push(e.v);
 				}
@@ -30,7 +30,7 @@ T max_flow(flow_graph<T> &g, int s, int t) {
 		if (x == t) return true;
 		for (; ptr[x] < g.adj[x].size(); ptr[x]++) {
 			const auto &e = g.edges[g.adj[x][ptr[x]]];
-			if (lvl[x] + 1 == lvl[e.v] && e.v - e.f > 0) {
+			if (lvl[x] + 1 == lvl[e.v] && e.c - e.f > 0) {
 				p[e.v] = g.adj[x][ptr[x]];
 				if (dfs(e.v, dfs)) {
 					return true;
@@ -45,7 +45,7 @@ T max_flow(flow_graph<T> &g, int s, int t) {
 		while (dfs(s, dfs)) {
 			T path_flow = std::numeric_limits<T>::max();
 			for (int x = t; x != s; x = g.edges[p[x]].u) {
-				path_flow = std::min(path_flow, g.edges[p[x]].v - g.edges[p[x]].f);
+				path_flow = std::min(path_flow, g.edges[p[x]].c - g.edges[p[x]].f);
 			}
 			max_flow += path_flow;
 			for (int x = t; x != s; x = g.edges[p[x]].u) {

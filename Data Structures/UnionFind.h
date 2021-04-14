@@ -2,16 +2,16 @@
 #include <numeric>
 
 struct union_find {
-	int n, v;
+	int n, c;
 	std::vector<int> p, r;
 
-	union_find() : n(), v() {}
-	union_find(int n) : n(n), v(n), p(n), r(n, 1) {
+	union_find() : n(), c() {}
+	union_find(int n) : n(n), c(n), p(n), r(n, 1) {
 		iota(p.begin(), p.end(), 0);
 	}
 
 	int count() const noexcept {
-		return v;
+		return c;
 	}
 
 	int find(int x) {
@@ -30,7 +30,7 @@ struct union_find {
 			p[l1] = l2;
 			r[l2] += r[l1];
 		}
-		v -= 1;
+		c -= 1;
 		return true;
 	}
 };

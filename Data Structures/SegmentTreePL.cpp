@@ -22,21 +22,16 @@ struct segment_tree {
 		return id;
 	}
 
-	int n, cur_ver;
+	int n;
 	std::vector<int> ver;
 	T e;
 	F f;
 
-	segment_tree() : ver(), n(), cur_ver(), e(), f() {}
-
-	void change_ver(int k) {
-		cur_ver = ver[k];
-	}
+	segment_tree() : ver(), n(), e(), f() {}
 
 	template<typename U>
 	segment_tree(const U &arr, int n, T e, F f): n(n), e(e), f(f) {
 		ver.push_back(build(arr, 0, n - 1));
-		cur_ver = ver.back();
 	}
 
 	template<typename U>
@@ -54,9 +49,9 @@ struct segment_tree {
 	}
 
 	template<typename U>
-	int update(int idx, U val) {
-		ver.push_back(update_helper(idx, val, cur_ver, 0, n - 1));
-		cur_ver = ver.back();
+	int update(int idx, U val, int k = -1) {
+		if (k == -1) k = ver.back();
+		ver.push_back(update_helper(idx, val, k, 0, n - 1));
 		return ver.back();
 	}
 
@@ -76,9 +71,9 @@ struct segment_tree {
 	}
 
 	template <typename U>
-	int update(int ql, int qr, U val) {
-		ver.push_back(update_helper(ql, qr, val, cur_ver, 0, n - 1));
-		cur_ver = ver.back();
+	int update(int ql, int qr, U val, int k = -1) {
+		if (k == -1) k = ver.back();
+		ver.push_back(update_helper(ql, qr, val, k, 0, n - 1));
 		return ver.back();
 	}
 
@@ -86,8 +81,9 @@ struct segment_tree {
 	int update_helper(int ql, int qr, U val, int v, int l, int r) {
 		if (r < ql || qr < l)
 			return v;
-		if (ql <= l && r <= qr)
-			;//lazy
+		if (ql <= l && r <= qr) {
+			//lazy
+		}
 		push(v, l, r);
 		int mid = (l + r) >> 1;
 		int vl = update_helper(ql, qr, val, t[v].l, l, mid);
@@ -95,12 +91,9 @@ struct segment_tree {
 		return new_node(f(t[vl].val, t[vr].val), vl, vr);
 	}
 
-	T query(int ql, int qr, int k) {
-		return query_helper(ql, qr, ver[k], 0, n - 1);
-	}
-
-	T query(int ql, int qr) {
-		return query_helper(ql, qr, cur_ver, 0, n - 1);
+	T query(int ql, int qr, int k = -1) {
+		if (k == -1) k = ver.back();
+		return query_helper(ql, qr, k, 0, n - 1);
 	}
 
 	T query_helper(int ql, int qr, int v, int l, int r) {

@@ -117,7 +117,7 @@ namespace ntt {
 		return a;
 	}
 
-	template <int M, typename T>
+	template <int M = 998244353, typename T>
 	std::enable_if_t<!is_mint<T>::value, std::vector<T>>
 	convolution(const std::vector<T> &a, const std::vector<T> &b) {
 		auto f = convolution(std::vector<static_mint<M>>(a.begin(), a.end()), std::vector<static_mint<M>>(b.begin(), b.end()));

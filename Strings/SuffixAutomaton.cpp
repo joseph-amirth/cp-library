@@ -28,19 +28,19 @@ struct suffix_automaton {
 
 	int extend(char c) {
 		static int last = 0;
-		int new_node = int(t.size());
+		int cur = int(t.size());
 		t.emplace_back(t[last].len + 1);
 		int p = last;
 		while (p != -1 && t[p].next[c - f] == -1) {
-			t[p].next[c - f] = new_node;
+			t[p].next[c - f] = cur;
 			p = t[p].link;
 		}
 		if (p == -1) {
-			t[new_node].link = 0;
+			t[cur].link = 0;
 		} else {
 			int q = t[p].next[c - f];
-			if (t[q].len == 1 + t[p].len) {
-				t[new_node].link = q;
+			if (t[p].len + 1 == t[q].len) {
+				t[cur].link = q;
 			} else {
 				int clone = int(t.size());
 				t.emplace_back(t[q]);
@@ -49,10 +49,10 @@ struct suffix_automaton {
 					t[p].next[c - f] = clone;
 					p = t[p].link;
 				}
-				t[q].link = t[new_node].link = clone;
+				t[q].link = t[cur].link = clone;
 			}
 		}
-		last = new_node;
+		last = cur;
 		return last;
 	}
 };

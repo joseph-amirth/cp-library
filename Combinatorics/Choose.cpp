@@ -3,20 +3,6 @@
 #include "../Numeric/StaticMint.h"
 using namespace std;
 
-namespace C1 {
-	vector<vector<long long>> C;
-	void choose(int n) {
-		C.assign(n + 1, vector<long long>(n + 1));
-		for (int i = 0; i <= n; i++) {
-			for (int j = 0; j <= i; j++) {
-				if (j == 0 or j == i)
-					C[i][j] = 1;
-				else C[i][j] = C[i - 1][j] + C[i - 1][j - 1];
-			}
-		}
-	}
-}
-
 template <typename mint>
 struct choose {
 	vector<mint> fact, inv_fact;

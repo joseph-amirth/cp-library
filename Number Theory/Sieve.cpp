@@ -49,11 +49,10 @@ struct sieve {
 	}
 
 	std::vector<int> divisors(int x) const {
-		if (x == 1) {
+		if (x == 1)
 			return {1};
-		}
 		int c = 0, n = x;
-		for (; spf[x] == spf[n]; n /= x, c++);
+		for (; spf[x] == spf[n]; n /= spf[x], c++);
 		std::vector<int> d = divisors(n);
 		std::vector<int> res((c + 1) * d.size());
 		for (int i = 0, j = 0, p = 1; i <= c; i++, p *= spf[x]) {

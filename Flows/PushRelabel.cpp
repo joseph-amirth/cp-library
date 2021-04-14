@@ -7,7 +7,7 @@ T max_flow(flow_graph<T> &g, int s, int t) {
 
 	auto push = [&](int i) -> void {
 		int u = g.edges[i].u, v = g.edges[i].v;
-		T d = std::min(excess[u], g.edges[i].v - g.edges[i].f);
+		T d = std::min(excess[u], g.edges[i].c - g.edges[i].f);
 		g.edges[i].f += d;
 		g.edges[i ^ 1].f -= d;
 		excess[u] -= d;
@@ -17,7 +17,7 @@ T max_flow(flow_graph<T> &g, int s, int t) {
 	auto relabel = [&](int u) -> void {
 		T d = std::numeric_limits<T>::max();
 		for (int i : g.adj[u]) {
-			if (g.edges[i].v - g.edges[i].f > 0) {
+			if (g.edges[i].c - g.edges[i].f > 0) {
 				d = std::min(d, h[g.edges[i].v]);
 			}
 		}
@@ -50,7 +50,7 @@ T max_flow(flow_graph<T> &g, int s, int t) {
 		for (int u : max_height) {
 			bool pushed = false;
 			for (int i : g.adj[u]) {
-				if (g.edges[i].v - g.edges[i].f > 0 && h[u] == h[g.edges[i].v] + 1) {
+				if (g.edges[i].c - g.edges[i].f > 0 && h[u] == h[g.edges[i].v] + 1) {
 					push(i);
 					pushed = true;
 				}

@@ -17,8 +17,8 @@ struct heavy_light : public LCA {
 		tail.assign(g.n, 0);
 		head.assign(g.n, 0);
 		tree_pos.assign(g.n, 0);
-		decompose(0, -1, a, g);
-		build(0, a);
+		decompose(0, g);
+		build(0);
 		std::vector<T> values(g.n);
 		for (int i = 0; i < g.n; i++) {
 			values[tree_pos[i]] = T(a[i]);
@@ -26,29 +26,27 @@ struct heavy_light : public LCA {
 		st = S(values, g.n, e, f);
 	}
 
-	template<typename U>
-	void decompose(int x, int p, const U &a, const graph &g) {
-		tail[x] = x;
-		sz[x] = 1;
+	void decompose(int u, const graph &g) {
+		tail[u] = u;
 		int mx = -1;
-		for (int i : g.adj[x]) {
-			i = g.edges[i].u ^ g.edges[i].v ^ x;
-			if (i == p) continue;
-			decompose(i, x, a, g);
-			sz[x] += sz[i];
+		for (int i : g.adj[u]) {
+			int v = g.edges[i].u ^ g.edges[i].v ^ u;
+			if (v == up[u][0])
+				continue;
+			decompose(v, g);
+			sz[u] += sz[v];
 			if (mx == -1)
-				mx = i;
-			else if (sz[mx] <= sz[i])
-				build(mx, a), mx = i;
-			else build(i, a);
+				mx = v;
+			else if (sz[mx] <= sz[v])
+				build(mx), mx = v;
+			else build(v);
 		}
-		if (mx != -1 && 2 * sz[mx] >= sz[x])
-			tail[x] = tail[mx];
-		else if (mx != -1) build(mx, a);
+		if (mx != -1 && 2 * sz[mx] >= sz[u])
+			tail[u] = tail[mx];
+		else if (mx != -1) build(mx);
 	}
 
-	template<typename U>
-	void build(int x, const U &a) {
+	void build(int x) {
 		for (int i = tail[x]; i != up[x][0]; i = up[i][0], nxt++) {
 			tree_pos[i] = nxt;
 			head[i] = x;
@@ -66,7 +64,7 @@ struct heavy_light : public LCA {
 
 	T query_helper(int x, int k) {
 		T ans = e;
-		while (x != -1 and lvl[head[x]] > k) {
+		while (lvl[head[x]] > k) {
 			ans = f(ans, st.query(tree_pos[x], tree_pos[head[x]]));
 			x = up[head[x]][0];
 		}
@@ -91,8 +89,8 @@ struct heavy_light : public LCA {
 
 	template<typename U>
 	void update_helper(int x, int k, const U &val) {
-		while (x != -1 and lvl[head[x]] > k) {
-			st.update(tree_pos[x], tree_pos[head[x]]);
+		while (lvl[head[x]] > k) {
+			st.update(tree_pos[x], tree_pos[head[x]], val);
 			x = up[head[x]][0];
 		}
 		st.update(tree_pos[x], tree_pos[x] + lvl[x] - k, val);

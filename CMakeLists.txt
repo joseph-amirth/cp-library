@@ -16,6 +16,7 @@ add_executable(Unsigned128 "Custom Datatypes/Unsigned128.cpp")
 add_executable(DisjointSparseTable "Data Structures/DisjointSparseTable.cpp")
 add_executable(FenwickTree "Data Structures/FenwickTree.cpp")
 add_executable(FenwickTree2D "Data Structures/FenwickTree2D.cpp")
+add_executable(MergeSortTree "Data Structures/MergeSortTree.cpp")
 add_executable(SegmentTree "Data Structures/SegmentTree.cpp")
 add_executable(SegmentTreeI "Data Structures/SegmentTreeI.cpp")
 add_executable(SegmentTreeL "Data Structures/SegmentTreeL.cpp")
@@ -28,10 +29,10 @@ add_executable(UnionFindRB "Data Structures/UnionFindRB.cpp")
 add_executable(UnionFindSL "Data Structures/UnionFindSL.cpp")
 
 #flows
+add_executable(BipartiteMatching Flows/BipartiteMatching.cpp)
 add_executable(Dinic Flows/Dinic.cpp)
 add_executable(EdmondsKarp Flows/EdmondsKarp.cpp)
 add_executable(HungarianAlgorithm Flows/HungarianAlgorithm.cpp)
-add_executable(Matching Flows/Matching.cpp)
 add_executable(MinCostFlow Flows/MinCostFlow.cpp)
 add_executable(PushRelabel Flows/PushRelabel.cpp)
 
@@ -52,7 +53,6 @@ add_executable(SCC Graphs/SCC.cpp)
 add_executable(TopSort Graphs/TopSort.cpp)
 
 #miscellaneous
-add_executable(CHT Miscellaneous/CHT.cpp)
 add_executable(Misc Miscellaneous/Misc.cpp)
 
 #number theory
@@ -78,6 +78,7 @@ add_executable(SuffixAutomaton Strings/SuffixAutomaton.cpp)
 add_executable(SuffixTrie Strings/SuffixTrie.cpp)
 
 #trees
+add_executable(CentroidDecomposition Trees/CentroidDecomposition.cpp)
 add_executable(HeavyLight Trees/HeavyLight.cpp)
 add_executable(LCA Trees/LCA.cpp)
 add_executable(PathQuery Trees/PathQuery.cpp)

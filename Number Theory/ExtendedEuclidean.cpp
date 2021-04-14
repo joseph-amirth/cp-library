@@ -42,4 +42,14 @@ namespace extended_euclidean {
 		}
 		return x;
 	}
+
+	template <typename T>
+	std::pair<T, T> solve_linear_congruence(T a, T b, T n) {
+		T d = gcd(a, n);
+		if (b % d != 0)
+			return std::make_pair(-1, -1);
+		a /= d, b /= d, n /= d;
+		T sol = (big_int) mod_inverse(a, n) * b % n;
+		return make_pair(sol, d);
+	}
 }
