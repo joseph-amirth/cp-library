@@ -1,32 +1,32 @@
 #include <vector>
 #include <functional>
 
-template<typename T>
+template<typename T, typename L = T>
 struct segment_tree {
 	using F = std::function<T(const T&, const T&)>;
 
 	int n;
 	std::vector<T> t;
-	std::vector<int> lazy;
+	std::vector<L> lazy;
 	T e;
 	F f;
 
-	segment_tree() : n(), e(), f() {}
+	segment_tree() : n(), e(), f() { }
 
 	template<typename U>
-	segment_tree(const U &arr, int n, T e, F f): n(n), t(4 * n), lazy(4 * n), e(e), f(f) {
-		build(arr, 1, 0, n - 1);
+	segment_tree(const std::vector<U> &v, int n, T e, F f): n(n), t(4 * n), lazy(4 * n), e(e), f(f) {
+		build(v, 1, 0, n - 1);
 	}
 
 	template<typename U>
-	void build(const U &arr, int i, int l, int r) {
+	void build(const std::vector<U> &v, int i, int l, int r) {
 		if (l == r) {
-			t[i] = T(arr[l]);
+			t[i] = T(v[l]);
 			return;
 		}
 		int mid = (l + r) >> 1;
-		build(arr, i << 1, l, mid);
-		build(arr, i << 1 | 1, mid + 1, r);
+		build(v, i << 1, l, mid);
+		build(v, i << 1 | 1, mid + 1, r);
 		t[i] = f(t[i << 1], t[i << 1 | 1]);
 	}
 
@@ -35,12 +35,12 @@ struct segment_tree {
 	}
 
 	template<typename U>
-	void update(int idx, U val) {
+	void update(int idx, const U &val) {
 		update_helper(idx, val, 1, 0, n - 1);
 	}
 
 	template<typename U>
-	void update_helper(int idx, U val, int i, int l, int r) {
+	void update_helper(int idx, const U &val, int i, int l, int r) {
 		if (l == r) {
 			t[i] = T(val);
 			return;
@@ -54,12 +54,12 @@ struct segment_tree {
 	}
 
 	template<typename U>
-	void update(int ql, int qr, U val) {
+	void update(int ql, int qr, const U &val) {
 		update_helper(ql, qr, val, 1, 0, n - 1);
 	}
 
 	template<typename U>
-	void update_helper(int ql, int qr, U val, int i, int l, int r) {
+	void update_helper(int ql, int qr, const U &val, int i, int l, int r) {
 		if (r < ql || qr < l)
 			return;
 		if (ql <= l && r <= qr) {

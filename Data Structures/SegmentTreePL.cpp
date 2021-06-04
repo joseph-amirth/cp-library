@@ -1,13 +1,14 @@
 #include <vector>
 #include <functional>
 
-template<typename T>
+template<typename T, typename L = T>
 struct segment_tree {
 	using F = std::function<T(const T&, const T&)>;
 
 	struct node {
 		T val;
-		int lazy, l, r;
+		L lazy;
+		int l, r;
 		node(T val) : val(val), lazy() {}
 		node(T val, int l, int r) : val(val), lazy(), l(l), r(r) {}
 		node(T val, int lazy, int l, int r): val(val), lazy(lazy), l(l), r(r) {}
@@ -30,18 +31,18 @@ struct segment_tree {
 	segment_tree() : ver(), n(), e(), f() {}
 
 	template<typename U>
-	segment_tree(const U &arr, int n, T e, F f): n(n), e(e), f(f) {
-		ver.push_back(build(arr, 0, n - 1));
+	segment_tree(const std::vector<U> &v, int n, T e, F f): n(n), e(e), f(f) {
+		ver.push_back(build(v, 0, n - 1));
 	}
 
 	template<typename U>
-	int build(const U &arr, int l, int r) {
+	int build(const std::vector<U> &v, int l, int r) {
 		if (l == r)
-			return new_node(T(arr[l]));
+			return new_node(T(v[l]));
 		int mid = (l + r) >> 1;
-		int vl = build(arr, l, mid);
-		int vr = build(arr, mid + 1, r);
-		return new_node(f(t[vl].val, t[vr].val), vl, vr);
+		int il = build(v, l, mid);
+		int ir = build(v, mid + 1, r);
+		return new_node(f(t[il].val, t[ir].val), il, ir);
 	}
 
 	void push(int i, int l, int r) {
@@ -49,46 +50,46 @@ struct segment_tree {
 	}
 
 	template<typename U>
-	int update(int idx, U val, int k = -1) {
+	int update(int idx, const U &val, int k = -1) {
 		if (k == -1) k = ver.back();
 		ver.push_back(update_helper(idx, val, k, 0, n - 1));
 		return ver.back();
 	}
 
 	template<typename U>
-	int update_helper(int idx, U val, int v, int l, int r) {
+	int update_helper(int idx, const U &val, int i, int l, int r) {
 		if (l == r)
 			return new_node(T(val));
-		push(v, l, r);
+		push(i, l, r);
 		int mid = (l + r) >> 1;
 		if (idx <= mid) {
-			int vl = update_helper(idx, val, t[v].l, l, mid);
-			return new_node(f(t[vl].val, t[t[v].r].val), vl, t[v].r);
+			int il = update_helper(idx, val, t[i].l, l, mid);
+			return new_node(f(t[il].val, t[t[i].r].val), il, t[i].r);
 		} else {
-			int vr = update_helper(idx, val, t[v].r, mid + 1, r);
-			return new_node(f(t[t[v].l].val, t[vr].val), t[v].l, vr);
+			int ir = update_helper(idx, val, t[i].r, mid + 1, r);
+			return new_node(f(t[t[i].l].val, t[ir].val), t[i].l, ir);
 		}
 	}
 
 	template <typename U>
-	int update(int ql, int qr, U val, int k = -1) {
+	int update(int ql, int qr, const U &val, int k = -1) {
 		if (k == -1) k = ver.back();
 		ver.push_back(update_helper(ql, qr, val, k, 0, n - 1));
 		return ver.back();
 	}
 
 	template <typename U>
-	int update_helper(int ql, int qr, U val, int v, int l, int r) {
+	int update_helper(int ql, int qr, const U &val, int i, int l, int r) {
 		if (r < ql || qr < l)
-			return v;
+			return i;
 		if (ql <= l && r <= qr) {
 			//lazy
 		}
-		push(v, l, r);
+		push(i, l, r);
 		int mid = (l + r) >> 1;
-		int vl = update_helper(ql, qr, val, t[v].l, l, mid);
-		int vr = update_helper(ql, qr, val, t[v].r, mid + 1, r);
-		return new_node(f(t[vl].val, t[vr].val), vl, vr);
+		int il = update_helper(ql, qr, val, t[i].l, l, mid);
+		int ir = update_helper(ql, qr, val, t[i].r, mid + 1, r);
+		return new_node(f(t[il].val, t[ir].val), il, ir);
 	}
 
 	T query(int ql, int qr, int k = -1) {
@@ -96,13 +97,13 @@ struct segment_tree {
 		return query_helper(ql, qr, k, 0, n - 1);
 	}
 
-	T query_helper(int ql, int qr, int v, int l, int r) {
+	T query_helper(int ql, int qr, int i, int l, int r) {
 		if (r < ql || qr < l)
 			return e;
 		if (ql <= l && r <= qr)
-			return t[v].val;
-		push(v, l, r);
+			return t[i].val;
+		push(i, l, r);
 		int mid = (l + r) >> 1;
-		return f(query_helper(ql, qr, t[v].l, l, mid), query_helper(ql, qr, t[v].r, mid + 1, r));
+		return f(query_helper(ql, qr, t[i].l, l, mid), query_helper(ql, qr, t[i].r, mid + 1, r));
 	}
 };

@@ -10,7 +10,7 @@ struct aho_corasick {
 		char pch;
 		int p;
 		int link = -1;
-		int exitLink = -1;
+		int exit_link = -1;
 		std::array<int, K> next;
 		node(int p = -1, char pch = '$') : p(p), pch(pch) {
 			next.fill(-1);
@@ -54,7 +54,7 @@ struct aho_corasick {
 				t[x].link = 0;
 			} else {
 				t[x].link = t[t[t[x].p].link].next[t[x].pch - f];
-				t[x].exitLink = t[t[x].link].leaf ? t[x].link : t[t[x].link].exitLink;
+				t[x].exit_link = t[t[x].link].leaf ? t[x].link : t[t[x].link].exit_link;
 			}
 
 			for (int i = 0; i < K; i++) {

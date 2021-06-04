@@ -1,5 +1,6 @@
 #include <vector>
 #include <tuple>
+#include "../Miscellaneous/TypePromotion.h"
 
 namespace extended_euclidean {
 	using big_int = long long;

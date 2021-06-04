@@ -92,38 +92,3 @@ struct sub_maximum {
 		return mx[i];
 	}
 };
-
-namespace std {
-	template<typename T>
-	struct promote { typedef T type; };
-
-	template<>
-	struct promote<int8_t> { typedef int16_t type; };
-
-	template<>
-	struct promote<int16_t> { typedef int32_t type; };
-
-	template<>
-	struct promote<int32_t> { typedef int64_t type; };
-
-	template<>
-	struct promote<int64_t> { typedef long double type; };
-
-	template<>
-	struct promote<uint8_t> { typedef uint16_t type; };
-
-	template<>
-	struct promote<uint16_t> { typedef uint32_t type; };
-
-	template<>
-	struct promote<uint32_t> { typedef uint64_t type; };
-
-	template<>
-	struct promote<uint64_t> { typedef long double type; };
-
-	template<>
-	struct promote<float> { typedef double type; };
-
-	template<>
-	struct promote<double> { typedef long double type; };
-}

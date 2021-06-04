@@ -1,7 +1,7 @@
 #include "Graph.h"
 #include <algorithm>
 
-std::vector<std::vector<int>> scc(const digraph &g) {
+std::vector<std::vector<int>> get_sccs(const digraph &g) {
 	digraph gr = g.transpose();
 	int timer = 0;
 	std::vector<int> f(g.n), visited(g.n), l(g.n);

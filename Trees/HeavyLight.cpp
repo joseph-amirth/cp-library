@@ -12,7 +12,7 @@ struct heavy_light : public LCA {
 	F f;
 
 	template<typename U>
-	heavy_light(const graph &g, const U &a, T e, F f) : LCA(g), e(e), f(f) {
+	heavy_light(const graph &g, const std::vector<U> &a, T e, F f) : LCA(g), e(e), f(f) {
 		sz.assign(g.n, 1);
 		tail.assign(g.n, 0);
 		head.assign(g.n, 0);

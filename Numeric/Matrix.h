@@ -7,9 +7,7 @@ struct matrix : std::vector<std::vector<T>> {
 	matrix(int n, int m, const T val = T()) : n(n), m(m), std::vector<std::vector<T>> (n, std::vector<T>(m, val)) { }
 	matrix(std::initializer_list<std::vector<T>> l): std::vector<std::vector<T>>(l) {
 		n = l.size();
-		if (l.size()) {
-			m = l.begin()->size();
-		}
+		m = l.size() ? l.begin()->size() : 0;
 	}
 
 	matrix &operator+=(const matrix &mat) {
@@ -53,6 +51,23 @@ struct matrix : std::vector<std::vector<T>> {
 			}
 		}
 		return *this;
+	}
+
+	static matrix identity(int n) {
+		matrix I(n, n);
+		for (int i = 0; i < n; i++) {
+			I[i][i] = 1;
+		}
+		return I;
+	}
+
+	matrix pow(long long k) {
+		matrix ans = identity(n), x = *this;
+		for (; k; k /= 2) {
+			if (k & 1) ans *= x;
+			x *= x;
+		}
+		return ans;
 	}
 
 	friend matrix operator+(matrix a, const matrix &b) {

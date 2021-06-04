@@ -1,19 +1,20 @@
 #include <vector>
-
-constexpr int mod = 1'000'000'007;
+#include "../Miscellaneous/TypePromotion.h"
 
 namespace modular_arithmetic {
-	long long modexp(long long x, long long n, int m = mod) {
-	    long long ans = 1;
-	    for (x %= m; n; n /= 2) {
-	        if (n & 1) ans = ans * x % m;
-	        x = x * x % m;
-	    }
-	    return ans;
+	template <typename T>
+	T modexp(T x, T n, T m) {
+		T ans = 1;
+		for (x %= m; n; n /= 2) {
+			if (n & 1) ans = (promote_t<T>) ans * x % m;
+			x = (promote_t<T>) x * x % m;
+		}
+		return ans;
 	}
 
-	long long modinv(long long x, int m = mod) {
-	    return modexp(x, m - 2, m);
+	template <typename T>
+	T modinv(T x, T m) {
+		return modexp(x, m - 2, m);
 	}
 
 	template <typename T>

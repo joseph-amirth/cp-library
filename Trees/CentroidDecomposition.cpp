@@ -37,7 +37,7 @@ struct centroid_decomposition {
 		return u;
 	}
 
-	centroid_decomposition(const graph &g) : g(g), c(g.n, -1), sz(g.n) {
+	centroid_decomposition(const graph &g) : g(g), sz(g.n), c(g.n, -1) {
 		decompose(0, -2);
 	}
 

@@ -5,6 +5,7 @@ set(CMAKE_CXX_STANDARD 20)
 
 #combinatorics
 add_executable(Choose Combinatorics/Choose.cpp)
+add_executable(Fibonacci Combinatorics/Fibonacci.cpp)
 
 #custom datatypes
 add_executable(Signed128 "Custom Datatypes/Signed128.cpp")
@@ -17,6 +18,7 @@ add_executable(DisjointSparseTable "Data Structures/DisjointSparseTable.cpp")
 add_executable(FenwickTree "Data Structures/FenwickTree.cpp")
 add_executable(FenwickTree2D "Data Structures/FenwickTree2D.cpp")
 add_executable(MergeSortTree "Data Structures/MergeSortTree.cpp")
+add_executable(MergeSortTreeU "Data Structures/MergeSortTreeU.cpp")
 add_executable(SegmentTree "Data Structures/SegmentTree.cpp")
 add_executable(SegmentTreeI "Data Structures/SegmentTreeI.cpp")
 add_executable(SegmentTreeL "Data Structures/SegmentTreeL.cpp")
@@ -58,15 +60,17 @@ add_executable(Misc Miscellaneous/Misc.cpp)
 #number theory
 add_executable(ExtendedEuclidean "Number Theory/ExtendedEuclidean.cpp")
 add_executable(Factorisation "Number Theory/Factorisation.cpp")
-add_executable(ModularArithmetic "Number Theory/ModularArithmetic.cpp")
+add_executable(PrimalityTesting "Number Theory/PrimalityTesting.cpp")
 add_executable(Sieve "Number Theory/Sieve.cpp")
 
 #numeric
 add_executable(DynamicMint Numeric/DynamicMint.cpp)
 add_executable(FFT Numeric/FFT.cpp)
+add_executable(FWHT Numeric/FWHT.cpp)
 add_executable(GaussianElimination Numeric/GaussianElimination.cpp)
 add_executable(NTT Numeric/NTT.cpp)
 add_executable(Polynomial Numeric/Polynomial.cpp)
+add_executable(Rational Numeric/Rational.cpp)
 
 #strings
 add_executable(AhoCorasick Strings/AhoCorasick.cpp)

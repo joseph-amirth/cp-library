@@ -2,16 +2,35 @@
 #include "StaticMint.h"
 
 namespace ntt {
-	template <int P>
+	template<int P>
 	struct prime_info {
 		constexpr static int root = 0, root_pw = 0;
 	};
 
-	template <> struct prime_info<7340033>   { constexpr static int root = 5, root_pw = 1 << 20; };
-	template <> struct prime_info<998244353> { constexpr static int root = 15311432, root_pw = 1 << 23; };
-	template <> struct prime_info<754974721> { constexpr static int root = 739831874, root_pw = 1 << 24; };
-	template <> struct prime_info<167772161> { constexpr static int root = 243, root_pw = 1 << 25; };
-	template <> struct prime_info<469762049> { constexpr static int root = 2187, root_pw = 1 << 26; };
+	template<>
+	struct prime_info<7340033> {
+		constexpr static int root = 5, root_pw = 1 << 20;
+	};
+
+	template<>
+	struct prime_info<998244353> {
+		constexpr static int root = 15311432, root_pw = 1 << 23;
+	};
+
+	template<>
+	struct prime_info<754974721> {
+		constexpr static int root = 739831874, root_pw = 1 << 24;
+	};
+
+	template<>
+	struct prime_info<167772161> {
+		constexpr static int root = 243, root_pw = 1 << 25;
+	};
+
+	template<>
+	struct prime_info<469762049> {
+		constexpr static int root = 2187, root_pw = 1 << 26;
+	};
 
 	std::vector<int> rev = {0};
 
@@ -25,10 +44,10 @@ namespace ntt {
 		computed = lg;
 	}
 
-	template <int M>
+	template<int M>
 	std::vector<static_mint<M>> root = {0, 1};
 
-	template <int M>
+	template<int M>
 	void compute_roots(int lg) {
 		static int computed = 1;
 		if (lg <= computed) return;
@@ -71,7 +90,7 @@ namespace ntt {
 		}
 	}
 
-	template <int M>
+	template<int M>
 	std::enable_if_t<prime_info<M>::root != 0, std::vector<static_mint<M>>>
 	convolution(std::vector<static_mint<M>> a, std::vector<static_mint<M>> b) {
 		int n = 1;
@@ -90,19 +109,21 @@ namespace ntt {
 		return a;
 	}
 
-	template <int M>
+	template<int M>
 	static_mint<M> garner(int a1, int a2, int a3) {
 		constexpr static int M1 = 754974721, M2 = 167772161, M3 = 469762049;
 		const static int R12 = static_mint<M2>(M1).inv().val;
 		const static int R13 = static_mint<M3>(M1).inv().val;
 		const static int R23 = static_mint<M3>(M2).inv().val;
 		int x1 = a1;
-		int x2 = (long long)(a2 - x1) * R12 % M2; if (x2 < 0) x2 += M2;
-		int x3 = ((long long)(a3 - x1) * R13 % M3 - x2) * R23 % M3; if (x3 < 0) x3 += M3;
+		int x2 = (long long) (a2 - x1) * R12 % M2;
+		if (x2 < 0) x2 += M2;
+		int x3 = ((long long) (a3 - x1) * R13 % M3 - x2) * R23 % M3;
+		if (x3 < 0) x3 += M3;
 		return static_mint<M>(x1) + static_mint<M>(x2) * M1 + static_mint<M>(x3) * M1 * M2;
 	}
 
-	template <int M>
+	template<int M>
 	std::enable_if_t<prime_info<M>::root == 0, std::vector<static_mint<M>>>
 	convolution(std::vector<static_mint<M>> a, const std::vector<static_mint<M>> &b) {
 		constexpr static int M1 = 754974721, M2 = 167772161, M3 = 469762049;
@@ -117,14 +138,15 @@ namespace ntt {
 		return a;
 	}
 
-	template <int M = 998244353, typename T>
+	template<int M = 998244353, typename T>
 	std::enable_if_t<!is_mint<T>::value, std::vector<T>>
 	convolution(const std::vector<T> &a, const std::vector<T> &b) {
-		auto f = convolution(std::vector<static_mint<M>>(a.begin(), a.end()), std::vector<static_mint<M>>(b.begin(), b.end()));
+		auto f = convolution(std::vector<static_mint<M>>(a.begin(), a.end()),
+							 std::vector<static_mint<M>>(b.begin(), b.end()));
 		return vector<T>(f.begin(), f.end());
 	}
 
-	template <typename T>
+	template<typename T>
 	void normalize(const std::vector<T> &a) {
 		for (int i = int(a.size()) - 1; i >= 0; i--) {
 			if (a[i]) {

@@ -12,7 +12,7 @@ std::pair<int, int> closest_pair_of_points(const std::vector<point<T>> &p) {
 	std::vector<int> ind(n), temp(n);
 	std::iota(ind.begin(), ind.end(), 0);
 	std::sort(ind.begin(), ind.end(), [&](int i, int j) {
-		return p[i].x < p[j].x || (p[i].x == p[j].x && p[i].y < p[j].y);
+		return p[i] < p[j];
 	});
 
 	std::pair<int, int> best_pair(0, 1);
@@ -46,7 +46,7 @@ std::pair<int, int> closest_pair_of_points(const std::vector<point<T>> &p) {
 		std::copy(temp.begin(), temp.begin() + r - l + 1, ind.begin() + l);
 
 		for (int i = l, k = 0; i <= r; i++) {
-			if (std::abs(p[i].x - mid_x) < best_distance) {
+			if (std::abs(p[ind[i]].x - mid_x) < best_distance) {
 				for (int j = k - 1; j >= 0 && p[ind[i]].y - p[temp[j]].y < best_distance; j--) {
 					if (dist(p[ind[i]], p[temp[j]]) < best_distance) {
 						best_pair = std::make_pair(ind[i], temp[j]);

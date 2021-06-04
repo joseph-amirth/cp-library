@@ -40,12 +40,7 @@ std::pair<T, C> min_cost_flow(flow_graph<T, C> &g, int s, int t, T target_flow =
 	T flow = 0;
 	C cost = 0;
 
-	while (flow < target_flow) {
-		spfa();
-		if (d[t] == inf_cost) {
-			break;
-		}
-
+	while (flow < target_flow && (spfa(), d[t] != inf_cost)) {
 		T path_flow = target_flow - flow;
 		for (int x = t; x != s; x = g.edges[p[x]].u) {
 			path_flow = std::min(path_flow, g.edges[p[x]].c - g.edges[p[x]].f);

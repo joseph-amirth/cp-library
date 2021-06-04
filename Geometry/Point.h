@@ -1,5 +1,3 @@
-#include <type_traits>
-
 template <typename T>
 struct point {
 	T x, y;
