@@ -7,7 +7,7 @@ std::vector<bool> two_sat(int n, const std::vector<std::pair<int, int>> &clauses
 		g.add_edge(y < n ? y + n : y - n, x);
 	}
 
-	auto sccs = get_sccs(g);
+	auto sccs = find_sccs(g);
 
 	std::vector<int> t(2 * n);
 	for (int i = 0; i < sccs.size(); i++) {

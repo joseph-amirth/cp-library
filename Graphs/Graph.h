@@ -45,7 +45,7 @@ struct digraph {
 	}
 
 	digraph transpose() const {
-		digraph rev(n);
+		digraph rev(n, m);
 		for (auto&[u, v] : edges) {
 			rev.add_edge(v, u);
 		}

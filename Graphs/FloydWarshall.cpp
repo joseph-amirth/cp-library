@@ -14,7 +14,7 @@ std::vector<std::vector<int>> floyd_warshall(const graph<T> &g) {
 	for (int k = 0; k < g.n; k++) {
 		for (int i = 0; i < g.n; i++) {
 			for (int j = 0; j < g.n; j++) {
-				if (d[i][k] != inf and d[k][j] != inf) {
+				if (d[i][k] != inf && d[k][j] != inf) {
 					d[i][j] = min(d[i][j], d[i][k] + d[k][j]);
 				}
 			}

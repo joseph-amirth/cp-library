@@ -1,4 +1,4 @@
-#include "NTT.cpp"
+#include "NTT.h"
 #include <algorithm>
 
 template <typename T>
@@ -87,10 +87,9 @@ struct polynomial : public std::vector<T> {
 		int sz = a.deg() - b.deg() + 1;
 		a %= sz;
 		reverse(b.begin(), b.end());
-		polynomial d = a * b.inv(sz);
-		d %= sz;
-		reverse(d.begin(), d.end());
-		a.swap(d);
+		a *= b.inv(sz);
+		a %= sz;
+		reverse(a.begin(), a.end());
 	}
 
 	polynomial &operator/=(const polynomial &q) {
@@ -99,15 +98,16 @@ struct polynomial : public std::vector<T> {
 		return *this;
 	}
 
-	polynomial &operator/=(const T &val) {
+	polynomial &operator/=(T val) {
+		val = 1 / val;
 		for (auto &x : *this) {
-			x /= val;
+			x *= val;
 		}
 		return *this;
 	}
 
 	polynomial &operator%=(const polynomial &q) {
-		*this = *this - q * (*this / q);
+		*this -= q * (*this / q);
 		normalize();
 		return *this;
 	}
@@ -135,6 +135,14 @@ struct polynomial : public std::vector<T> {
 		return *this;
 	}
 
+	T operator()(const T &val) {
+		T ans = 0;
+		for (int i = deg(); i >= 0; i--) {
+			ans = (ans * val + (*this)[i]);
+		}
+		return ans;
+	}
+
 	friend polynomial operator+(polynomial p, const polynomial &q) {
 		p += q;
 		return p;
@@ -151,16 +159,12 @@ struct polynomial : public std::vector<T> {
 	}
 
 	friend polynomial operator*(polynomial p, const T &val) {
-		for (auto &x : p) {
-			x *= val;
-		}
+		p *= val;
 		return p;
 	}
 
 	friend polynomial operator*(const T &val, polynomial p) {
-		for (auto &x : p) {
-			x *= val;
-		}
+		p *= val;
 		return p;
 	}
 
@@ -170,9 +174,7 @@ struct polynomial : public std::vector<T> {
 	}
 
 	friend polynomial operator/(polynomial p, const T &val) {
-		for (auto &x : p) {
-			x /= val;
-		}
+		p /= val;
 		return p;
 	}
 
@@ -203,11 +205,9 @@ struct polynomial : public std::vector<T> {
 		polynomial b(1, 1 / (*this)[0]);
 		for (int i = 2; i <= (k << 1); i <<= 1) {
 			polynomial temp = (*this) % i;
-			temp *= b;
-			temp %= i;
-			temp = polynomial(1, 2) - temp;
-			b *= temp;
-			b %= i;
+			temp *= b, temp %= i;
+			temp *= T(-1), temp[0] += 2;
+			b *= temp, b %= i;
 		}
 		b.resize(k);
 		return b;
@@ -251,8 +251,7 @@ struct polynomial : public std::vector<T> {
 		polynomial q(1, 1);
 		for (int i = 2; i <= (k << 1); i <<= 1) {
 			polynomial temp = polynomial(1, 1) + (*this % i) - q.log(i);
-			q *= temp;
-			q %= i;
+			q *= temp, q %= i;
 		}
 		q.resize(k);
 		return q;
@@ -282,5 +281,31 @@ struct polynomial : public std::vector<T> {
 		b *= alpha.pow(n);
 		b.resize(k);
 		return b;
+	}
+
+	template <typename U>
+	std::vector<T> multipoint_evaluation(const std::vector<U> &pt) {
+		int n = (int) pt.size();
+
+		std::vector<polynomial> tree(2 * n);
+		for (int i = 0; i < n; i++) {
+			tree[i + n] = {T(-pt[i]), 1};
+		}
+
+		for (int i = n - 1; i > 0; i--) {
+			tree[i] = tree[i << 1] * tree[i << 1 | 1];
+		}
+
+		tree[1] = *this % tree[1];
+		for (int i = 1; i < n; i++) {
+			tree[i << 1] = tree[i] % tree[i << 1];
+			tree[i << 1 | 1] = tree[i] % tree[i << 1 | 1];
+		}
+
+		std::vector<T> result(n);
+		for (int i = 0; i < n; i++) {
+			result[i] = (tree[i + n].empty() ? T(0) : tree[i + n][0]);
+		}
+		return result;
 	}
 };

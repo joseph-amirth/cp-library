@@ -68,7 +68,6 @@ add_executable(DynamicMint Numeric/DynamicMint.cpp)
 add_executable(FFT Numeric/FFT.cpp)
 add_executable(FWHT Numeric/FWHT.cpp)
 add_executable(GaussianElimination Numeric/GaussianElimination.cpp)
-add_executable(NTT Numeric/NTT.cpp)
 add_executable(Polynomial Numeric/Polynomial.cpp)
 add_executable(Rational Numeric/Rational.cpp)
 

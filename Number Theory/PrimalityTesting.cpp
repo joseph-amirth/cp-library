@@ -71,7 +71,7 @@ namespace primality_testing {
 	template <typename T>
 	T random_prime(T l = 2, T r = 1000000000) {
 		while (true) {
-			T n = l + rng() % (r - l);
+			T n = l + rng() % (r - l + 1);
 			if (randomized_miller_rabin(n)) {
 				return n;
 			}

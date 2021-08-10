@@ -7,7 +7,7 @@ struct union_find {
 
 	union_find() : n(), c() {}
 	union_find(int n) : n(n), c(n), p(n), r(n, 1) {
-		iota(p.begin(), p.end(), 0);
+		std::iota(p.begin(), p.end(), 0);
 	}
 
 	int count() const noexcept {
@@ -21,8 +21,9 @@ struct union_find {
 	bool merge(int x, int y) {
 		int l1 = find(x);
 		int l2 = find(y);
-		if (l1 == l2)
+		if (l1 == l2) {
 			return false;
+		}
 		if (r[l1] >= r[l2]) {
 			r[l1] += r[l2];
 			p[l2] = l1;
