@@ -7,38 +7,47 @@ struct LCA {
 	std::vector<std::vector<int>> up;
 
 	LCA(const graph &g, int root = 0) : timer(0), tin(g.n), tout(g.n), lvl(g.n) {
-		lg = std::max(32 - __builtin_clz(g.n) - 1, 1);
+		lg = 32 - __builtin_clz(g.n);
 		up.assign(g.n, std::vector<int>(lg, -1));
-		dfs(root, -1, g);
-	}
 
-	void dfs(int x, int p, const graph &g) {
-		tin[x] = timer++;
-		up[x][0] = p;
-		for (int i = 1; i < lg && up[x][i - 1] != -1; i++) {
-			up[x][i] = up[up[x][i - 1]][i - 1];
-		}
-		for (int i : g.adj[x]) {
-			i = g.edges[i].u ^ g.edges[i].v ^ x;
-			if (i != p) {
-				lvl[i] = lvl[x] + 1;
-				dfs(i, x, g);
+		auto dfs = [&](int u, const auto &self) -> void {
+			tin[u] = timer++;
+			for (int i = 1; i < lg && up[u][i - 1] != -1; i++) {
+				up[u][i] = up[up[u][i - 1]][i - 1];
 			}
+			for (int i : g.adj[u]) {
+				int v = g.edges[i].u ^ g.edges[i].v ^ u;
+				if (v != up[u][0]) {
+					lvl[v] = lvl[u] + 1;
+					up[v][0] = u;
+					self(v, self);
+				}
+			}
+			tout[u] = timer++;
+		};
+
+		if (root == 0) {
+			for (int u = 0; u < g.n; u++) {
+				if (up[u][0] == -1) {
+					dfs(u, dfs);
+				}
+			}
+		} else {
+			dfs(root, dfs);
 		}
-		tout[x] = timer++;
 	}
 
-	bool f(int u, int v) {
+	inline bool is_anc(int u, int v) {
 		return tin[u] <= tin[v] && tout[u] >= tout[v];
 	}
 
 	int lca(int u, int v) {
-		if (f(u, v))
+		if (is_anc(u, v))
 			return u;
-		if (f(v, u))
+		if (is_anc(v, u))
 			return v;
 		for (int i = lg - 1; i >= 0; i--) {
-			if (up[u][i] != -1 && !f(up[u][i], v)) {
+			if (up[u][i] != -1 && !is_anc(up[u][i], v)) {
 				u = up[u][i];
 			}
 		}

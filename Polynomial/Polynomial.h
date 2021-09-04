@@ -54,17 +54,13 @@ struct polynomial : public std::vector<T> {
 		a.swap(result);
 	}
 
-	void ntt_mul(polynomial &fa, polynomial fb) const {
-		fa = ntt::convolution(fa, fb);
-	}
-
 	polynomial &operator*=(const polynomial &q) {
 		if (this->empty() || q.empty()) {
 			this->clear();
 		} else if (this->size() <= 60) {
 			naive_mul(*this, q);
 		} else {
-			ntt_mul(*this, q);
+			ntt::inplace_convolution(*this, q);
 		}
 		normalize();
 		return *this;
@@ -281,31 +277,5 @@ struct polynomial : public std::vector<T> {
 		b *= alpha.pow(n);
 		b.resize(k);
 		return b;
-	}
-
-	template <typename U>
-	std::vector<T> multipoint_evaluation(const std::vector<U> &pt) {
-		int n = (int) pt.size();
-
-		std::vector<polynomial> tree(2 * n);
-		for (int i = 0; i < n; i++) {
-			tree[i + n] = {T(-pt[i]), 1};
-		}
-
-		for (int i = n - 1; i > 0; i--) {
-			tree[i] = tree[i << 1] * tree[i << 1 | 1];
-		}
-
-		tree[1] = *this % tree[1];
-		for (int i = 1; i < n; i++) {
-			tree[i << 1] = tree[i] % tree[i << 1];
-			tree[i << 1 | 1] = tree[i] % tree[i << 1 | 1];
-		}
-
-		std::vector<T> result(n);
-		for (int i = 0; i < n; i++) {
-			result[i] = (tree[i + n].empty() ? T(0) : tree[i + n][0]);
-		}
-		return result;
 	}
 };

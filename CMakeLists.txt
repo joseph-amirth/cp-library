@@ -3,6 +3,12 @@ project(Library)
 
 set(CMAKE_CXX_STANDARD 20)
 
+#binary search trees
+add_executable(ImplicitSplayTree "Binary Search Trees/ImplicitSplayTree.cpp")
+add_executable(SplayTree "Binary Search Trees/SplayTree.cpp")
+add_executable(Treap "Binary Search Trees/Treap.cpp")
+add_executable(ImplicitTreap "Binary Search Trees/ImplicitTreap.cpp")
+
 #combinatorics
 add_executable(Choose Combinatorics/Choose.cpp)
 add_executable(Fibonacci Combinatorics/Fibonacci.cpp)
@@ -26,7 +32,6 @@ add_executable(SegmentTreeM "Data Structures/SegmentTreeM.cpp")
 add_executable(SegmentTreeP "Data Structures/SegmentTreeP.cpp")
 add_executable(SegmentTreePL "Data Structures/SegmentTreePL.cpp")
 add_executable(SparseTable2D "Data Structures/SparseTable2D.cpp")
-add_executable(Treap "Data Structures/Treap.cpp")
 add_executable(UnionFindRB "Data Structures/UnionFindRB.cpp")
 add_executable(UnionFindSL "Data Structures/UnionFindSL.cpp")
 
@@ -65,11 +70,14 @@ add_executable(Sieve "Number Theory/Sieve.cpp")
 
 #numeric
 add_executable(DynamicMint Numeric/DynamicMint.cpp)
-add_executable(FFT Numeric/FFT.cpp)
-add_executable(FWHT Numeric/FWHT.cpp)
-add_executable(GaussianElimination Numeric/GaussianElimination.cpp)
-add_executable(Polynomial Numeric/Polynomial.cpp)
+add_executable(GaussianElimination Numeric/Gaussian-Elimination.cpp)
 add_executable(Rational Numeric/Rational.cpp)
+
+#polynomial
+add_executable(Evaluation-Interpolation Polynomial/Evaluation-Interpolation.cpp)
+add_executable(FFT Polynomial/FFT.cpp)
+add_executable(FWHT Polynomial/FWHT.cpp)
+add_executable(Subset-Convolution Polynomial/Subset-Convolution.cpp)
 
 #strings
 add_executable(AhoCorasick Strings/AhoCorasick.cpp)
@@ -84,5 +92,6 @@ add_executable(SuffixTrie Strings/SuffixTrie.cpp)
 add_executable(CentroidDecomposition Trees/CentroidDecomposition.cpp)
 add_executable(HeavyLight Trees/HeavyLight.cpp)
 add_executable(LCA Trees/LCA.cpp)
+add_executable(LCT Trees/LCT.cpp)
 add_executable(PathQuery Trees/PathQuery.cpp)
 add_executable(SubtreeQuery Trees/SubtreeQuery.cpp)
