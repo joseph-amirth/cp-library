@@ -1,0 +1,3 @@
+namespace implicit_treap {
+
+}
