@@ -4,36 +4,26 @@
 
 template <int N>
 struct sieve {
+	std::vector<int> primes;
 	std::array<int, N + 1> spf;
 
-	constexpr sieve() {
-		spf.fill(0);
-		for (int i = 2; i * i <= N; i++) {
-			if (spf[i] == 0) {
-				for (int j = i * i; j <= N; j += i) {
-					if (spf[j] == 0) spf[j] = i;
-				}
-			}
-		}
+	constexpr sieve() : spf() {
 		for (int i = 2; i <= N; i++) {
 			if (spf[i] == 0) {
 				spf[i] = i;
+				primes.push_back(i);
+			}
+			for (int j = 0; j < (int) primes.size() && i * primes[j] <= N; j++) {
+				spf[i * primes[j]] = primes[j];
+				if (i % primes[j] == 0) {
+					break;
+				}
 			}
 		}
 	}
 
 	bool is_prime(int x) const {
 		return spf[x] == x;
-	}
-
-	std::vector<int> primes() const {
-		std::vector<int> primes;
-		for (int i = 1; i <= N; i++) {
-			if (spf[i] == i) {
-				primes.push_back(i);
-			}
-		}
-		return primes;
 	}
 
 	std::vector<std::pair<int, int>> prime_factors(int x) const {
@@ -49,17 +39,32 @@ struct sieve {
 	}
 
 	std::vector<int> divisors(int x) const {
-		if (x == 1)
-			return {1};
-		int c = 0, n = x;
-		for (; spf[x] == spf[n]; n /= spf[x], c++);
-		std::vector<int> d = divisors(n);
-		std::vector<int> res((c + 1) * d.size());
-		for (int i = 0, j = 0, p = 1; i <= c; i++, p *= spf[x]) {
-			for (int item : d) {
-				res[j++] = p * item;
+		std::vector<int> divisors = {1};
+		while (x > 1) {
+			int p = spf[x], c = 0;
+			while (x % p == 0) {
+				x /= p, c += 1;
+			}
+			int sz = (int) divisors.size();
+			for (int i = 1, pw = p; i <= c; i++, pw *= p) {
+				for (int j = 0; j < sz; j++) {
+					divisors.push_back(divisors[j] * pw);
+				}
 			}
 		}
-		return res;
+		return divisors;
+	}
+
+	template <typename T, typename F>
+	T compute_multiplicative_function(int x, F &&f) const {
+		T result = T(1);
+		while (x > 1) {
+			int p = spf[x], c = 0;
+			while (spf[x] == p) {
+				x /= p, c += 1;
+			}
+			result *= f(p, c);
+		}
+		return result;
 	}
 };

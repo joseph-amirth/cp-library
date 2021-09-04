@@ -1,5 +1,6 @@
 #include <vector>
-#include "StaticMint.h"
+#include <algorithm>
+#include "../Numeric/StaticMint.h"
 
 namespace ntt {
 	template<int P>
@@ -104,17 +105,35 @@ namespace ntt {
 		for (int i = 0; i < n; i++) {
 			a[i] *= b[i] * n_inv;
 		}
-		reverse(a.begin() + 1, a.end());
+		std::reverse(a.begin() + 1, a.end());
 		ntt(a);
 		return a;
 	}
 
+	template <int M>
+	std::enable_if_t<prime_info<M>::root != 0, void>
+	inplace_convolution(std::vector<static_mint<M>> &a, std::vector<static_mint<M>> b) {
+		int n = 1;
+		while (n < a.size() + b.size()) {
+			n <<= 1;
+		}
+		a.resize(n);
+		b.resize(n);
+		ntt(a), ntt(b);
+		static_mint<M> n_inv = static_mint<M>(n).inv();
+		for (int i = 0; i < n; i++) {
+			a[i] *= b[i] * n_inv;
+		}
+		std::reverse(a.begin() + 1, a.end());
+		ntt(a);
+	}
+
 	template<int M>
 	static_mint<M> garner(int a1, int a2, int a3) {
-		constexpr static int M1 = 754974721, M2 = 167772161, M3 = 469762049;
-		const static int R12 = static_mint<M2>(M1).inv().val;
-		const static int R13 = static_mint<M3>(M1).inv().val;
-		const static int R23 = static_mint<M3>(M2).inv().val;
+		constexpr auto M1 = 754974721, M2 = 167772161, M3 = 469762049;
+		constexpr auto R12 = static_mint<M2>(M1).inv().val;
+		constexpr auto R13 = static_mint<M3>(M1).inv().val;
+		constexpr auto R23 = static_mint<M3>(M2).inv().val;
 		int x1 = a1;
 		int x2 = (long long) (a2 - x1) * R12 % M2;
 		if (x2 < 0) x2 += M2;
@@ -126,7 +145,7 @@ namespace ntt {
 	template<int M>
 	std::enable_if_t<prime_info<M>::root == 0, std::vector<static_mint<M>>>
 	convolution(std::vector<static_mint<M>> a, const std::vector<static_mint<M>> &b) {
-		constexpr static int M1 = 754974721, M2 = 167772161, M3 = 469762049;
+		constexpr auto M1 = 754974721, M2 = 167772161, M3 = 469762049;
 		auto c1 = convolution(vector<static_mint<M1>>(a.begin(), a.end()), vector<static_mint<M1>>(b.begin(), b.end()));
 		auto c2 = convolution(vector<static_mint<M2>>(a.begin(), a.end()), vector<static_mint<M2>>(b.begin(), b.end()));
 		auto c3 = convolution(vector<static_mint<M3>>(a.begin(), a.end()), vector<static_mint<M3>>(b.begin(), b.end()));
