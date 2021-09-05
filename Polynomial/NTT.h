@@ -146,9 +146,9 @@ namespace ntt {
 	std::enable_if_t<prime_info<M>::root == 0, std::vector<static_mint<M>>>
 	convolution(std::vector<static_mint<M>> a, const std::vector<static_mint<M>> &b) {
 		constexpr auto M1 = 754974721, M2 = 167772161, M3 = 469762049;
-		auto c1 = convolution(vector<static_mint<M1>>(a.begin(), a.end()), vector<static_mint<M1>>(b.begin(), b.end()));
-		auto c2 = convolution(vector<static_mint<M2>>(a.begin(), a.end()), vector<static_mint<M2>>(b.begin(), b.end()));
-		auto c3 = convolution(vector<static_mint<M3>>(a.begin(), a.end()), vector<static_mint<M3>>(b.begin(), b.end()));
+		auto c1 = convolution(std::vector<static_mint<M1>>(a.begin(), a.end()), std::vector<static_mint<M1>>(b.begin(), b.end()));
+		auto c2 = convolution(std::vector<static_mint<M2>>(a.begin(), a.end()), std::vector<static_mint<M2>>(b.begin(), b.end()));
+		auto c3 = convolution(std::vector<static_mint<M3>>(a.begin(), a.end()), std::vector<static_mint<M3>>(b.begin(), b.end()));
 		int n = int(c1.size());
 		a.resize(n);
 		for (int i = 0; i < n; i++) {
@@ -162,7 +162,7 @@ namespace ntt {
 	convolution(const std::vector<T> &a, const std::vector<T> &b) {
 		auto f = convolution(std::vector<static_mint<M>>(a.begin(), a.end()),
 							 std::vector<static_mint<M>>(b.begin(), b.end()));
-		return vector<T>(f.begin(), f.end());
+		return std::vector<T>(f.begin(), f.end());
 	}
 
 	template<typename T>
