@@ -63,6 +63,7 @@ namespace ntt {
 				root<M>[i << 1 | 1] = root<M>[i] * z;
 			}
 		}
+		computed = lg;
 	}
 
 	template<int M>
@@ -77,10 +78,6 @@ namespace ntt {
 			}
 		}
 		for (int k = 1; k < n; k <<= 1) {
-			static_mint<M> wl = prime_info<M>::root;
-			for (int i = 2 * k; i < prime_info<M>::root_pw; i <<= 1) {
-				wl *= wl;
-			}
 			for (int i = 0; i < n; i += 2 * k) {
 				for (int j = 0; j < k; j++) {
 					static_mint<M> z = root<M>[j + k] * a[i + j + k];
@@ -98,16 +95,14 @@ namespace ntt {
 		while (n < a.size() + b.size()) {
 			n <<= 1;
 		}
-		a.resize(n);
-		b.resize(n);
+		a.resize(n), b.resize(n);
 		ntt(a), ntt(b);
 		static_mint<M> n_inv = static_mint<M>(n).inv();
 		for (int i = 0; i < n; i++) {
 			a[i] *= b[i] * n_inv;
 		}
 		std::reverse(a.begin() + 1, a.end());
-		ntt(a);
-		return a;
+		return ntt(a), a;
 	}
 
 	template <int M>
@@ -117,8 +112,7 @@ namespace ntt {
 		while (n < a.size() + b.size()) {
 			n <<= 1;
 		}
-		a.resize(n);
-		b.resize(n);
+		a.resize(n), b.resize(n);
 		ntt(a), ntt(b);
 		static_mint<M> n_inv = static_mint<M>(n).inv();
 		for (int i = 0; i < n; i++) {
@@ -149,7 +143,7 @@ namespace ntt {
 		auto c1 = convolution(std::vector<static_mint<M1>>(a.begin(), a.end()), std::vector<static_mint<M1>>(b.begin(), b.end()));
 		auto c2 = convolution(std::vector<static_mint<M2>>(a.begin(), a.end()), std::vector<static_mint<M2>>(b.begin(), b.end()));
 		auto c3 = convolution(std::vector<static_mint<M3>>(a.begin(), a.end()), std::vector<static_mint<M3>>(b.begin(), b.end()));
-		int n = int(c1.size());
+		int n = (int) c1.size();
 		a.resize(n);
 		for (int i = 0; i < n; i++) {
 			a[i] = garner<M>(c1[i].val, c2[i].val, c3[i].val);
@@ -158,11 +152,37 @@ namespace ntt {
 	}
 
 	template<int M = 998244353, typename T>
-	std::enable_if_t<!is_mint<T>::value, std::vector<T>>
+	std::enable_if_t<!is_mint<T>::value, std::vector<static_mint<M>>>
 	convolution(const std::vector<T> &a, const std::vector<T> &b) {
-		auto f = convolution(std::vector<static_mint<M>>(a.begin(), a.end()),
-							 std::vector<static_mint<M>>(b.begin(), b.end()));
-		return std::vector<T>(f.begin(), f.end());
+		return convolution(std::vector<static_mint<M>>(a.begin(), a.end()), std::vector<static_mint<M>>(b.begin(), b.end()));
+	}
+
+	int garner(int a1, int a2, int a3, int M) {
+		constexpr auto M1 = 754974721, M2 = 167772161, M3 = 469762049;
+		constexpr auto R12 = static_mint<M2>(M1).inv().val;
+		constexpr auto R13 = static_mint<M3>(M1).inv().val;
+		constexpr auto R23 = static_mint<M3>(M2).inv().val;
+		int x1 = a1;
+		int x2 = (long long) (a2 - x1) * R12 % M2;
+		if (x2 < 0) x2 += M2;
+		int x3 = ((long long) (a3 - x1) * R13 % M3 - x2) * R23 % M3;
+		if (x3 < 0) x3 += M3;
+		return (x1 + (long long)x2 * M1 + (long long)x3 * M1 % M * M2) % M;
+	}
+
+	template <typename T>
+	std::enable_if_t<!is_mint<T>::value, std::vector<T>>
+	convolution(const std::vector<T> &a, const std::vector<T> &b, int M) {
+		constexpr auto M1 = 754974721, M2 = 167772161, M3 = 469762049;
+		auto c1 = convolution(std::vector<static_mint<M1>>(a.begin(), a.end()), std::vector<static_mint<M1>>(b.begin(), b.end()));
+		auto c2 = convolution(std::vector<static_mint<M2>>(a.begin(), a.end()), std::vector<static_mint<M2>>(b.begin(), b.end()));
+		auto c3 = convolution(std::vector<static_mint<M3>>(a.begin(), a.end()), std::vector<static_mint<M3>>(b.begin(), b.end()));
+		int n = (int) c1.size();
+		a.resize(n);
+		for (int i = 0; i < n; i++) {
+			a[i] = garner(c1[i].val, c2[i].val, c3[i].val, M);
+		}
+		return a;
 	}
 
 	template<typename T>
