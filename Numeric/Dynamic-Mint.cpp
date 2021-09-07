@@ -1,6 +1,7 @@
 #include <iostream>
 #include <assert.h>
 
+template <int version>
 struct dynamic_mint {
 	static int M;
 
@@ -117,13 +118,14 @@ struct dynamic_mint {
 	}
 };
 
-int dynamic_mint::M;
+template <int version>
+int dynamic_mint<version>::M;
 
 template <typename>
 struct is_mint_helper : std::false_type { };
 
-template <>
-struct is_mint_helper<dynamic_mint> : std::true_type { };
+template <int version>
+struct is_mint_helper<dynamic_mint<version>> : std::true_type { };
 
 template <typename T>
 struct is_mint : is_mint_helper<typename std::decay<T>::type> { };
