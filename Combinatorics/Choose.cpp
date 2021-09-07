@@ -1,6 +1,6 @@
 #include <vector>
 #include <cassert>
-#include "../Numeric/StaticMint.h"
+#include "../Numeric/Static-Mint.h"
 using namespace std;
 
 template <typename mint>

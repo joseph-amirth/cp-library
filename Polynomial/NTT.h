@@ -1,6 +1,6 @@
 #include <vector>
 #include <algorithm>
-#include "../Numeric/StaticMint.h"
+#include "../Numeric/Static-Mint.h"
 
 namespace ntt {
 	template<int P>
