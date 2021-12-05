@@ -164,5 +164,4 @@ struct montgomery_mint {
 };
 
 template<uint32_t M>
-struct is_static_mint_helper<montgomery_mint<M>> : std::true_type {
-};
+struct is_static_mint_helper<montgomery_mint<M>> : std::true_type {};

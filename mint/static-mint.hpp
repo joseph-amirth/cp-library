@@ -126,5 +126,4 @@ struct static_mint {
 };
 
 template<int M>
-struct is_static_mint_helper<static_mint<M>> : std::true_type {
-};
+struct is_static_mint_helper<static_mint<M>> : std::true_type {};

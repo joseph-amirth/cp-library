@@ -133,5 +133,4 @@ template<int version>
 int dynamic_mint<version>::M;
 
 template<int version>
-struct is_dynamic_mint_helper<dynamic_mint<version>> : std::true_type {
-};
+struct is_dynamic_mint_helper<dynamic_mint<version>> : std::true_type {};
