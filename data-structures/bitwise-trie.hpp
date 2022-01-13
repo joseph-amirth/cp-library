@@ -63,7 +63,7 @@ struct bitwise_trie {
     }
 
     std::bitset<N> xor_maximum(const std::bitset<N> &b) {
-        return xor_minimum(~b);
+        return ~xor_minimum(~b);
     }
 
     node &operator[](int i) {
