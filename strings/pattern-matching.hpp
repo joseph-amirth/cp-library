@@ -1,7 +1,8 @@
 #pragma once
 
-#include <vector>
 #include <string>
+#include <vector>
+#include <array>
 
 template<typename string_t>
 std::vector<int> prefix_function(const string_t &s, int n = -1) {
@@ -66,19 +67,21 @@ std::vector<int> z_function(const string_t &s, int n = -1) {
     return z;
 }
 
-template<typename string_t>
+template <char f ='a', int K = 26, typename string_t>
 std::vector<std::vector<int>> prefix_automaton(const string_t &s, int n = -1) {
-    if (n == -1) n = int(s.size());
-    std::vector<int> l = lps(s, n);
-    std::vector<std::vector<int>> f(n, std::vector<int>(26));
+    if (n == -1) {
+        n = (int) s.size();
+    }
+    std::vector<int> lps = prefix_function(s, n);
+    std::vector<std::vector<int>> automaton(n, std::array<int, K>());
     for (int i = 0; i < n; i++) {
-        for (int j = 0; j < 26; j++) {
-            if (j == s[i] - 'a' or i == 0) {
-                f[i][j] = i;
+        for (int j = 0; j < K; j++) {
+            if (i == 0 || j == s[i] - f) {
+                automaton[i][j] = i;
             } else {
-                f[i][j] = f[l[j - 1]][j];
+                automaton[i][j] = automaton[lps[j - 1]][j];
             }
         }
     }
-    return f;
+    return automaton;
 }
