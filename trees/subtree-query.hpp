@@ -14,7 +14,9 @@ struct subtree_query { //vertex queries
         euler.reserve(2 * g.n - 1);
         dfs(root, -1, g);
         std::vector<T> values(2 * g.n - 1, e);
-        for (int i = 0; i < g.n; i++) values[tin[i]] = T(a[i]);
+        for (int i = 0; i < g.n; i++) {
+            values[tin[i]] = T(a[i]);
+        }
         st = segtree_t(values, 2 * g.n - 1, e, f);
     }
 
