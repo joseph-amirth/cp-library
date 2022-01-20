@@ -3,23 +3,19 @@
 #include "../graphs/graph.hpp"
 #include <functional>
 
-template<typename T, typename S>
+template<typename T, typename segtree_t>
 struct subtree_query { //vertex queries
-    using F = std::function<T(const T &, const T &)>;
-
     int timer = 0;
     std::vector<int> euler, tin, tout;
-    T e;
-    F f;
-    S st;
+    segtree_t st;
 
-    template<typename U>
-    subtree_query(const graph &g, const U &a, int root, T &&e, F &&f) : tin(g.n), tout(g.n), e(e), f(f) {
+    template<typename U, typename F>
+    subtree_query(const graph &g, const U &a, int root, T e, F &&f) : tin(g.n), tout(g.n) {
         euler.reserve(2 * g.n - 1);
         dfs(root, -1, g);
         std::vector<T> values(2 * g.n - 1, e);
         for (int i = 0; i < g.n; i++) values[tin[i]] = T(a[i]);
-        st = S(values, 2 * g.n - 1, e, f);
+        st = segtree_t(values, 2 * g.n - 1, e, f);
     }
 
     void dfs(int u, int p, const graph &g) {
