@@ -3,10 +3,8 @@
 #include <vector>
 #include <functional>
 
-template<typename T>
+template<typename T, typename F = std::function<T(const T&, const T&)>>
 struct fenwick_tree_2d {
-    using F = std::function<T(const T&, const T&)>;
-
     int n, m;
     std::vector<std::vector<int>> bit;
     F f;

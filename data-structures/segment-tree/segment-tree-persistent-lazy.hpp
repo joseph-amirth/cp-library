@@ -3,10 +3,8 @@
 #include <vector>
 #include <functional>
 
-template<typename T, typename L = T>
+template<typename T, typename L = T, typename F = std::function<T(const T&, const T&)>>
 struct segment_tree {
-    using F = std::function<T(const T &, const T &)>;
-
     struct node {
         T val;
         L lazy;

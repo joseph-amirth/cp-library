@@ -3,10 +3,8 @@
 #include "../graphs/graph-weighted.hpp"
 #include <functional>
 
-template<typename T>
+template<typename T, typename F = std::function<T(const T&, const T&)>>
 struct path_query { //queries on edges
-    using F = std::function<T(const T &, const T &)>;
-
     int timer, lg;
     std::vector<int> tin, tout;
     std::vector<std::vector<int>> up;
