@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../binary-search-trees/splay-tree/implicit-splay-tree.cpp"
+#include "../data-structures/splay-tree/implicit-splay-tree.hpp"
 #include <vector>
 
 template<typename lct_node>
