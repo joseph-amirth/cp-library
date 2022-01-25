@@ -3,14 +3,13 @@
 #include "../graphs/graph.hpp"
 
 struct heavy_light {
-    const graph &g;
     std::vector<int> parent, head, depth, ptr;
     std::vector<int> tree_pos;
 
-    heavy_light(const graph &g) : g(g), parent(g.n, -1), head(g.n, -1), depth(g.n), ptr(g.n, -1), tree_pos(g.n, -1) {
+    heavy_light(const graph &g) : parent(g.n, -1), head(g.n, -1), depth(g.n), ptr(g.n, -1), tree_pos(g.n, -1) {
         auto dfs = [&](int u, const auto &self) -> int {
             int tree_sz = 1, mx_sz = 0;
-            for (int i: g.adj[u]) {
+            for (int i : g.adj[u]) {
                 int v = g.edges[i].u ^ g.edges[i].v ^ u;
                 if (v == parent[u]) {
                     continue;
@@ -51,11 +50,11 @@ struct heavy_light {
     }
 
     template<typename F, typename G>
-    void ordered_visit_path(int u, int v, F &&f1, G &&f2) const {
+    void ordered_visit_path(int u, int v, F &&f, G &&g) const {
         static std::vector<std::pair<int, int>> right_segments;
         while (head[u] != head[v]) {
             if (depth[head[u]] >= depth[head[v]]) {
-                f1(tree_pos[u], tree_pos[head[u]]);
+                f(tree_pos[u], tree_pos[head[u]]);
                 u = parent[head[u]];
             } else {
                 right_segments.emplace_back(tree_pos[v], tree_pos[head[v]]);
@@ -63,13 +62,13 @@ struct heavy_light {
             }
         }
         if (depth[u] >= depth[v]) {
-            f1(tree_pos[u], tree_pos[v]);
+            f(tree_pos[u], tree_pos[v]);
         } else {
-            f2(tree_pos[v], tree_pos[u]);
+            g(tree_pos[v], tree_pos[u]);
         }
         while (!right_segments.empty()) {
             auto[l, r] = right_segments.back();
-            f2(l, r);
+            g(l, r);
             right_segments.pop_back();
         }
     }
