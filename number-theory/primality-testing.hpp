@@ -3,6 +3,8 @@
 #include <random>
 #include <chrono>
 #include <cassert>
+
+#include "../miscellaneous/type-promotion.hpp"
 #include "modular-arithmetic.hpp"
 
 namespace math {
@@ -20,7 +22,7 @@ namespace math {
     bool witness(T a, T n, T u, T t) {
         T x = modexp(a, u, n);
         for (int i = 0; i < t; i++) {
-            T now_x = (promote_t <T>) x * x % n;
+            T now_x = (promote_t<T>) x * x % n;
             if (now_x == 1 && x != n - 1 && x != 1) {
                 return true;
             }
@@ -29,10 +31,9 @@ namespace math {
         return x != 1;
     }
 
-    std::mt19937_64 rng(std::chrono::steady_clock::now().time_since_epoch().count());
-
-    template<typename T, int no_of_iter = 30>
+    template<int no_of_iter, typename T>
     bool randomized_miller_rabin(T n) {
+        static std::mt19937_64 rng(std::chrono::steady_clock::now().time_since_epoch().count());
         T u = n - 1, t = 0;
         while (u % 2 == 0) {
             u /= 2, t += 1;
@@ -63,14 +64,16 @@ namespace math {
         return true;
     };
 
-    template<typename T, int no_of_iter = 1000000>
+    template<int no_of_iter, typename T>
     T random_prime(T l, T r) {
         assert(0 < l <= r);
+        static std::mt19937_64 rng(std::chrono::steady_clock::now().time_since_epoch().count());
         for (int iter = 0; iter < no_of_iter; iter++) {
             T n = l + rng() % (r - l + 1);
-            if (randomized_miller_rabin(n)) {
+            if (randomized_miller_rabin<30>(n)) {
                 return n;
             }
         }
+        return T(0);
     }
 }
