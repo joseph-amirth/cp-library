@@ -2,31 +2,31 @@
 
 #include <vector>
 #include <cassert>
+#include "../miscellaneous/type-promotion.hpp"
 
 namespace math {
-    constexpr int mod_exp(long long x, long long n, int m) {
+    template <typename T>
+    constexpr T mod_exp(promote_t<T> x, promote_t<T> n, T m) {
         assert(0 <= n && 0 < m);
         if ((x %= m) < 0) {
             x += m;
         }
-        long long ans = 1;
-        for (; n; n /= 2) {
+        promote_t<T> ans = 1;
+        for (; n > 0; n /= 2) {
             if (n & 1) {
                 ans = ans * x % m;
             }
             x = x * x % m;
         }
-        return ans;
+        return (T) ans;
     }
 
     template<typename T>
     constexpr T primitive_root(T n) {
         assert(1 < n);
 
-        T factors[20] = {};
         int no_factors = 0;
-
-        T x = n - 1;
+        T x = n - 1, factors[20] = {};
         for (int i = 2; (T) i * i <= x; i++) {
             if (x % i == 0) {
                 factors[no_factors++] = i;
@@ -48,6 +48,6 @@ namespace math {
                 return i;
             }
         }
-        return -1;
+        return T(0);
     }
 }
