@@ -3,20 +3,21 @@
 #include "../graphs/graph.hpp"
 
 struct lowest_common_ancestor {
-    int timer, lg;
+    int lg;
     std::vector<int> tin, tout, lvl;
     std::vector<std::vector<int>> up;
 
-    lowest_common_ancestor(const graph &g, int root = 0) : timer(0), tin(g.n), tout(g.n), lvl(g.n) {
+    lowest_common_ancestor(const graph &g, int root = 0) : tin(g.n), tout(g.n), lvl(g.n) {
         lg = 32 - __builtin_clz(g.n);
         up.assign(g.n, std::vector<int>(lg, -1));
 
+        int timer = 0;
         auto dfs = [&](int u, const auto &self) -> void {
             tin[u] = timer++;
             for (int i = 1; i < lg && up[u][i - 1] != -1; i++) {
                 up[u][i] = up[up[u][i - 1]][i - 1];
             }
-            for (int i: g.adj[u]) {
+            for (int i : g.adj[u]) {
                 int v = g.edges[i].u ^ g.edges[i].v ^ u;
                 if (v != up[u][0]) {
                     lvl[v] = lvl[u] + 1;
