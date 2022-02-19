@@ -12,10 +12,11 @@ struct sparse_table {
 
     sparse_table() : n(), f() {}
 
-    sparse_table(std::vector<T> &&v, F &&f) : n(v.size()), f(f) {
+    template <typename iterator_t>
+    sparse_table(iterator_t first, iterator_t last, F &&f) : n(std::distance(first, last)), f(f) {
         assert(n > 0);
         int lg = 32 - __builtin_clz(n);
-        mat.resize(lg), mat[0] = v;
+        mat.resize(lg), mat[0] = std::vector<T>(first, last);
         for (int j = 1; j < mat.size(); j++) {
             mat[j].resize(n - (1 << j) + 1);
             for (int i = 0; i + (1 << j) <= n; i++) {
