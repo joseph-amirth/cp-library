@@ -3,8 +3,8 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-#include "../mint/static-mint.hpp"
-#include "../data-structures/splay-tree/implicit-splay-tree.hpp"
+#include "mint/static-mint.hpp"
+#include "data-structures/splay-tree/implicit-splay-tree.hpp"
 
 using mint = static_mint<998244353>;
 
