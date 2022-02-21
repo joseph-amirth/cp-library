@@ -36,7 +36,7 @@ struct flat_tensor_view {
         return flat_tensor_view<T>(D - 1, *strides, shape + 1, strides + 1, data + index * (*strides));
     }
 
-    const flat_tensor_view<T> &operator[](const int index) const {
+    const flat_tensor_view<T> operator[](const int index) const {
         return flat_tensor_view<T>(D - 1, *strides, shape + 1, strides + 1, data + index * (*strides));
     }
 
@@ -104,7 +104,7 @@ struct flat_tensor {
         return flat_tensor_view<T>(D - 1, strides.front(), shape.data() + 1, strides.data() + 1, data.data() + index * strides.front());
     }
 
-    const flat_tensor_view<T> &operator[](const int index) const {
+    const flat_tensor_view<T> operator[](const int index) const {
         return flat_tensor_view<T>(D - 1, strides.front(), shape.data() + 1, strides.data() + 1, data.data() + index * strides.front());
     }
 
