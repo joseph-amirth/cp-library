@@ -3,5 +3,6 @@
 /.idea/
 CMakeLists.txt
 main.cpp
+expand.cpp
 test.cpp
 *.un~
