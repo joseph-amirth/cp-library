@@ -1,15 +1,15 @@
 #pragma once
 
-#include "../numeric/static-mint.hpp"
+#include "../mint/static-mint.hpp"
 #include <vector>
 #include <cassert>
 
 namespace string_hashing {
     template<int B, int M>
     struct rolling_hash {
-        static std::vector<static_mint < M>> pw,
-        inv_pw;
-        std::vector<static_mint < M>> pref;
+        static std::vector<static_mint<M>> pw, inv_pw;
+
+        std::vector<static_mint<M>> pref;
 
         rolling_hash(const std::string &s) : pref(s.size()) {
             assert(!s.empty());
@@ -47,10 +47,7 @@ namespace string_hashing {
 
         double_rolling_hash(const std::string &s) : h1(s), h2(s) {}
 
-        std::pair<static_mint < M1>, static_mint <M2>> substr(
-        int i,
-        int j
-        ) const {
+        std::pair<static_mint < M1>, static_mint <M2>> substr(int i, int j) const {
             return std::make_pair(h1.substr(i, j), h2.substr(i, j));
         }
 
