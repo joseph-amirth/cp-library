@@ -3,7 +3,7 @@
 #include <vector>
 #include <immintrin.h>
 #include <algorithm>
-#include "../numeric/montgomery-mint.hpp"
+#include "../mint/montgomery-mint.hpp"
 
 namespace ntt {
     template<uint32_t P>
@@ -49,29 +49,29 @@ namespace ntt {
     }
 
     template<uint32_t M>
-    std::vector<montgomery_mint < M>>
-    root = {0, 1};
+    std::vector<montgomery_mint<M>> root = {0, 1};
 
     template<uint32_t M>
     void compute_roots(int lg) {
         static int computed = 1;
         if (lg <= computed) return;
-        root < M >.resize(1 << lg);
+        root<M>.resize(1 << lg);
         for (int k = computed; k < lg; k++) {
-            montgomery_mint <M> z(prime_info<M>::root);
+            montgomery_mint<M> z(prime_info<M>::root);
             for (int i = (1 << (k + 1)); i < prime_info<M>::root_pw; i <<= 1) {
                 z *= z;
             }
             for (int i = (1 << (k - 1)); i < (1 << k); i++) {
-                root < M >[i << 1] = root < M >[i];
-                root < M >[i << 1 | 1] = root < M >[i] *z;
+                root<M>[i << 1] = root<M>[i];
+                root<M>[i << 1 | 1] = root<M>[i] * z;
             }
         }
         computed = lg;
     }
 
     template<uint32_t M>
-    void ntt(uint32_t *a, int n) {
+    void ntt(std::vector<montgomery_mint<M>> &_a) {
+        int n = (int) _a.size(), *a = _a.data();
         int lg = 32 - __builtin_clz(n) - 1;
         compute_bit_reverse(lg), compute_roots<M>(lg);
         int shift = 31 - lg;
@@ -142,7 +142,7 @@ namespace ntt {
             if (k < 8) {
                 for (int i = 0; i < n; i += 2 * k) {
                     for (int j = 0; j < k; j++) {
-                        auto z = montgomery_mint<M>::reduce((uint64_t) root < M >[j + k].val * a[i + j + k]);
+                        auto z = montgomery_mint<M>::reduce((uint64_t) root<M>[j + k].val * a[i + j + k]);
                         a[i + j + k] = a[i + j] - z;
                         if (a[i + j + k] >= M) {
                             a[i + j + k] += M;
@@ -157,7 +157,7 @@ namespace ntt {
                 for (int i = 0; i < n; i += 2 * k) {
                     for (int j = 0; j < k; j += 8) {
                         __m256i _a = _mm256_cvtepu32_epi64(
-                                _mm_loadu_si128((__m128i *) ((uint32_t *) root < M >.data() + j + k)));
+                                _mm_loadu_si128((__m128i *) ((uint32_t *) root<M>.data() + j + k)));
                         __m256i _c = _mm256_cvtepu32_epi64(_mm_loadu_si128((__m128i *) (a + i + j + k)));
 
                         _a = _c = _mm256_mul_epu32(_a, _c);
@@ -168,7 +168,7 @@ namespace ntt {
                         _a = _mm256_sub_epi64(_a, _mm256_and_si256(__M64, _mm256_cmpgt_epi64(_a, __M_1_64)));
 
                         __m256i _b = _mm256_cvtepu32_epi64(
-                                _mm_loadu_si128((__m128i *) ((uint32_t *) root < M >.data() + j + k + 4)));
+                                _mm_loadu_si128((__m128i *) ((uint32_t *) root<M>.data() + j + k + 4)));
                         __m256i _d = _mm256_cvtepu32_epi64(_mm_loadu_si128((__m128i *) (a + i + j + k + 4)));
 
                         _b = _d = _mm256_mul_epu32(_b, _d);
@@ -198,8 +198,7 @@ namespace ntt {
     }
 
     template<typename mint>
-    std::enable_if_t<is_montgomery_mint<mint>::value, std::vector<mint>>
-    naive_convolution(const std::vector<mint> &a, const std::vector<mint> &b) {
+    std::vector<mint> naive_convolution(const std::vector<mint> &a, const std::vector<mint> &b) {
         std::vector<mint> c(a.size() + b.size() - 1);
         for (int i = 0; i < (int) a.size(); i++) {
             for (int j = 0; j < (int) b.size(); j++) {
@@ -209,338 +208,95 @@ namespace ntt {
         return c;
     }
 
-    template<uint32_t M>
-    std::enable_if_t<prime_info<M>::root != 0, std::vector<montgomery_mint < M>>>
-    convolution(std::vector<montgomery_mint < M>>
-    a, std::vector<montgomery_mint < M>>
-    b) {
-    if (a.
-
-    empty()
-
-    || b.
-
-    empty()
-
-    ) {
-    return {
-};
-}
-if (a.
-
-size()
-
-< 8 || b.
-
-size()
-
-< 8) {
-return
-naive_convolution(a, b
-);
-}
-int n = 1;
-while (n<a.
-
-size()
-
-+ b.
-
-size()
-
-) {
-n <<= 1;
-}
-a.
-resize(n), b
-.
-resize(n);
-ntt<M>((uint32_t
-*) a.
-
-data(), n
-
-);
-ntt<M>((uint32_t
-*) b.
-
-data(), n
-
-);
-montgomery_mint <M> n_inv = montgomery_mint<M>(n).inv();
-for (
-int i = 0;
-i<n;
-i++) {
-a[i] *= b[i] *
-n_inv;
-}
-std::reverse(a
-.
-
-begin()
-
-+ 1, a.
-
-end()
-
-);
-ntt<M>((uint32_t
-*) a.
-
-data(), n
-
-);
-return
-a;
-}
-
-template<uint32_t M>
-std::enable_if_t<prime_info<M>::root != 0, void>
-inplace_convolution(std::vector<montgomery_mint < M>>
-
-&a, std::vector<montgomery_mint < M>>
-b) {
-if (a.
-
-empty()
-
-|| b.
-
-empty()
-
-) {
-a.
-
-clear();
-
-return;
-}
-if (a.
-
-size()
-
-< 8 || b.
-
-size()
-
-< 8) {
-a = naive_convolution(a, b);
-return;
-}
-int n = 1;
-while (n<a.
-
-size()
-
-+ b.
-
-size()
-
-) {
-n <<= 1;
-}
-a.
-resize(n), b
-.
-resize(n);
-ntt<M>((uint32_t
-*) a.
-
-data(), n
-
-);
-ntt<M>((uint32_t
-*) b.
-
-data(), n
-
-);
-montgomery_mint <M> n_inv = montgomery_mint<M>(n).inv();
-for (
-int i = 0;
-i<n;
-i++) {
-a[i] *= b[i] *
-n_inv;
-}
-std::reverse(a
-.
-
-begin()
-
-+ 1, a.
-
-end()
-
-);
-ntt<M>((uint32_t
-*) a.
-
-data(), n
-
-);
-}
-
-template<uint32_t M>
-montgomery_mint <M> garner(int a1, int a2, int a3) {
-    constexpr auto M1 = 754974721, M2 = 167772161, M3 = 469762049;
-    constexpr int R12 = montgomery_mint<M2>(M1).inv().get_val();
-    constexpr int R13 = montgomery_mint<M3>(M1).inv().get_val();
-    constexpr int R23 = montgomery_mint<M3>(M2).inv().get_val();
-    int x1 = a1;
-    int x2 = (long long) (a2 - x1) * R12 % M2;
-    if (x2 < 0) x2 += M2;
-    int x3 = ((long long) (a3 - x1) * R13 % M3 - x2) * R23 % M3;
-    if (x3 < 0) x3 += M3;
-    return montgomery_mint<M>(x1) + montgomery_mint<M>(x2) * M1 + montgomery_mint<M>(x3) * M1 * M2;
-}
-
-template<uint32_t M>
-std::enable_if_t<prime_info<M>::root == 0, std::vector<montgomery_mint < M>>>
-convolution(std::vector<montgomery_mint < M>>
-a, const std::vector<montgomery_mint < M>> &b) {
-constexpr auto M1 = 754974721u, M2 = 167772161u, M3 = 469762049u;
-auto c1 = convolution(std::vector<montgomery_mint < M1>>
-(a.
-
-begin(), a
-
-.
-
-end()
-
-),
-std::vector<montgomery_mint < M1>>(b.
-
-begin(), b
-
-.
-
-end()
-
-));
-auto c2 = convolution(std::vector<montgomery_mint < M2>>
-(a.
-
-begin(), a
-
-.
-
-end()
-
-),
-std::vector<montgomery_mint < M2>>(b.
-
-begin(), b
-
-.
-
-end()
-
-));
-auto c3 = convolution(std::vector<montgomery_mint < M3>>
-(a.
-
-begin(), a
-
-.
-
-end()
-
-),
-std::vector<montgomery_mint < M3>>(b.
-
-begin(), b
-
-.
-
-end()
-
-));
-int n = (int) c1.size();
-a.
-resize(n);
-for (
-int i = 0;
-i<n;
-i++) {
-a[i] =
-garner<M>(c1[i]
-.
-
-get_val(), c2[i]
-
-.
-
-get_val(), c3[i]
-
-.
-
-get_val()
-
-);
-}
-return
-a;
-}
-
-template<uint32_t M = 998244353, typename T>
-std::enable_if_t<!is_montgomery_mint<T>::value, std::vector<montgomery_mint < M>>>
-
-convolution(const std::vector<T> &a, const std::vector<T> &b) {
-    return convolution(std::vector<montgomery_mint < M>>
-    (a.begin(), a.end()),
-            std::vector<montgomery_mint < M>>
-    (b.begin(), b.end()));
-}
-
-int garner(int a1, int a2, int a3, uint32_t M) {
-    constexpr auto M1 = 754974721, M2 = 167772161, M3 = 469762049;
-    constexpr int R12 = montgomery_mint<M2>(M1).inv().get_val();
-    constexpr int R13 = montgomery_mint<M3>(M1).inv().get_val();
-    constexpr int R23 = montgomery_mint<M3>(M2).inv().get_val();
-    int x1 = a1;
-    int x2 = (long long) (a2 - x1) * R12 % M2;
-    if (x2 < 0) x2 += M2;
-    int x3 = ((long long) (a3 - x1) * R13 % M3 - x2) * R23 % M3;
-    if (x3 < 0) x3 += M3;
-    return (x1 + (long long) x2 * M1 + (long long) x3 * M1 % M * M2) % M;
-}
-
-template<typename T>
-std::enable_if_t<!is_montgomery_mint<T>::value, std::vector<T>>
-convolution(std::vector<T> a, const std::vector<T> &b, uint32_t M) {
-    constexpr auto M1 = 754974721u, M2 = 167772161u, M3 = 469762049u;
-    auto c1 = convolution(std::vector<montgomery_mint < M1>>
-    (a.begin(), a.end()),
-            std::vector<montgomery_mint < M1>>
-    (b.begin(), b.end()));
-    auto c2 = convolution(std::vector<montgomery_mint < M2>>
-    (a.begin(), a.end()),
-            std::vector<montgomery_mint < M2>>
-    (b.begin(), b.end()));
-    auto c3 = convolution(std::vector<montgomery_mint < M3>>
-    (a.begin(), a.end()),
-            std::vector<montgomery_mint < M3>>
-    (b.begin(), b.end()));
-    int n = (int) c1.size();
-    a.resize(n);
-    for (int i = 0; i < n; i++) {
-        a[i] = garner(c1[i].get_val(), c2[i].get_val(), c3[i].get_val(), M);
-    }
-    return a;
-}
-
-template<typename T>
-void normalize(const std::vector<T> &a) {
-    for (int i = int(a.size()) - 1; i >= 0; i--) {
-        if (a[i]) {
-            a.resize(i + 1);
-            return;
+    template <uint32_t M>
+    std::enable_if_t<prime_info<M>::root != 0, std::vector<montgomery_mint<M>>>
+    convolution(std::vector<montgomery_mint<M>> a, std::vector<montgomery_mint<M>> b) {
+        int n = 1;
+        while (n < a.size() + b.size()) {
+            n <<= 1;
         }
+        a.resize(n), b.resize(n);
+        ntt(a), ntt(b);
+        montgomery_mint<M> n_inv = montgomery_mint<M>(n).inv();
+        for (int i = 0; i < n; i++) {
+            a[i] *= b[i] * n_inv;
+        }
+        std::reverse(a.begin() + 1, a.end());
+        return ntt(a), a;
     }
-    a.clear();
-}
 
+    template <uint32_t M>
+    std::enable_if_t<prime_info<M>::root != 0, std::vector<montgomery_mint<M>>&>
+    inplace_convolution(std::vector<montgomery_mint<M>> &a, std::vector<montgomery_mint<M>> b) {
+        int n = 1;
+        while (n < a.size() + b.size()) {
+            n <<= 1;
+        }
+        a.resize(n), b.resize(n);
+        ntt(a), ntt(b);
+        montgomery_mint<M> n_inv = montgomery_mint<M>(n).inv();
+        for (int i = 0; i < n; i++) {
+            a[i] *= b[i] * n_inv;
+        }
+        std::reverse(a.begin() + 1, a.end());
+        return ntt(a), a;
+    }
+
+    template<typename mint>
+    mint garner(uint32_t a1, uint32_t a2, uint32_t a3) {
+        static constexpr auto M1 = 167772161u, M2 = 469762049u, M3 = 754974721u;
+        static constexpr auto R12 = montgomery_mint<M2>(M1).inv().get_val();
+        static constexpr auto R13 = montgomery_mint<M3>(M1).inv().get_val();
+        static constexpr auto R23 = montgomery_mint<M3>(M2).inv().get_val();
+        uint32_t x1 = a1;
+        uint32_t x2 = (uint64_t) (a2 >= x1 ? a2 - x1 : M2 + a2 - x1) * R12 % M2;
+        uint32_t temp = (uint64_t) (a3 >= x1 ? a3 - x1 : M3 + a3 - x1) * R13 % M3;
+        uint32_t x3 = (uint64_t) (temp >= x2 ? temp - x2 : M3 + temp - x2) * R23 % M3;
+        return mint(x1) + mint(x2) * M1 + mint(x3) * M1 * M2;
+    }
+
+    template<typename mint>
+    std::vector<mint> arbitrary_mod_convolution(std::vector<mint> a, const std::vector<mint> &b) {
+        static constexpr auto M1 = 167772161u, M2 = 469762049u, M3 = 754974721u;
+        auto c1 = convolution(std::vector<montgomery_mint<M1>>(a.begin(), a.end()),
+                              std::vector<montgomery_mint<M1>>(b.begin(), b.end()));
+        auto c2 = convolution(std::vector<montgomery_mint<M2>>(a.begin(), a.end()),
+                              std::vector<montgomery_mint<M2>>(b.begin(), b.end()));
+        auto c3 = convolution(std::vector<montgomery_mint<M3>>(a.begin(), a.end()),
+                              std::vector<montgomery_mint<M3>>(b.begin(), b.end()));
+        int n = (int) c1.size();
+        a.resize(n);
+        for (int i = 0; i < n; i++) {
+            a[i] = garner<mint, montgomery_mint>(c1[i].get_val(), c2[i].get_val(), c3[i].get_val());
+        }
+        return a;
+    }
+
+    template<typename mint>
+    std::vector<mint> &arbitrary_mod_inplace_convolution(std::vector<mint> &a, const std::vector<mint> &b) {
+        static constexpr auto M1 = 167772161, M2 = 469762049, M3 = 754974721;
+        auto c1 = convolution(std::vector<montgomery_mint<M1>>(a.begin(), a.end()),
+                              std::vector<montgomery_mint<M1>>(b.begin(), b.end()));
+        auto c2 = convolution(std::vector<montgomery_mint<M2>>(a.begin(), a.end()),
+                              std::vector<montgomery_mint<M2>>(b.begin(), b.end()));
+        auto c3 = convolution(std::vector<montgomery_mint<M3>>(a.begin(), a.end()),
+                              std::vector<montgomery_mint<M3>>(b.begin(), b.end()));
+        int n = (int) c1.size();
+        a.resize(n);
+        for (int i = 0; i < n; i++) {
+            a[i] = garner<mint>(c1[i].get_val(), c2[i].get_val(), c3[i].get_val());
+        }
+        return a;
+    }
+
+    template<typename T>
+    void normalize(const std::vector<T> &a) {
+        for (int i = (int) a.size() - 1; i >= 0; i--) {
+            if (a[i]) {
+                a.resize(i + 1);
+                return;
+            }
+        }
+        a.clear();
+    }
 }
