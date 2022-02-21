@@ -7,7 +7,7 @@ struct binomial {
     std::vector<mint> fact, inv_fact;
 
     binomial(int n) : fact(n + 1), inv_fact(n + 1) {
-        const int M = mint::get_mod();
+        const int M = mint::get_m();
         fact[0] = inv_fact[0] = 1;
         for (int i = 1; i <= n; i++) {
             fact[i] = i * fact[i - 1];
