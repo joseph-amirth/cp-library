@@ -1,4 +1,4 @@
-#pragma
+#pragma once
 
 #include <vector>
 #include <array>
@@ -32,12 +32,12 @@ struct flat_tensor_view {
         return flat_tensor_view<T>(D - i, view_sz, shape + i, strides + i, data + offset);
     }
 
-    T &operator[](const int index) {
-        return data[index];
+    flat_tensor_view<T> operator[](const int index) {
+        return flat_tensor_view<T>(D - 1, *strides, shape + 1, strides + 1, data + index * (*strides));
     }
 
-    const T &operator[](const int index) const {
-        return data[index];
+    const flat_tensor_view<T> &operator[](const int index) const {
+        return flat_tensor_view<T>(D - 1, *strides, shape + 1, strides + 1, data + index * (*strides));
     }
 
     T &operator[](const std::initializer_list<int> &index) {
@@ -100,12 +100,12 @@ struct flat_tensor {
         return flat_tensor_view<T>(D - i, view_sz, shape.data() + i, strides.data() + i, data.data() + offset);
     }
 
-    T &operator[](const int index) {
-        return data[index];
+    flat_tensor_view<T> operator[](const int index) {
+        return flat_tensor_view<T>(D - 1, strides.front(), shape.data() + 1, strides.data() + 1, data.data() + index * strides.front());
     }
 
-    const T &operator[](const int index) const {
-        return data[index];
+    const flat_tensor_view<T> &operator[](const int index) const {
+        return flat_tensor_view<T>(D - 1, strides.front(), shape.data() + 1, strides.data() + 1, data.data() + index * strides.front());
     }
 
     T &operator[](const std::initializer_list<int> &index) {

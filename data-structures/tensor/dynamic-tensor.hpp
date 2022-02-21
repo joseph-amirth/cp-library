@@ -1,4 +1,4 @@
-#pragma
+#pragma once
 
 #include <vector>
 
@@ -30,3 +30,31 @@ struct dynamic_tensor<T, 1> : std::vector<T> {
         std::fill(this->begin(), this->end(), val);
     }
 };
+
+template <typename T, int D, typename F>
+dynamic_tensor<T, D> combine_tensors(dynamic_tensor<T, D> a, const dynamic_tensor<T, D> &b, const F &f) {
+    if constexpr (D == 1) {
+        for (int i = 0; i < (int) a.size(); i++) {
+            a[i] = f(a[i], b[i]);
+        }
+    } else {
+        for (int i = 0; i < (int) a.size(); i++) {
+            a[i] = combine_tensors(a[i], b[i], f);
+        }
+    }
+    return a;
+}
+
+template <typename T, int D, typename F>
+dynamic_tensor<T, D>& inplace_combine_tensors(dynamic_tensor<T, D> &a, const dynamic_tensor<T, D> &b, const F &f) {
+    if constexpr (D == 1) {
+        for (int i = 0; i < (int) a.size(); i++) {
+            a[i] = f(a[i], b[i]);
+        }
+    } else {
+        for (int i = 0; i < (int) a.size(); i++) {
+            inplace_combine_tensors(a[i], b[i], f);
+        }
+    }
+    return a;
+}
