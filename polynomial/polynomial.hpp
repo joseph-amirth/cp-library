@@ -3,9 +3,11 @@
 #include "ntt.hpp"
 #include <algorithm>
 
-template<typename T>
+namespace polynomials {
+
+template <typename T>
 struct polynomial : public std::vector<T> {
-    template<typename...args>
+    template <typename...args>
     polynomial(args...A) : std::vector<T>(A...) {}
 
     polynomial(const std::initializer_list<T> &l) : std::vector<T>(l) {}
@@ -46,7 +48,7 @@ struct polynomial : public std::vector<T> {
         return *this;
     }
 
-    void naive_mul(polynomial &a, const polynomial &b) const {
+    static void naive_mul(polynomial &a, const polynomial &b) {
         polynomial result(a.deg() + b.deg() + 1);
         for (int i = 0; i <= a.deg(); i++) {
             for (int j = 0; j <= b.deg(); j++) {
@@ -69,7 +71,7 @@ struct polynomial : public std::vector<T> {
     }
 
     polynomial &operator*=(const T &val) {
-        for (auto &x: *this) {
+        for (auto &x : *this) {
             x *= val;
         }
         return *this;
@@ -98,7 +100,7 @@ struct polynomial : public std::vector<T> {
 
     polynomial &operator/=(T val) {
         val = 1 / val;
-        for (auto &x: *this) {
+        for (auto &x : *this) {
             x *= val;
         }
         return *this;
@@ -283,3 +285,5 @@ struct polynomial : public std::vector<T> {
         return b;
     }
 };
+
+}

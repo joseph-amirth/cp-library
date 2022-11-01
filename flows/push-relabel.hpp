@@ -3,13 +3,13 @@
 #include "flow-graph.hpp"
 #include <limits>
 
-template<typename T>
+template <typename T>
 T max_flow(flow_graph<T> &g, int s, int t) {
     std::vector<T> h(g.n), excess(g.n);
 
     auto push = [&](int i) -> void {
         int u = g.edges[i].u, v = g.edges[i].v;
-        T d = std::min(excess[u], g.edges[i].c - g.edges[i].f);
+        T d = std::min(excess[u], g.edges[i].cap - g.edges[i].flow);
         g.edges[i].f += d;
         g.edges[i ^ 1].f -= d;
         excess[u] -= d;
@@ -17,13 +17,13 @@ T max_flow(flow_graph<T> &g, int s, int t) {
     };
 
     auto relabel = [&](int u) -> void {
-        T d = std::numeric_limits<T>::max();
-        for (int i: g.adj[u]) {
-            if (g.edges[i].c - g.edges[i].f > 0) {
+        T d = 2 * g.n;
+        for (int i : g.adj[u]) {
+            if (g.edges[i].cap - g.edges[i].flow > 0) {
                 d = std::min(d, h[g.edges[i].v]);
             }
         }
-        if (d < std::numeric_limits<T>::max()) {
+        if (d < 2 * g.n) {
             h[u] = d + 1;
         }
     };
@@ -44,14 +44,14 @@ T max_flow(flow_graph<T> &g, int s, int t) {
 
     h[s] = g.n;
     excess[s] = std::numeric_limits<T>::max();
-    for (int i: g.adj[s]) {
+    for (int i : g.adj[s]) {
         push(i);
     }
 
     while (find_vertices(), !max_height.empty()) {
-        for (int u: max_height) {
+        for (int u : max_height) {
             bool pushed = false;
-            for (int i: g.adj[u]) {
+            for (int i : g.adj[u]) {
                 if (g.edges[i].c - g.edges[i].f > 0 && h[u] == h[g.edges[i].v] + 1) {
                     push(i);
                     pushed = true;
@@ -65,7 +65,7 @@ T max_flow(flow_graph<T> &g, int s, int t) {
     }
 
     T max_flow = 0;
-    for (int i: g.adj[s]) {
+    for (int i : g.adj[s]) {
         max_flow += g.edges[i].f;
     }
     return max_flow;

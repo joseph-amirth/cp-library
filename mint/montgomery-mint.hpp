@@ -1,6 +1,6 @@
 #pragma once
 
-#include "mint-traits.hpp"
+#include "type-traits.hpp"
 #include <iostream>
 #include <cstdint>
 

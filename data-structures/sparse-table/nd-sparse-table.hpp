@@ -53,7 +53,7 @@ struct nd_sparse_table {
             return f(mat[j][l], mat[j][r + 1 - (1 << j)]);
         } else {
             int j = 32 - __builtin_clz(r - l + 1) - 1;
-            return f(mat[j][l].query(tail...), mat[j][r - (1 << j) + 1].query(tail...));
+            return f(mat[j][l].range_query(tail...), mat[j][r - (1 << j) + 1].range_query(tail...));
         }
     }
 };

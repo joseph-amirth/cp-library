@@ -2,37 +2,46 @@
 
 #include <vector>
 #include <functional>
+#include <cassert>
 
-template<typename T, typename F = std::function<T(const T&, const T&)>>
+namespace data_structures {
+
+template <typename Semigroup>
 struct disjoint_sparse_table {
-    int n, lg;
-    std::vector<std::vector<T>> table;
-    F f;
+    using semigroup_type = Semigroup;
+    using value_type = typename semigroup_type::value_type;
 
-    disjoint_sparse_table() : n(), f() {}
+    int n;
+    std::vector<std::vector<value_type>> table;
 
-    template<typename U>
-    disjoint_sparse_table(const std::vector<U> &v, int n, F &&f) : n(v.size()), f(f) {
-        lg = 32 - __builtin_clz(n);
-        table.assign(lg, std::vector<T>(v.begin(), v.end()));
+    disjoint_sparse_table() : n() {}
+
+    template <typename ArrayLike>
+    disjoint_sparse_table(ArrayLike &&v) : n(std::size(v)) {
+        assert(!std::empty(v));
+        int lg = 32 - __builtin_clz(n);
+        table.assign(lg, std::vector<value_type>(std::begin(v), std::end(v)));
         for (int k = 1; k < lg; k++) {
             for (int j = 1 << k; j < n; j += 2 << k) {
                 for (int i = j - 2; i >= j - (1 << k); i--) {
-                    table[k][i] = f(v[i], table[k][i + 1]);
+                    table[k][i] = semigroup_type::op(v[i], table[k][i + 1]);
                 }
                 for (int i = j + 1; i < std::min(n, j + (1 << k)); i++) {
-                    table[k][i] = f(table[k][i - 1], v[i]);
+                    table[k][i] = semigroup_type::op(table[k][i - 1], v[i]);
                 }
             }
         }
     }
 
-    T query(int l, int r) {
+    value_type range_query(int l, int r) {
+        assert(0 <= l && l <= r && r < n);
         if (l != r) {
             int j = 32 - __builtin_clz(l ^ r) - 1;
-            return f(table[j][l], table[j][r]);
+            return semigroup_type::op(table[j][l], table[j][r]);
         } else {
             return table[0][l];
         }
     }
 };
+
+}

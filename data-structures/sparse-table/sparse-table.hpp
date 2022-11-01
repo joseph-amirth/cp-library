@@ -4,30 +4,36 @@
 #include <functional>
 #include <cassert>
 
-template<typename T, typename F = std::function<T(const T&, const T&)>>
+namespace data_structures {
+
+template <typename Semigroup>
 struct sparse_table {
+    using semigroup_type = Semigroup;
+    using value_type = typename semigroup_type::value_type;
+
     int n;
-    std::vector<std::vector<T>> mat;
-    F f;
+    std::vector<std::vector<value_type>> table;
 
-    sparse_table() : n(), f() {}
+    sparse_table() : n() {}
 
-    template <typename iterator_t>
-    sparse_table(iterator_t first, iterator_t last, F &&f) : n(std::distance(first, last)), f(f) {
-        assert(n > 0);
+    template <typename Iterator>
+    sparse_table(Iterator first, Iterator last) : n(std::distance(first, last)) {
+        assert(first != last);
         int lg = 32 - __builtin_clz(n);
-        mat.resize(lg), mat[0] = std::vector<T>(first, last);
-        for (int j = 1; j < mat.size(); j++) {
-            mat[j].resize(n - (1 << j) + 1);
+        table.resize(lg), table[0] = std::vector<value_type>(first, last);
+        for (int j = 1; j < table.size(); j++) {
+            table[j].resize(n - (1 << j) + 1);
             for (int i = 0; i + (1 << j) <= n; i++) {
-                mat[j][i] = f(mat[j - 1][i], mat[j - 1][i + (1 << (j - 1))]);
+                table[j][i] = semigroup_type::op(table[j - 1][i], table[j - 1][i + (1 << (j - 1))]);
             }
         }
     }
 
-    T query(int l, int r) {
+    value_type range_query(int l, int r) {
         assert(0 <= l && l <= r && r < n);
         int j = 32 - __builtin_clz(r - l + 1) - 1;
-        return f(mat[j][l], mat[j][r + 1 - (1 << j)]);
+        return semigroup_type::op(table[j][l], table[j][r + 1 - (1 << j)]);
     }
 };
+
+}

@@ -1,32 +1,43 @@
 #pragma once
 
+#include "basic.hpp"
+#include "../../algebra/groupoid/merge.hpp"
+
 #include <vector>
 #include <algorithm>
 
-template<typename T>
-struct merge_sort_tree {
-    using node = std::vector<T>;
+namespace data_structures {
 
-    int n;
-    std::vector<node> t;
+template <typename T, typename C>
+struct merge_sort_tree : data_structures::segment_tree<algebra::merge_monoid<C>> {
+    using value_type = T;
+    using container_type = C;
+    using monoid_type = algebra::merge_monoid<C>;
+    using base_class_type = data_structures::segment_tree<algebra::merge_monoid<C>>;
 
-    merge_sort_tree() : n() {}
+    using base_class_type::n;
+    using base_class_type::t;
+    using base_class_type::build;
 
-    template<typename U>
-    merge_sort_tree(const std::vector<U> &v): n(v.size()), t(4 * n) {
-        build(v, 1, 0, n - 1);
+    merge_sort_tree() : base_class_type() {}
+
+    template <typename iterator_t>
+    merge_sort_tree(iterator_t first, iterator_t last) {
+        n = std::distance(first, last);
+        t.assign(4 * n, monoid_type::e());
+        build([&first](container_type &leaf) {
+            leaf = {value_type(*first)};
+            ++first;
+        });
     }
 
-    template<typename U>
-    void build(const std::vector<U> &v, int i, int l, int r) {
-        if (l == r) {
-            t[i] = {T(v[l])};
-            return;
-        }
-        int mid = (l + r) >> 1;
-        build(v, i << 1, l, mid);
-        build(v, i << 1 | 1, mid + 1, r);
-        t[i].resize(t[i << 1].size() + t[i << 1 | 1].size());
-        std::merge(t[i << 1].begin(), t[i << 1].end(), t[i << 1 | 1].begin(), t[i << 1 | 1].end(), t[i].begin());
+    int range_rank(int l, int r, const value_type &x) {
+        int order = 0;
+        base_class_type::template split_range(l, r, [&x, &order](const container_type &c) {
+            order += std::distance(std::begin(c), std::lower_bound(std::begin(c), std::end(c), x));
+        });
+        return order;
     }
 };
+
+}

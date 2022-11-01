@@ -2,7 +2,9 @@
 
 #include <vector>
 
-template<typename T>
+namespace polynomials {
+
+template <typename T>
 std::vector<T> subset_convolution(int n, const std::vector<T> &f, const std::vector<T> &g) {
     std::vector<std::vector<T>> f_hat(n + 1, std::vector<T>(1 << n));
     std::vector<std::vector<T>> g_hat(n + 1, std::vector<T>(1 << n));
@@ -42,4 +44,6 @@ std::vector<T> subset_convolution(int n, const std::vector<T> &f, const std::vec
         result[mask] = h[__builtin_popcount(mask)][mask];
     }
     return result;
+}
+
 }

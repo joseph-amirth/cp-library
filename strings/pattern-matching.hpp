@@ -79,7 +79,7 @@ std::vector<std::vector<int>> prefix_automaton(const string_t &s, int n = -1) {
             if (i == 0 || j == s[i] - f) {
                 automaton[i][j] = i;
             } else {
-                automaton[i][j] = automaton[lps[j - 1]][j];
+                automaton[i][j] = automaton[lps[i - 1]][j];
             }
         }
     }

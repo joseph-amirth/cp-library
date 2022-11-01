@@ -11,7 +11,7 @@ int main() {
     cin.tie(nullptr);
 
     using mint = static_mint<998244353>;
-    using ntt::inplace_convolution;
+    using polynomials::ntt::inplace_convolution;
 
     int n, m;
     cin >> n >> m;
