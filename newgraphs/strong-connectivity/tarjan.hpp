@@ -1,9 +1,11 @@
 #pragma once
 
-#include "graph.hpp"
-#include <algorithm>
+#include <vector>
 
-std::vector<std::vector<int>> find_sccs(const digraph &g) {
+namespace graphs {
+
+template <typename Graph>
+std::vector<std::vector<int>> tarjan_sccs(const Graph &g) {
     int timer = 0;
     std::vector<int> tin(g.n, -1), low(g.n);
 
@@ -11,13 +13,13 @@ std::vector<std::vector<int>> find_sccs(const digraph &g) {
     all.reserve(g.n);
 
     std::vector<std::vector<int>> sccs;
-    auto dfs = [&](int u, const auto &self) -> void {
+    auto dfs = [&](auto &&self, int u) -> void {
         low[u] = tin[u] = timer++;
         all.push_back(u);
         for (int i: g.adj[u]) {
             int v = g.edges[i].v;
             if (tin[v] == -1) {
-                self(v, self);
+                self(self, v);
             }
             low[u] = std::min(low[u], low[v]);
         }
@@ -36,9 +38,12 @@ std::vector<std::vector<int>> find_sccs(const digraph &g) {
 
     for (int u = 0; u < g.n; u++) {
         if (tin[u] == -1) {
-            dfs(u, dfs);
+            dfs(dfs, u);
         }
     }
+
     std::reverse(sccs.begin(), sccs.end());
     return sccs;
+}
+
 }

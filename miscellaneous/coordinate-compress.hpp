@@ -31,11 +31,16 @@ struct coordinate_compress {
     }
 
     int compress(const value_type &value) const {
-        return std::lower_bound(values.begin(), values.end(), value) - values.begin();
+        auto it = std::lower_bound(values.begin(), values.end(), value);
+        if (it == values.end() || *it != value) {
+            return -1;
+        } else {
+            return it - values.begin();
+        }
     }
 
     template <typename Iterator>
-    void compress(Iterator first, Iterator last) {
+    void compress(Iterator first, Iterator last) const {
         for (; first != last; first++) {
             *first = compress(*first);
         }

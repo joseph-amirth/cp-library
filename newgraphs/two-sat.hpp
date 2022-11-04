@@ -1,19 +1,22 @@
 #pragma once
 
-#include "scc.hpp"
+#include "directed-graph.hpp"
+#include "strong-connectivity/tarjan.hpp"
+
+// TODO(Test this)
 
 std::vector<bool> two_sat(int n, const std::vector<std::pair<int, int>> &clauses) {
-    digraph g(2 * n);
-    for (auto&[x, y]: clauses) {
+    graphs::directed_graph<> g(2 * n, 2 * clauses.size());
+    for (auto &[x, y] : clauses) {
         g.add_edge(x < n ? x + n : x - n, y);
         g.add_edge(y < n ? y + n : y - n, x);
     }
 
-    auto sccs = find_sccs(g);
+    auto sccs = graphs::tarjan_sccs(g);
 
     std::vector<int> t(2 * n);
     for (int i = 0; i < sccs.size(); i++) {
-        for (int x: sccs[i]) {
+        for (int x : sccs[i]) {
             t[x] = i;
         }
     }

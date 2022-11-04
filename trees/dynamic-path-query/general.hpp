@@ -8,13 +8,13 @@ namespace trees {
 
 template <typename Graph, typename RangeQuery>
 struct dynamic_path_query<Graph, RangeQuery,
-        std::enable_if_t<!algebra::is_commutative_v<typename RangeQuery::monoid_type>>, void> {
+        std::enable_if_t<!algebra::is_commutative_v<typename RangeQuery::groupoid_type>>, void> {
 
     using graph_type = Graph;
     using range_query_type = RangeQuery;
 
-    using monoid_type = typename range_query_type::monoid_type;
-    using value_type = typename monoid_type::value_type;
+    using groupoid_type = typename range_query_type::groupoid_type;
+    using value_type = typename groupoid_type::value_type;
 
     const heavy_light_decomposition<graph_type> &hld;
     range_query_type rq, reverse_rq;
@@ -31,14 +31,14 @@ struct dynamic_path_query<Graph, RangeQuery,
     }
 
     value_type path_query(int u, int v) {
-        value_type ans_up = monoid_type::e();
-        value_type ans_down = monoid_type::e();
+        value_type ans_up = groupoid_type::e();
+        value_type ans_down = groupoid_type::e();
         hld.semiordered_visit_path(u, v, [&](int l, int r) {
-            ans_up = monoid_type::op(ans_up, rq.range_query(l, r));
+            ans_up = groupoid_type::op(ans_up, rq.range_query(l, r));
         }, [&](int l, int r) {
-            ans_down = monoid_type::op(reverse_rq.range_query(hld.g.n - 1 - r, hld.g.n - 1 - l), ans_down);
+            ans_down = groupoid_type::op(reverse_rq.range_query(hld.g.n - 1 - r, hld.g.n - 1 - l), ans_down);
         });
-        return monoid_type::op(ans_up, ans_down);
+        return groupoid_type::op(ans_up, ans_down);
     }
 
     template <typename T, typename...args>

@@ -9,14 +9,14 @@ namespace trees {
 
 template <typename Graph, typename RangeQuery>
 struct dynamic_path_query<Graph, RangeQuery,
-        std::enable_if_t<algebra::is_commutative_v<typename RangeQuery::monoid_type>>,
-        std::enable_if_t<!algebra::is_group_v<typename RangeQuery::monoid_type>>> {
+        std::enable_if_t<algebra::is_commutative_v<typename RangeQuery::groupoid_type>>,
+        std::enable_if_t<!algebra::is_group_v<typename RangeQuery::groupoid_type>>> {
 
     using graph_type = Graph;
     using range_query_type = RangeQuery;
 
-    using monoid_type = typename range_query_type::monoid_type;
-    using value_type = typename monoid_type::value_type;
+    using groupoid_type = typename range_query_type::groupoid_type;
+    using value_type = typename groupoid_type::value_type;
 
     const heavy_light_decomposition<graph_type> &hld;
     range_query_type rq;
@@ -32,9 +32,9 @@ struct dynamic_path_query<Graph, RangeQuery,
     }
 
     value_type path_query(int u, int v) {
-        value_type ans = monoid_type::e();
+        value_type ans = groupoid_type::e();
         hld.unordered_visit_path(u, v, [&](int l, int r) {
-            ans = monoid_type::op(ans, rq.range_query(l, r));
+            ans = groupoid_type::op(ans, rq.range_query(l, r));
         });
         return ans;
     }

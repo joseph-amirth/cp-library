@@ -1,23 +1,31 @@
 #pragma once
 
-#include "graph.hpp"
-#include <functional>
 #include <queue>
 
-std::vector<int> diameter(const graph &g) {
+#include "edge.hpp"
+#include "graph.hpp"
+#include "primitives/get-vertices-on-path.hpp"
+
+// TODO(Test this)
+
+namespace graphs {
+
+template <typename Graph>
+std::vector<int> diameter(const Graph &g) {
     std::vector<int> lvl(g.n);
-    auto bfs = [&](int s) {
+    auto bfs = [&](int s) -> int {
         std::fill(lvl.begin(), lvl.end(), -1);
 
         std::queue<int> q;
-        q.push(s), lvl[s] = 0;
+        lvl[s] = 0;
+        q.push(s);
 
         int furthest = s;
         while (!q.empty()) {
             int u = q.front();
             q.pop();
 
-            for (int i: g.adj[u]) {
+            for (int i : g.adj[u]) {
                 int v = g.edges[i].u ^ g.edges[i].v ^ u;
                 if (lvl[v] == -1) {
                     lvl[v] = 1 + lvl[u];
@@ -28,22 +36,22 @@ std::vector<int> diameter(const graph &g) {
                 }
             }
         }
+
         return furthest;
     };
 
-    int f = bfs(0);
+    int v = bfs(0);
+    int u = bfs(v);
 
-    std::vector<int> d;
-    for (int u = bfs(f); u != f;) {
-        d.push_back(u);
-        for (int i: g.adj[u]) {
+    return get_vertices_on_path(g, u, v, [&](int u) {
+        for (int i : g.adj[u]) {
             int v = g.edges[i].u ^ g.edges[i].v ^ u;
             if (lvl[v] + 1 == lvl[u]) {
-                u = v;
-                break;
+                return v;
             }
         }
-    }
-    d.push_back(f);
-    return d;
+        return -1;
+    });
+}
+
 }

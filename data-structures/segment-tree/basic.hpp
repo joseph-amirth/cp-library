@@ -5,10 +5,10 @@
 
 namespace data_structures {
 
-template <typename Monoid, bool lazy = false>
+template <typename Groupoid, bool lazy = false>
 struct basic_segment_tree {
-    using monoid_type = Monoid;
-    using value_type = typename monoid_type::value_type;
+    using groupoid_type = Groupoid;
+    using value_type = typename groupoid_type::value_type;
 
     int n;
     std::vector<value_type> t;
@@ -26,7 +26,7 @@ struct basic_segment_tree {
                 int m = (l + r) / 2;
                 self(self, i << 1, l, m);
                 self(self, i << 1 | 1, m + 1, r);
-                t[i] = monoid_type::op(t[i << 1], t[i << 1 | 1]);
+                t[i] = groupoid_type::op(t[i << 1], t[i << 1 | 1]);
             }
         };
         build(build, 1, 0, n - 1);
@@ -34,14 +34,14 @@ struct basic_segment_tree {
 
     template <typename F>
     basic_segment_tree(int n, F &&f) : n(n) {
-        t.assign(4 * n, monoid_type::e());
+        t.assign(4 * n, groupoid_type::e());
         build(f);
     }
 
     template <typename iterator_t>
     basic_segment_tree(iterator_t first, iterator_t last) {
         n = std::distance(first, last);
-        t.assign(4 * n, monoid_type::e());
+        t.assign(4 * n, groupoid_type::e());
         build([&first](value_type &leaf) {
             leaf = value_type(*first);
             ++first;
@@ -65,7 +65,7 @@ struct basic_segment_tree {
                     self(self, i << 1 | 1, m + 1, r);
                 }
                 if constexpr (update) {
-                    t[i] = monoid_type::op(t[i << 1], t[i << 1 | 1]);
+                    t[i] = groupoid_type::op(t[i << 1], t[i << 1 | 1]);
                 }
             }
         };
@@ -88,7 +88,7 @@ struct basic_segment_tree {
                 self(self, i << 1, l, m);
                 self(self, i << 1 | 1, m + 1, r);
                 if constexpr (update) {
-                    t[i] = monoid_type::op(t[i << 1], t[i << 1 | 1]);
+                    t[i] = groupoid_type::op(t[i << 1], t[i << 1 | 1]);
                 }
             }
         };
@@ -96,9 +96,9 @@ struct basic_segment_tree {
     }
 
     value_type range_query(int l, int r) {
-        value_type ans = monoid_type::e();
+        value_type ans = groupoid_type::e();
         split_range<false>(l, r, [&ans, this](int i, auto &&...) {
-            ans = monoid_type::op(ans, t[i]);
+            ans = groupoid_type::op(ans, t[i]);
         });
         return ans;
     }

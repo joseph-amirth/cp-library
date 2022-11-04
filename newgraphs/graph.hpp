@@ -25,4 +25,7 @@ struct graph {
     }
 };
 
+template <typename Graph>
+using edge_t = typename Graph::edge_type;
+
 }

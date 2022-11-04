@@ -22,6 +22,14 @@ struct directed_graph : public graph<Edge> {
         adj[e.u].push_back(m);
         return m++;
     }
+
+    directed_graph transpose() const {
+        directed_graph transpose(n, m);
+        for (const auto &e : edges) {
+            transpose.add_edge(e);
+        }
+        return transpose;
+    }
 };
 
 }

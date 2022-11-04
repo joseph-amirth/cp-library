@@ -6,10 +6,10 @@
 
 namespace data_structures {
 
-template <typename Semigroup>
+template <typename Groupoid>
 struct sparse_table {
-    using semigroup_type = Semigroup;
-    using value_type = typename semigroup_type::value_type;
+    using groupoid_type = Groupoid;
+    using value_type = typename groupoid_type::value_type;
 
     int n;
     std::vector<std::vector<value_type>> table;
@@ -24,7 +24,7 @@ struct sparse_table {
         for (int j = 1; j < table.size(); j++) {
             table[j].resize(n - (1 << j) + 1);
             for (int i = 0; i + (1 << j) <= n; i++) {
-                table[j][i] = semigroup_type::op(table[j - 1][i], table[j - 1][i + (1 << (j - 1))]);
+                table[j][i] = groupoid_type::op(table[j - 1][i], table[j - 1][i + (1 << (j - 1))]);
             }
         }
     }
@@ -32,7 +32,7 @@ struct sparse_table {
     value_type range_query(int l, int r) {
         assert(0 <= l && l <= r && r < n);
         int j = 32 - __builtin_clz(r - l + 1) - 1;
-        return semigroup_type::op(table[j][l], table[j][r + 1 - (1 << j)]);
+        return groupoid_type::op(table[j][l], table[j][r + 1 - (1 << j)]);
     }
 };
 

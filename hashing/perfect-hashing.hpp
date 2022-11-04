@@ -5,21 +5,24 @@
 
 namespace hashing {
 
-template <typename key_t, typename value_t>
+template <typename Key, typename Value>
 struct perfect_hash_table {
+    using key_type = Key;
+    using value_type = Value;
+
     int m;
-    std::function<int(key_t)> f;
-    std::vector<value_t> table;
+    std::function<int(key_type)> f;
+    std::vector<value_type> table;
 
     perfect_hash_table() {}
 
-    template <typename generator_t>
-    perfect_hash_table(std::vector<key_t> &keys, generator_t &&generator) {
+    template <typename Generator>
+    perfect_hash_table(std::vector<key_type> &keys, Generator &&generator) {
         if (!keys.empty()) {
             m = 32 - __builtin_clz(keys.size() * keys.size());
             table.resize(1 << m);
 
-            std::vector<key_t *> used(1 << m, nullptr);
+            std::vector<key_type *> used(1 << m, nullptr);
             while (f = generator(m), true) {
                 bool invalid = false;
                 fill(used.begin(), used.end(), nullptr);
@@ -38,25 +41,28 @@ struct perfect_hash_table {
         }
     }
 
-    value_t &operator[](const key_t &key) {
+    value_type &operator[](const key_type &key) {
         return table[f(key)];
     }
 
-    const value_t &operator[](const key_t &key) const {
+    const value_type &operator[](const key_type &key) const {
         return table[f(key)];
     }
 };
 
-template <typename key_t, typename value_t>
+template <typename Key, typename Value>
 struct linear_perfect_hash_table {
+    using key_type = Key;
+    using value_type = Value;
+
     int m;
-    std::function<int(key_t)> f;
-    std::vector<perfect_hash_table<key_t, value_t>> table;
+    std::function<int(key_type)> f;
+    std::vector<perfect_hash_table<key_type, value_type>> table;
 
     linear_perfect_hash_table() {}
 
-    template <typename generator_t>
-    linear_perfect_hash_table(const std::vector<key_t> &keys, generator_t &&generator) {
+    template <typename Generator>
+    linear_perfect_hash_table(const std::vector<key_type> &keys, Generator &&generator) {
         m = 32 - __builtin_clz(keys.size());
         table.resize(1 << m);
 
@@ -74,7 +80,7 @@ struct linear_perfect_hash_table {
             }
         }
 
-        std::vector<std::vector<key_t>> bins(1 << m);
+        std::vector<std::vector<key_type>> bins(1 << m);
         for (int i = 0; i < (1 << m); i++) {
             bins[i].reserve(count[i]);
         }
@@ -84,15 +90,15 @@ struct linear_perfect_hash_table {
         }
 
         for (int i = 0; i < (1 << m); i++) {
-            table[i] = perfect_hash_table<key_t, value_t>(bins[i], generator);
+            table[i] = perfect_hash_table<key_type, value_type>(bins[i], generator);
         }
     }
 
-    value_t &operator[](const key_t &key) {
+    value_type &operator[](const key_type &key) {
         return table[f(key)][key];
     }
 
-    const value_t &operator[](const key_t &key) const {
+    const value_type &operator[](const key_type &key) const {
         return table[f(key)][key];
     }
 };

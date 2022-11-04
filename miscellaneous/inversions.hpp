@@ -3,7 +3,7 @@
 #include <vector>
 
 template<typename T>
-auto inversions(std::vector<T> v) {
+auto inversions(std::vector<T> &&v) {
     int n = (int) v.size();
 
     std::vector<T> temp(n);

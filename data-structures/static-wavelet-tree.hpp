@@ -44,9 +44,12 @@ struct static_wavelet_tree {
         build(build, std::move(v), 1, 0, cc.sigma - 1);
     }
 
+    template <bool compressed = false>
     int rank(int qr, int value) {
         assert(0 <= qr && qr < n);
-        assert(0 <= value && value < cc.sigma);
+        if constexpr (compressed) {
+            assert(0 <= value && value < cc.sigma);
+        }
 
         auto recurse = [&](auto &&self, int i, int l, int r) -> int {
             if (qr == -1 || l == r || t[i].empty()) {
@@ -63,14 +66,21 @@ struct static_wavelet_tree {
                 }
             }
         };
+        if constexpr (!compressed) {
+            value = cc.compress(value);
+        }
         return recurse(recurse, 1, 0, cc.sigma - 1);
     }
 
+    template <bool compressed = false>
     int rank(int ql, int qr, int value) {
         assert(0 <= ql && ql <= qr && qr < n);
-        assert(0 <= value && value < cc.sigma);
-
-        return rank(qr, value) - (ql == 0 ? 0 : rank(ql - 1, value));
+        if constexpr (compressed) {
+            assert(0 <= value && value < cc.sigma);
+        } else {
+            value = cc.compress(value);
+        }
+        return rank<true>(qr, value) - (ql == 0 ? 0 : rank<true>(ql - 1, value));
     }
 
     int range_quantile(int ql, int qr, int k) {
