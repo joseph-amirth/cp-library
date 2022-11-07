@@ -3,19 +3,11 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-#include "data-structures/segment-tree/basic.hpp"
+#include "data-structures/fenwick-tree.hpp"
 #include "algebra/groupoid/common.hpp"
 #include "trees/dynamic-subtree-query.hpp"
 
-struct point_add_range_sum : data_structures::segment_tree<algebra::sum_monoid<long long>> {
-    point_add_range_sum(auto&&...args) : data_structures::segment_tree<algebra::sum_monoid<long long>>(args...) {}
-
-    void point_add(int p, int x) {
-        visit_point<true>(p, [&x](auto &y) {
-            y += x;
-        });
-    }
-};
+using point_add_range_sum = data_structures::fenwick_tree<algebra::sum_group<long long>>;
 
 using subtree_query = trees::dynamic_subtree_query<graphs::undirected_graph<>, point_add_range_sum>;
 
@@ -45,7 +37,7 @@ int main() {
         if (type == 0) {
             int u, x;
             cin >> u >> x;
-            query.vertex_update(&point_add_range_sum::point_add, u, x);
+            query.vertex_update(&point_add_range_sum::apply, u, x);
         } else {
             int u;
             cin >> u;

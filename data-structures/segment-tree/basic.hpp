@@ -17,8 +17,8 @@ struct basic_segment_tree {
 
     basic_segment_tree() : n() {}
 
-    template <typename F>
-    void build(F &&f) {
+    template <typename Function>
+    void build(Function &&f) {
         auto build = [&](auto &&self, int i, int l, int r) -> void {
             if (l == r) {
                 f(t[i]);
@@ -32,14 +32,14 @@ struct basic_segment_tree {
         build(build, 1, 0, n - 1);
     }
 
-    template <typename F>
-    basic_segment_tree(int n, F &&f) : n(n) {
+    template <typename Function>
+    basic_segment_tree(int n, Function &&f) : n(n) {
         t.assign(4 * n, groupoid_type::e());
         build(f);
     }
 
-    template <typename iterator_t>
-    basic_segment_tree(iterator_t first, iterator_t last) {
+    template <typename Iterator>
+    basic_segment_tree(Iterator first, Iterator last) {
         n = std::distance(first, last);
         t.assign(4 * n, groupoid_type::e());
         build([&first](value_type &leaf) {
@@ -48,8 +48,8 @@ struct basic_segment_tree {
         });
     }
 
-    template <bool update = false>
-    void visit_point(int qi, auto &&f) {
+    template <bool update = false, typename Function>
+    void visit_point(int qi, Function &&f) {
         assert(0 <= qi && qi < n);
         auto visit = [&](auto &&self, int i, int l, int r) -> void {
             if (l == r) {
@@ -72,15 +72,10 @@ struct basic_segment_tree {
         visit(visit, 1, 0, n - 1);
     }
 
-    template <bool update = false>
-    void split_range(int ql, int qr, auto &&f) {
-        assert(0 <= ql && ql <= qr && qr < n);
-        auto split = [&](auto &&self, int i, int l, int r) -> void {
-            if (qr < l || r < ql) {
-
-            } else if (ql <= l && r <= qr) {
-                f(i, l, r);
-            } else {
+    template <bool update = false, typename Function>
+    void walk_down(Function &&f) {
+        auto walk = [&](auto &&self, int i, int l, int r) -> void {
+            if (!f(i, l, r)) {
                 if constexpr (lazy) {
                     push_down(i, l, r);
                 }
@@ -92,12 +87,27 @@ struct basic_segment_tree {
                 }
             }
         };
-        split(split, 1, 0, n - 1);
+        walk(walk, 1, 0, n - 1);
+    }
+
+    template <bool update = false, typename Function>
+    void split_range(int ql, int qr, Function &&f) {
+        assert(0 <= ql && ql <= qr && qr < n);
+        walk_down<update>([&ql, &qr, &f](int i, int l, int r) {
+            if (qr < l || r < ql) {
+                return true;
+            } else if (ql <= l && r <= qr) {
+                f(i, l, r);
+                return true;
+            } else {
+                return false;
+            }
+        });
     }
 
     value_type range_query(int l, int r) {
         value_type ans = groupoid_type::e();
-        split_range<false>(l, r, [&ans, this](int i, auto &&...) {
+        split_range<false>(l, r, [&ans, this](int i, ...) {
             ans = groupoid_type::op(ans, t[i]);
         });
         return ans;
@@ -112,7 +122,8 @@ struct basic_segment_tree {
 
 template <typename M>
 struct segment_tree : public basic_segment_tree<M, false> {
-    segment_tree(auto &&...args) : basic_segment_tree<M, false>(args...) {}
+    template <typename...Args>
+    segment_tree(Args &&...args) : basic_segment_tree<M, false>(args...) {}
 };
 
 }

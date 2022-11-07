@@ -4,8 +4,8 @@
 
 namespace graphs {
 
-template <typename Graph>
-std::vector<int> get_vertices_on_path(const Graph &g, int s, int t, auto &&p) {
+template <typename Graph, typename ParentFunction>
+std::vector<int> get_vertices_on_path(const Graph &g, int s, int t, ParentFunction &&p) {
     std::vector<int> path;
     for (int u = t; u != s;) {
         path.push_back(u);

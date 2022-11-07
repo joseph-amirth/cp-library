@@ -39,15 +39,15 @@ struct dynamic_path_query<Graph, RangeQuery,
         return ans;
     }
 
-    template <typename T, typename...args>
-    void vertex_update(void (T::*update)(int, args...), int u, auto&&...extra_args) {
-        (rq.*update)(hld.tree_pos[u], std::forward<decltype(extra_args)>(extra_args)...);
+    template <typename T, typename...Args, typename...ExtraArgs>
+    void vertex_update(void (T::*update)(int, Args...), int u, ExtraArgs &&...extra_args) {
+        (rq.*update)(hld.tree_pos[u], std::forward<ExtraArgs>(extra_args)...);
     }
 
-    template <typename T, typename...args>
-    void path_update(void (T::*update)(int, int, args...), int u, int v, auto&&...extra_args) {
+    template <typename T, typename...Args, typename...ExtraArgs>
+    void path_update(void (T::*update)(int, int, Args...), int u, int v, ExtraArgs &&...extra_args) {
         hld.unordered_visit_path(u, v, [&](int l, int r) {
-            (rq.*update)(l, r, std::forward<decltype(extra_args)>(extra_args)...);
+            (rq.*update)(l, r, std::forward<ExtraArgs>(extra_args)...);
         });
     }
 };

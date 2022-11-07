@@ -3,8 +3,6 @@
 #include "directed-graph.hpp"
 #include "strong-connectivity/tarjan.hpp"
 
-// TODO(Test this)
-
 std::vector<bool> two_sat(int n, const std::vector<std::pair<int, int>> &clauses) {
     graphs::directed_graph<> g(2 * n, 2 * clauses.size());
     for (auto &[x, y] : clauses) {
@@ -15,7 +13,7 @@ std::vector<bool> two_sat(int n, const std::vector<std::pair<int, int>> &clauses
     auto sccs = graphs::tarjan_sccs(g);
 
     std::vector<int> t(2 * n);
-    for (int i = 0; i < sccs.size(); i++) {
+    for (int i = 0; i < (int) sccs.size(); i++) {
         for (int x : sccs[i]) {
             t[x] = i;
         }

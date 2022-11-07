@@ -20,8 +20,9 @@ struct graph {
 
     virtual int add_edge(edge_type &&e) = 0;
 
-    int add_edge(int u, int v, auto &&...args) {
-        return add_edge(edge_type(u, v, args...));
+    template <typename...Args>
+    int add_edge(int u, int v, Args&&...args) {
+        return add_edge(edge_type(u, v, std::forward<Args>(args)...));
     }
 };
 

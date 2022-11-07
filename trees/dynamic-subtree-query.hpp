@@ -29,14 +29,14 @@ struct dynamic_subtree_query {
         return rq.range_query(et.tin[u], et.tout[u]);
     }
 
-    template <typename T, typename...args>
-    void vertex_update(void (T::*update)(int, args...), int u, auto&&...extra_args) {
-        (rq.*update)(et.tin[u], std::forward<decltype(extra_args)>(extra_args)...);
+    template <typename T, typename...Args, typename...ExtraArgs>
+    void vertex_update(void (T::*update)(int, Args...), int u, ExtraArgs &&...extra_args) {
+        (rq.*update)(et.tin[u], std::forward<ExtraArgs>(extra_args)...);
     }
 
-    template <typename T, typename...args>
-    void subtree_update(void (T::*update)(int, int, args...), int u, auto&&...extra_args) {
-        (rq.*update)(et.tin[u], et.tout[u], std::forward<decltype(extra_args)>(extra_args)...);
+    template <typename T, typename...Args, typename...ExtraArgs>
+    void subtree_update(void (T::*update)(int, int, Args...), int u, ExtraArgs &&...extra_args) {
+        (rq.*update)(et.tin[u], et.tout[u], std::forward<ExtraArgs>(extra_args)...);
     }
 };
 

@@ -18,13 +18,20 @@ struct fenwick_tree {
 
     fenwick_tree(int n) : n(n), bit(n + 1, groupoid_type::e()) {}
 
+    template <typename Iterator>
+    fenwick_tree(Iterator first, Iterator last) : fenwick_tree(std::distance(first, last)) {
+        for (int i = 0; first != last; i++, first++) {
+            apply(i, *first);
+        }
+    }
+
     void apply(int i, const value_type &val) {
         for (++i; i <= n; i += i & -i) {
             bit[i] = groupoid_type::op(bit[i], val);
         }
     }
 
-    value_type query(int i) const {
+    value_type prefix_query(int i) const {
         value_type ans = groupoid_type::e();
         for (++i; i; i -= i & -i) {
             ans = groupoid_type::op(ans, bit[i]);
@@ -35,9 +42,9 @@ struct fenwick_tree {
     template <typename T = groupoid_type>
     std::enable_if_t<algebra::is_group_v<T>, value_type> range_query(int l, int r) const {
         if (l == 0) {
-            return query(r);
+            return prefix_query(r);
         } else {
-            return groupoid_type::op(query(r), groupoid_type::inv(query(l - 1)));
+            return groupoid_type::op(prefix_query(r), groupoid_type::inv(prefix_query(l - 1)));
         }
     }
 };

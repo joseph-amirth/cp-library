@@ -15,7 +15,8 @@ struct lazy_segment_tree : public basic_segment_tree<Groupoid, true> {
 
     std::vector<tag_type> tag;
 
-    lazy_segment_tree(auto &&...args) : basic_segment_tree<groupoid_type, true>(args...) {
+    template <typename...Args>
+    lazy_segment_tree(Args &&...args) : basic_segment_tree<groupoid_type, true>(std::forward<Args>(args)...) {
         tag.assign(4 * n, lazy_update_type::e());
     }
 

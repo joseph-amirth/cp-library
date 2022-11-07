@@ -43,7 +43,8 @@ struct heavy_light_decomposition {
         }
     }
 
-    void unordered_visit_path(int u, int v, auto &&f) const {
+    template <typename Function>
+    void unordered_visit_path(int u, int v, Function &&f) const {
         for (; head[u] != head[v]; u = parent[head[u]]) {
             if (depth[head[u]] < depth[head[v]]) {
                 std::swap(u, v);
@@ -56,7 +57,8 @@ struct heavy_light_decomposition {
         f(tree_pos[u], tree_pos[v]);
     }
 
-    void semiordered_visit_path(int u, int v, auto &&f_up, auto &&f_down) const {
+    template <typename FunctionUp, typename FunctionDown>
+    void semiordered_visit_path(int u, int v, FunctionUp &&f_up, FunctionDown &&f_down) const {
         while (head[u] != head[v]) {
             if (depth[head[u]] >= depth[head[v]]) {
                 f_up(tree_pos[u], tree_pos[head[u]]);
@@ -73,7 +75,8 @@ struct heavy_light_decomposition {
         }
     }
 
-    void ordered_visit_path(int u, int v, auto &&f_up, auto &&f_down) const {
+    template <typename FunctionUp, typename FunctionDown>
+    void ordered_visit_path(int u, int v, FunctionUp &&f_up, FunctionDown &&f_down) const {
         static std::vector<std::pair<int, int>> right_segments;
         while (head[u] != head[v]) {
             if (depth[head[u]] >= depth[head[v]]) {

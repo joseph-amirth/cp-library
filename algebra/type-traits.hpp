@@ -16,14 +16,14 @@ DEFINE_HAS_STATIC_METHOD(op)
 DEFINE_HAS_STATIC_METHOD(inv)
 
 template <typename T>
-using element_t = typename T::value_type;
+using value_t = typename T::value_type;
 
 template <typename T>
 struct is_semigroup :
         std::conjunction<
             has_typedef_value_type<T>,
             has_typedef_is_commutative<T>,
-            has_static_method_op<T, element_t<T>(const element_t<T>&, const element_t<T>&)>> {};
+            has_static_method_op<T, value_t<T>(const value_t<T>&, const value_t<T>&)>> {};
 
 template <typename T>
 constexpr bool is_semigroup_v = is_semigroup<T>::value;
@@ -32,7 +32,7 @@ template <typename T>
 struct is_monoid :
         std::conjunction<
             is_semigroup<T>,
-            has_static_method_e<T, element_t<T>(void)>> {};
+            has_static_method_e<T, value_t<T>(void)>> {};
 
 template <typename T>
 constexpr bool is_monoid_v = is_monoid<T>::value;
@@ -41,7 +41,7 @@ template <typename T>
 struct is_group :
         std::conjunction<
             is_monoid<T>,
-            has_static_method_inv<T, element_t<T>(const element_t<T>&)>> {};
+            has_static_method_inv<T, value_t<T>(const value_t<T>&)>> {};
 
 template <typename T>
 constexpr bool is_group_v = is_group<T>::value;
