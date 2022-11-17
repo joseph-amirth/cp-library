@@ -12,29 +12,33 @@ struct fenwick_tree {
     using value_type = typename groupoid_type::value_type;
 
     int n;
-    std::vector<value_type> bit;
+    std::vector<value_type> ft;
 
     fenwick_tree() : n() {}
 
-    fenwick_tree(int n) : n(n), bit(n + 1, groupoid_type::e()) {}
+    fenwick_tree(int n) : n(n), ft(n + 1, groupoid_type::e()) {}
 
     template <typename Iterator>
     fenwick_tree(Iterator first, Iterator last) : fenwick_tree(std::distance(first, last)) {
-        for (int i = 0; first != last; i++, first++) {
-            apply(i, *first);
+        for (int i = 1; first != last; i++, first++) {
+            int j = i + (i & -i);
+            ft[i] = groupoid_type::op(ft[i], *first);
+            if (j <= n) {
+                ft[j] = groupoid_type::op(ft[j], ft[i]);
+            }
         }
     }
 
     void apply(int i, const value_type &val) {
         for (++i; i <= n; i += i & -i) {
-            bit[i] = groupoid_type::op(bit[i], val);
+            ft[i] = groupoid_type::op(ft[i], val);
         }
     }
 
     value_type prefix_query(int i) const {
         value_type ans = groupoid_type::e();
         for (++i; i; i -= i & -i) {
-            ans = groupoid_type::op(ans, bit[i]);
+            ans = groupoid_type::op(ans, ft[i]);
         }
         return ans;
     }

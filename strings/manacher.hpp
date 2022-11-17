@@ -2,11 +2,11 @@
 
 #include <vector>
 
-template<typename string_t>
-auto palindromic_substrings(const string_t &s, int n = -1) {
-    if (n == -1) {
-        n = int(s.length());
-    }
+namespace strings {
+
+template <typename String>
+auto palindromic_substrings(const String &s) {
+    int n = std::size(s);
     std::vector<int> d_odd(n);
     for (int i = 0, l = 0, r = -1; i < n; i++) {
         int j = (i > r ? 1 : std::min(d_odd[l + r - i], r - i + 1));
@@ -32,4 +32,6 @@ auto palindromic_substrings(const string_t &s, int n = -1) {
         }
     }
     return std::make_pair(d_odd, d_even);
+}
+
 }
