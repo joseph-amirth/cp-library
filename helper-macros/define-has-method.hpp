@@ -4,10 +4,10 @@
 
 #define DEFINE_HAS_METHOD(name)                                     \
 template <typename T, typename Ret, typename...Args>                \
-struct has_nonstatic_method_ ##name## _helper;                      \
+struct has_method_ ##name## _helper;                                \
                                                                     \
 template <typename T, typename Ret, typename... Args>               \
-struct has_nonstatic_method_ ##name## _helper<T, Ret(Args...)> {    \
+struct has_method_ ##name## _helper<T, Ret(Args...)> {              \
     template<typename C>                                            \
     static constexpr auto check(C*) -> typename std::is_same<Ret, decltype(std::declval<C>(). name (std::declval<Args>()...))>::type;   \
                                                                     \
@@ -18,7 +18,7 @@ struct has_nonstatic_method_ ##name## _helper<T, Ret(Args...)> {    \
 };                                                                  \
                                                                     \
 template <typename T, typename Return, typename...Args>             \
-struct has_nonstatic_method_##name;                                 \
+struct has_method_##name;                                           \
                                                                     \
 template <typename T, typename Return, typename...Args>             \
-struct has_nonstatic_method_##name<T, Return(Args...)> : has_nonstatic_method_ ##name## _helper<T, Return(Args...)>::type {};
+struct has_method_##name<T, Return(Args...)> : has_method_ ##name## _helper<T, Return(Args...)>::type {};
