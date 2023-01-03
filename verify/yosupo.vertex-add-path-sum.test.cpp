@@ -7,16 +7,17 @@ using namespace std;
 #include "trees/heavy-light-decomposition.hpp"
 #include "trees/dynamic-path-query/commutative.hpp"
 #include "data-structures/segment-tree/basic.hpp"
-#include "algebra/groupoid/common.hpp"
+#include "algebra/groupoid/common-monoids.hpp"
 
 struct point_add_range_sum : data_structures::segment_tree<algebra::sum_monoid<long long>> {
-point_add_range_sum(auto&&...args) : data_structures::segment_tree<algebra::sum_monoid<long long>>(args...) {}
+    template <typename...Args>
+    point_add_range_sum(Args &&...args) : data_structures::segment_tree<algebra::sum_monoid<long long>>(std::forward<Args>(args)...) {}
 
-void point_add(int p, int x) {
-    visit_point<true>(p, [&x](long long &y) {
-        y += x;
-    });
-}
+    void point_add(int p, int x) {
+        visit_point<true>(p, [&x](long long &y) {
+            y += x;
+        });
+    }
 };
 
 using path_query = trees::dynamic_path_query<graphs::undirected_graph<>, point_add_range_sum>;

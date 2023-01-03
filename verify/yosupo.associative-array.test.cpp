@@ -18,13 +18,11 @@ int main() {
         return x;
     };
 
-    auto random_hash_function = [&](int m) {
+    auto random_hash_function = [&random_odd_number](int m) {
         return [m, a = random_odd_number()](uint64_t x) -> int {
             return (a * x) >> (64 - m);
         };
     };
-
-    using hash_table = hashing::linear_perfect_hash_table<uint64_t, uint64_t>;
 
     int q;
     cin >> q;
@@ -42,6 +40,7 @@ int main() {
     sort(sorted.begin(), sorted.end());
     sorted.erase(unique(sorted.begin(), sorted.end()), sorted.end());
 
+    using hash_table = hashing::perfect_hash_table<uint64_t, uint64_t>;
     hash_table mp(sorted, random_hash_function);
 
     for (int i = 0; i < q; i++) {

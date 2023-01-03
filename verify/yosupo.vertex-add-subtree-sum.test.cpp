@@ -4,7 +4,7 @@
 using namespace std;
 
 #include "data-structures/fenwick-tree.hpp"
-#include "algebra/groupoid/common.hpp"
+#include "algebra/groupoid/common-groups.hpp"
 #include "trees/dynamic-subtree-query.hpp"
 
 using point_add_range_sum = data_structures::fenwick_tree<algebra::sum_group<long long>>;

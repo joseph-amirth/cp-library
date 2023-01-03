@@ -4,7 +4,7 @@
 using namespace std;
 
 #include "data-structures/fenwick-tree.hpp"
-#include "algebra/groupoid/common.hpp"
+#include "algebra/groupoid/common-groups.hpp"
 
 using data_structures::fenwick_tree;
 using algebra::sum_group;

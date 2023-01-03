@@ -16,9 +16,6 @@ using monoid = algebra::function_composition_monoid<algebra::affine_function<min
 using segtree = data_structures::segment_tree<monoid>;
 using path_query = trees::dynamic_path_query<graphs::undirected_graph<>, segtree>;
 
-template <>
-struct algebra::is_commutative<monoid> : std::false_type {};
-
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);

@@ -45,15 +45,15 @@ struct nd_sparse_table {
         inplace_combine_tensors(this->mat, b.mat, f);
     }
 
-    template <typename...args>
-    auto query(int l, int r, const args...tail) {
+    template <typename...Tail>
+    auto query(int l, int r, Tail &&...tail) {
         assert(0 <= l && l <= r && r < n);
         if constexpr (D == 1) {
             int j = 32 - __builtin_clz(r - l + 1) - 1;
             return f(mat[j][l], mat[j][r + 1 - (1 << j)]);
         } else {
             int j = 32 - __builtin_clz(r - l + 1) - 1;
-            return f(mat[j][l].range_query(tail...), mat[j][r - (1 << j) + 1].range_query(tail...));
+            return f(mat[j][l].range_query(std::forward<Tail>(tail)...), mat[j][r - (1 << j) + 1].range_query(std::forward<Tail>(tail)...));
         }
     }
 };

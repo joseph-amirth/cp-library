@@ -4,41 +4,24 @@
 #include <algorithm>
 #include <numeric>
 
-template <typename T>
-struct is_euclidean : std::true_type {};
+namespace algebra {
 
-template <typename T>
-using value_t = typename T::value_type;
-
-template <typename EuclideanDomain>
-value_t<EuclideanDomain> gcd(const value_t<EuclideanDomain> &x, const value_t<EuclideanDomain> &y) {
-    if (x == EuclideanDomain::zero()) {
-        return y;
-    } else if (y == EuclideanDomain::zero()) {
-        return x;
-    } else {
-        auto r = EuclideanDomain::euclidean_division(x, y).second;
-        return gcd(y, r);
-    }
-}
-
-template <typename IntegralDomain>
+template <typename Integer>
 struct fraction {
-    using integral_domain_type = IntegralDomain;
-    using value_type = typename integral_domain_type::value_type;
+    using value_type = Integer;
 
-    value_type a, b;
+    value_type num, den;
 
-    fraction(value_type a = integral_domain_type::zero(), value_type b = integral_domain_type::unit()) : a(a), b(b) {
-        normalize();
+    fraction(value_type num = value_type(0), value_type den = value_type(1)) : num(num), den(den) {
+        reduce();
+        if (den < 0) {
+            num *= -1, den *= -1;
+        }
     }
 
-    void normalize() {
-        if constexpr (is_euclidean<integral_domain_type>::value) {
-            value_type d = gcd(a, b);
-            a /= d, b /= d;
-            if (b < 0) a *= -1, b *= -1;
-        }
+    void reduce() {
+        value_type g = std::gcd(num, den);
+        num /= g, den /= g;
     }
 
     fraction operator+() const {
@@ -46,27 +29,27 @@ struct fraction {
     }
 
     fraction operator-() const {
-        return fraction(-a, b);
+        return fraction(-num, den);
     }
 
     fraction &operator+=(const fraction &x) {
-        std::tie(a, b) = std::make_pair(a * x.b + b * x.a, b * x.b);
-        return normalize(), *this;
+        std::tie(num, den) = std::make_pair(num * x.den + den * x.num, den * x.den);
+        return reduce(), *this;
     }
 
     fraction &operator-=(const fraction &x) {
-        std::tie(a, b) = std::make_pair(a * x.b - b * x.a, b * x.b);
-        return normalize(), *this;
+        std::tie(num, den) = std::make_pair(num * x.den - den * x.num, den * x.den);
+        return reduce(), *this;
     }
 
     fraction &operator*=(const fraction &x) {
-        a *= x.a, b *= x.b;
-        return normalize(), *this;
+        num *= x.num, den *= x.den;
+        return reduce(), *this;
     }
 
     fraction &operator/=(const fraction &x) {
-        a *= x.b, b *= x.a;
-        return normalize(), *this;
+        num *= x.den, den *= x.num;
+        return reduce(), *this;
     }
 
     friend fraction operator+(const fraction &x, const fraction &y) {
@@ -86,11 +69,11 @@ struct fraction {
     }
 
     friend std::ostream &operator<<(std::ostream &os, const fraction &x) {
-        return os << x.a << '/' << x.b;
+        return os << x.num << '/' << x.den;
     }
 
     friend bool operator==(const fraction &x, const fraction &y) {
-        return x.a == y.a && x.b == y.b;
+        return x.num == y.num && x.den == y.den;
     }
 
     friend bool operator!=(const fraction &x, const fraction &y) {
@@ -98,11 +81,11 @@ struct fraction {
     }
 
     friend bool operator<(const fraction &x, const fraction &y) {
-        return x.a * y.b < x.b * y.a;
+        return x.num * y.den < x.den * y.num;
     }
 
     friend bool operator>(const fraction &x, const fraction &y) {
-        return x.a * y.b > x.b * y.a;
+        return x.num * y.den > x.den * y.num;
     }
 
     friend bool operator<=(const fraction &x, const fraction &y) {
@@ -113,3 +96,5 @@ struct fraction {
         return !(x < y);
     }
 };
+
+}

@@ -5,7 +5,7 @@ using namespace std;
 
 #include "mint/static-mint.hpp"
 #include "data-structures/segment-tree/lazy.hpp"
-#include "algebra/groupoid/common.hpp"
+#include "algebra/groupoid/common-groups.hpp"
 #include "algebra/domain/affine-function.hpp"
 
 using mint = static_mint<998244353>;
@@ -15,10 +15,8 @@ struct lazy_update {
     using tag_type = algebra::affine_function<mint>;
 
     static tag_type e() {
-        return algebra::affine_function<mint>();
+        return tag_type();
     }
-
-    std::vector<int> &t;
 
     static void apply(tag_type &lazy_val, mint &value, tag_type &tag, int l, int r) {
         value = lazy_val.a * value + (r - l + 1) * lazy_val.b;
@@ -27,7 +25,8 @@ struct lazy_update {
 };
 
 struct range_affine_range_sum : public lazy_segment_tree<algebra::sum_monoid<mint>, lazy_update> {
-    range_affine_range_sum(auto &&...args) : lazy_segment_tree<algebra::sum_monoid<mint>, lazy_update>(args...) {}
+    template <typename...Args>
+    range_affine_range_sum(Args &&...args) : lazy_segment_tree<algebra::sum_monoid<mint>, lazy_update>(std::forward<Args>(args)...) {}
 
     void range_affine(int l, int r, algebra::affine_function<mint> f) {
         split_range<true>(l, r, [&f, this](int i, int l, int r) {

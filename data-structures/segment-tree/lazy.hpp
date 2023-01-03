@@ -4,19 +4,19 @@
 
 namespace data_structures {
 
-template <typename Groupoid, typename LazyUpdate>
-struct lazy_segment_tree : public basic_segment_tree<Groupoid, true> {
-    using groupoid_type = Groupoid;
+template <typename Monoid, typename LazyUpdate>
+struct lazy_segment_tree : public basic_segment_tree<Monoid, true> {
+    using groupoid = Monoid;
     using lazy_update_type = LazyUpdate;
     using tag_type = typename lazy_update_type::tag_type;
 
-    using basic_segment_tree<groupoid_type, true>::n;
-    using basic_segment_tree<groupoid_type, true>::t;
+    using basic_segment_tree<groupoid, true>::n;
+    using basic_segment_tree<groupoid, true>::t;
 
     std::vector<tag_type> tag;
 
     template <typename...Args>
-    lazy_segment_tree(Args &&...args) : basic_segment_tree<groupoid_type, true>(std::forward<Args>(args)...) {
+    lazy_segment_tree(Args &&...args) : basic_segment_tree<groupoid, true>(std::forward<Args>(args)...) {
         tag.assign(4 * n, lazy_update_type::e());
     }
 

@@ -5,10 +5,10 @@
 
 namespace trees {
 
-template <typename G, typename R>
-struct dynamic_path_query<G, R,
-        std::enable_if_t<algebra::is_commutative_v<typename R::monoid_type>>,
-        std::enable_if_t<algebra::is_group_v<typename R::monoid_type>>> {
+template <typename Graph, typename RangeQuery>
+struct dynamic_path_query<Graph, RangeQuery,
+        std::enable_if_t<algebra::is_commutative_v<typename RangeQuery::groupoid>>,
+        std::enable_if_t<algebra::is_group_v<typename RangeQuery::groupoid>>> {
 
     // TODO(implement dis)
 };
