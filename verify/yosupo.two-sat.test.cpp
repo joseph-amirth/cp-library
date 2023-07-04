@@ -16,7 +16,7 @@ int main() {
     cin >> n >> m;
 
     vector<pair<int, int>> clauses(m);
-    for (auto&[x, y] : clauses) {
+    for (auto &[x, y] : clauses) {
         cin >> x >> y >> s;
         x = x < 0 ? -x - 1 + n : x - 1;
         y = y < 0 ? -y - 1 + n : y - 1;

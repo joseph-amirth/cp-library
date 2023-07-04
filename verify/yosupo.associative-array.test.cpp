@@ -9,8 +9,11 @@ int main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
 
-    auto random_odd_number = [](void) -> uint64_t {
-        static mt19937_64 rng(chrono::steady_clock::now().time_since_epoch().count());
+    auto make_rng = [](void) -> mt19937_64 {
+        return mt19937_64(chrono::steady_clock::now().time_since_epoch().count());
+    };
+
+    auto random_odd_number = [rng = make_rng()](void) mutable {
         uint64_t x = 0;
         while (x % 2 == 0) {
             x = rng();

@@ -44,42 +44,33 @@ struct char_range {
     }
 };
 
-template <typename HeadCharSet, typename...TailCharSets>
+template <typename...CharSets>
 struct char_set_union {
-    using head_char_set_type = HeadCharSet;
-    using tail_char_sets_union_type = char_set_union<TailCharSets...>;
-    using char_type = typename head_char_set_type::char_type;
+    using char_type = char;
 
     static constexpr int size() {
-        return head_char_set_type::size() + tail_char_sets_union_type::size();
+        return (CharSets::size() + ... + 0);
     }
 
     static constexpr int index_of(char_type ch) {
-        if (head_char_set_type::contains(ch)) {
-            return head_char_set_type::index_of(ch);
-        } else {
-            return head_char_set_type::size() + tail_char_sets_union_type::index_of(ch);
-        }
+        int index = 0;
+        ((CharSets::contains(ch) ? (index += CharSets::index_of(ch), false) : (index += CharSets::size(), true)) && ...);
+        return index;
     }
 
     static constexpr char_type char_at(int i) {
-        if (i < head_char_set_type::size()) {
-            return head_char_set_type::char_at(i);
-        } else {
-            return tail_char_sets_union_type::char_at(i - head_char_set_type::size());
-        }
+        char_type answer;
+        ((i < CharSets::size() ? (answer = CharSets::char_at(i), false) : (i -= CharSets::size(), true)) && ...);
+        return answer;
     }
 
     static constexpr bool contains(char_type c) {
-        return head_char_set_type::contains(c) || tail_char_sets_union_type::contains(c);
+        return (CharSets::contains(c) || ... || false);
     }
 };
 
 template <typename Char, Char...chars>
 using char_set = char_set_union<char_singleton<Char, chars>...>;
-
-template <typename CharSet>
-struct char_set_union<CharSet> : CharSet {};
 
 using ascii = char_range<char, 0, 1 << 7>;
 using digits = char_range<char, '0', 10>;

@@ -17,12 +17,12 @@ struct naive_perfect_hash_table {
     naive_perfect_hash_table() {}
 
     template <typename Generator>
-    naive_perfect_hash_table(std::vector<key_type> &keys, Generator &&generator) {
+    naive_perfect_hash_table(const std::vector<key_type> &keys, Generator &&generator) {
         if (!keys.empty()) {
             m = 32 - __builtin_clz(keys.size() * keys.size());
             table.resize(1 << m);
 
-            std::vector<key_type *> used(1 << m, nullptr);
+            std::vector<const key_type *> used(1 << m, nullptr);
             while (f = generator(m), true) {
                 bool invalid = false;
                 fill(used.begin(), used.end(), nullptr);
