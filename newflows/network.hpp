@@ -1,7 +1,7 @@
 #pragma once
 
-#include "edge.hpp"
 #include "../newgraphs/directed-graph.hpp"
+#include "edge.hpp"
 
 namespace networks {
 
@@ -11,16 +11,16 @@ struct network : public graphs::directed_graph<Edge> {
     using flow_type = typename edge_type::flow_type;
     using graph_type = graphs::directed_graph<edge_type>;
 
-    using graph_type::n;
-    using graph_type::m;
-    using graph_type::edges;
     using graph_type::adj;
+    using graph_type::edges;
+    using graph_type::m;
+    using graph_type::n;
 
     network() : graph_type() {}
 
     network(int n, int expected_m = 0) : graph_type(n, expected_m) {}
 
-    void add_edge_with_residual_edge(int u, int v, flow_type c, auto&&...args) {
+    void add_edge_with_residual_edge(int u, int v, flow_type c, auto &&...args) {
         graph_type::add_edge(u, v, c, args...);
         graph_type::add_edge(v, u, 0, args...);
     }
@@ -66,4 +66,4 @@ struct network : public graphs::directed_graph<Edge> {
     }
 };
 
-}
+} // namespace networks

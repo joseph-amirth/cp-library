@@ -6,3 +6,5 @@ main.cpp
 expand.cpp
 test.cpp
 *.un~
+/.verify-helper
+!.verify-helper/config.toml

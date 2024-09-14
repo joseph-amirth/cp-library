@@ -10,7 +10,8 @@ typename Edge::flow_type dinic_max_flow(network<Edge> &g, int s, int t, typename
     using edge_type = Edge;
     using flow_type = typename edge_type::flow_type;
 
-    if (target_flow < 0) target_flow = std::numeric_limits<flow_type>::max();
+    if (target_flow < 0)
+        target_flow = std::numeric_limits<flow_type>::max();
 
     std::vector<int> lvl(g.n), q;
     q.reserve(g.n);
@@ -22,7 +23,7 @@ typename Edge::flow_type dinic_max_flow(network<Edge> &g, int s, int t, typename
         q.push_back(s);
         lvl[s] = 0;
 
-        for (int qi = 0; qi < (int) q.size(); qi++) {
+        for (int qi = 0; qi < (int)q.size(); qi++) {
             int u = q[qi];
             for (int i : g.adj[u]) {
                 const auto &e = g.edges[i];
@@ -37,8 +38,9 @@ typename Edge::flow_type dinic_max_flow(network<Edge> &g, int s, int t, typename
     std::vector<int> p(g.n), ptr(g.n);
 
     auto dfs = [&](int u, auto &&self) -> bool {
-        if (u == t) return true;
-        for (; ptr[u] < (int) g.adj[u].size(); ptr[u]++) {
+        if (u == t)
+            return true;
+        for (; ptr[u] < (int)g.adj[u].size(); ptr[u]++) {
             const auto &e = g.edges[g.adj[u][ptr[u]]];
             if (lvl[u] + 1 == lvl[e.v] && e.cap - e.flow > 0) {
                 p[e.v] = g.adj[u][ptr[u]];
@@ -60,4 +62,4 @@ typename Edge::flow_type dinic_max_flow(network<Edge> &g, int s, int t, typename
     return flow;
 }
 
-}
+} // namespace networks
