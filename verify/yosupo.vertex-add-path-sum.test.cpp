@@ -3,14 +3,14 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-#include "newgraphs/undirected-graph.hpp"
-#include "trees/heavy-light-decomposition.hpp"
-#include "trees/dynamic-path-query/commutative.hpp"
-#include "data-structures/segment-tree/basic.hpp"
 #include "algebra/groupoid/common-monoids.hpp"
+#include "data-structures/segment-tree/basic.hpp"
+#include "newgraphs/undirected-graph.hpp"
+#include "trees/dynamic_path_query/commutative.hpp"
+#include "trees/heavy-light-decomposition.hpp"
 
 struct point_add_range_sum : data_structures::segment_tree<algebra::sum_monoid<long long>> {
-    template <typename...Args>
+    template <typename... Args>
     point_add_range_sum(Args &&...args) : data_structures::segment_tree<algebra::sum_monoid<long long>>(std::forward<Args>(args)...) {}
 
     void point_add(int p, int x) {
@@ -30,7 +30,8 @@ int main() {
     cin >> n >> q;
 
     vector<int> a(n);
-    for (auto &x : a) cin >> x;
+    for (auto &x : a)
+        cin >> x;
 
     graphs::undirected_graph<> g(n, n - 1);
     for (int i = 0, u, v; i + 1 < n; i++) {

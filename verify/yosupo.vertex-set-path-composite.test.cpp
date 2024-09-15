@@ -3,13 +3,13 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-#include "mint/static-mint.hpp"
-#include "data-structures/segment-tree/basic.hpp"
-#include "algebra/groupoid/function-composition.hpp"
 #include "algebra/domain/affine-function.hpp"
+#include "algebra/groupoid/function-composition.hpp"
+#include "data-structures/segment-tree/basic.hpp"
+#include "mint/static-mint.hpp"
 #include "newgraphs/undirected-graph.hpp"
+#include "trees/dynamic_path_query/general.hpp"
 #include "trees/heavy-light-decomposition.hpp"
-#include "trees/dynamic-path-query/general.hpp"
 
 using mint = static_mint<998244353>;
 using monoid = algebra::function_composition_monoid<algebra::affine_function<mint>>;
@@ -42,11 +42,13 @@ int main() {
         cin >> type;
 
         if (type == 0) {
-            int p; algebra::affine_function<mint> v;
+            int p;
+            algebra::affine_function<mint> v;
             cin >> p >> v.a >> v.b;
             query.vertex_update(&segtree::point_assign, p, v);
         } else {
-            int u, v; mint x;
+            int u, v;
+            mint x;
             cin >> u >> v >> x;
             cout << query.path_query(u, v)(x) << '\n';
         }

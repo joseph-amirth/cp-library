@@ -60,4 +60,4 @@ struct euler_tour_tree {
     }
 };
 
-}
+} // namespace trees
