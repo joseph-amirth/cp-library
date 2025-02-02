@@ -2,4 +2,5 @@
 /.idea/
 /.verify-helper
 !.verify-helper/config.toml
-/*
+main.cpp
+expand.cpp

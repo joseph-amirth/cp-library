@@ -1,9 +1,9 @@
 #pragma once
 
-#include "type-traits.hpp"
+#include "concepts.hpp"
 #include <iostream>
 
-template<int M>
+template <int M>
 struct static_mint {
     static_assert(0 < M, "Module must be positive");
 
@@ -19,12 +19,16 @@ struct static_mint {
 
     constexpr static_mint() : val() {}
 
-    constexpr static_mint(long long x) : val(x % M) { if (val < 0) val += M; }
+    constexpr static_mint(long long x) : val(x % M) {
+        if (val < 0)
+            val += M;
+    }
 
     constexpr static_mint pow(long long n) const {
         static_mint ans = 1, x(*this);
         for (; n > 0; n /= 2) {
-            if (n & 1) ans *= x;
+            if (n & 1)
+                ans *= x;
             x *= x;
         }
         return ans;
@@ -47,22 +51,24 @@ struct static_mint {
     }
 
     constexpr static_mint &operator+=(const static_mint &m) {
-        if ((val += m.val) >= M) val -= M;
+        if ((val += m.val) >= M)
+            val -= M;
         return *this;
     }
 
     constexpr static_mint &operator-=(const static_mint &m) {
-        if ((val -= m.val) < 0) val += M;
+        if ((val -= m.val) < 0)
+            val += M;
         return *this;
     }
 
     constexpr static_mint &operator*=(const static_mint &m) {
-        val = (long long) val * m.val % M;
+        val = (long long)val * m.val % M;
         return *this;
     }
 
     constexpr static_mint &operator/=(const static_mint &m) {
-        val = (long long) val * m.inv().val % M;
+        val = (long long)val * m.inv().val % M;
         return *this;
     }
 
@@ -110,7 +116,7 @@ struct static_mint {
         return result;
     }
 
-    template<typename T>
+    template <typename T>
     constexpr explicit operator T() const {
         return T(val);
     }
@@ -125,5 +131,5 @@ struct static_mint {
     }
 };
 
-template<int M>
-struct is_static_mint_helper<static_mint<M>> : std::true_type {};
+template <int M>
+struct _detail::is_static_mint_helper<static_mint<M>> : std::true_type {};

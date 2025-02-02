@@ -1,10 +1,10 @@
 #pragma once
 
-#include "type-traits.hpp"
-#include <iostream>
+#include "concepts.hpp"
 #include <cassert>
+#include <iostream>
 
-template<int version>
+template <int version>
 struct dynamic_mint {
     static int M;
 
@@ -25,12 +25,17 @@ struct dynamic_mint {
 
     dynamic_mint() : val() {}
 
-    dynamic_mint(long long x) : val(x % M) { if (val < 0) { val += M; }}
+    dynamic_mint(long long x) : val(x % M) {
+        if (val < 0) {
+            val += M;
+        }
+    }
 
     dynamic_mint pow(long long n) const {
         dynamic_mint ans = 1, x(*this);
         for (; n > 0; n /= 2) {
-            if (n & 1) ans *= x;
+            if (n & 1)
+                ans *= x;
             x *= x;
         }
         return ans;
@@ -51,22 +56,24 @@ struct dynamic_mint {
     }
 
     dynamic_mint &operator+=(const dynamic_mint &m) {
-        if ((val += m.val) >= M) val -= M;
+        if ((val += m.val) >= M)
+            val -= M;
         return *this;
     }
 
     dynamic_mint &operator-=(const dynamic_mint &m) {
-        if ((val -= m.val) < 0) val += M;
+        if ((val -= m.val) < 0)
+            val += M;
         return *this;
     }
 
     dynamic_mint &operator*=(const dynamic_mint &m) {
-        val = (long long) val * m.val % M;
+        val = (long long)val * m.val % M;
         return *this;
     }
 
     dynamic_mint &operator/=(const dynamic_mint &m) {
-        val = (long long) val * m.inv().val % M;
+        val = (long long)val * m.inv().val % M;
         return *this;
     }
 
@@ -114,7 +121,7 @@ struct dynamic_mint {
         return result;
     }
 
-    template<typename T>
+    template <typename T>
     explicit operator T() const {
         return T(val);
     }
@@ -129,8 +136,8 @@ struct dynamic_mint {
     }
 };
 
-template<int version>
+template <int version>
 int dynamic_mint<version>::M;
 
-template<int version>
-struct is_dynamic_mint_helper<dynamic_mint<version>> : std::true_type {};
+template <int version>
+struct _detail::is_dynamic_mint_helper<dynamic_mint<version>> : std::true_type {};
