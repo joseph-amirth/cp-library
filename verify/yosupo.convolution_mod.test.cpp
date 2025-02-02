@@ -3,8 +3,8 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+#include "mint/static_mint.hpp"
 #include "polynomial/ntt.hpp"
-#include "mint/static-mint.hpp"
 
 int main() {
     ios::sync_with_stdio(false);
@@ -17,8 +17,10 @@ int main() {
     cin >> n >> m;
 
     vector<mint> a(n), b(m);
-    for (auto &x : a) cin >> x;
-    for (auto &x : b) cin >> x;
+    for (auto &x : a)
+        cin >> x;
+    for (auto &x : b)
+        cin >> x;
 
     inplace_convolution(a, b);
     for (int i = 0; i < n + m - 1; i++) {
