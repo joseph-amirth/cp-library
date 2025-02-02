@@ -1,10 +1,5 @@
-# Project exclude paths
 /cmake-build-debug/
 /.idea/
-CMakeLists.txt
-main.cpp
-expand.cpp
-test.cpp
-*.un~
 /.verify-helper
 !.verify-helper/config.toml
+/*
