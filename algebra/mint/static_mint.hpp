@@ -3,6 +3,8 @@
 #include "concepts.hpp"
 #include <iostream>
 
+namespace algebra {
+
 template <int M>
 struct static_mint {
     static_assert(0 < M, "Module must be positive");
@@ -133,3 +135,5 @@ struct static_mint {
 
 template <int M>
 struct _detail::is_static_mint_helper<static_mint<M>> : std::true_type {};
+
+} // namespace algebra

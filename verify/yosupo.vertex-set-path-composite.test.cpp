@@ -5,13 +5,13 @@ using namespace std;
 
 #include "algebra/domain/affine-function.hpp"
 #include "algebra/groupoid/function-composition.hpp"
+#include "algebra/mint/static_mint.hpp"
 #include "data-structures/segment-tree/basic.hpp"
-#include "mint/static-mint.hpp"
 #include "newgraphs/undirected-graph.hpp"
 #include "trees/dynamic_path_query/general.hpp"
 #include "trees/heavy-light-decomposition.hpp"
 
-using mint = static_mint<998244353>;
+using mint = algebra::static_mint<998244353>;
 using monoid = algebra::function_composition_monoid<algebra::affine_function<mint>>;
 using segtree = data_structures::segment_tree<monoid>;
 using path_query = trees::dynamic_path_query<graphs::undirected_graph<>, segtree>;

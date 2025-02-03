@@ -3,14 +3,14 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-#include "mint/static_mint.hpp"
+#include "algebra/mint/static_mint.hpp"
 #include "polynomial/ntt.hpp"
 
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
 
-    using mint = static_mint<998244353>;
+    using mint = algebra::static_mint<998244353>;
     using polynomials::ntt::inplace_convolution;
 
     int n, m;

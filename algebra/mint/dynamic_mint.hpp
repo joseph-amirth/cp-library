@@ -4,6 +4,8 @@
 #include <cassert>
 #include <iostream>
 
+namespace algebra {
+
 template <int version>
 struct dynamic_mint {
     static int M;
@@ -141,3 +143,5 @@ int dynamic_mint<version>::M;
 
 template <int version>
 struct _detail::is_dynamic_mint_helper<dynamic_mint<version>> : std::true_type {};
+
+} // namespace algebra

@@ -3,14 +3,14 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-#include "mint/static_mint.hpp"
+#include "algebra/mint/static_mint.hpp"
 #include "polynomial/bitwise_convolution.hpp"
 
 int main() {
     int n;
     cin >> n;
 
-    using mint = static_mint<998244353>;
+    using mint = algebra::static_mint<998244353>;
 
     vector<mint> a(1 << n), b(1 << n);
     for (auto &x : a)

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../mint/concepts.hpp"
+#include "../algebra/mint/concepts.hpp"
 #include "../number_theory/modular_arithmetic.hpp"
 #include <algorithm>
 #include <vector>
@@ -20,7 +20,7 @@ constexpr std::size_t order_of_ntt_root(T n) {
     return 1 << __builtin_ctz(n - 1);
 }
 
-template <StaticMint Mint>
+template <algebra::StaticMint Mint>
 struct ntt_info {
     static constexpr auto m = Mint::get_m();
     static constexpr auto root = ntt_root(m);
@@ -47,7 +47,7 @@ struct ntt_info {
     };
 };
 
-template <StaticMint Mint>
+template <algebra::StaticMint Mint>
 std::vector<Mint> ntt_info<Mint>::roots = {0, 1};
 
 namespace {

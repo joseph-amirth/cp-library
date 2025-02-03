@@ -3,14 +3,14 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-#include "mint/montgomery_mint.hpp"
+#include "algebra/mint/montgomery_mint.hpp"
 #include "polynomial/ntt.hpp"
 
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
 
-    using mint = montgomery_mint<1000000007>;
+    using mint = algebra::montgomery_mint<1000000007>;
     using polynomials::ntt::arbitrary_mod_convolution;
 
     int n, m;
@@ -22,7 +22,7 @@ int main() {
     for (auto &x : b)
         cin >> x;
 
-    auto c = arbitrary_mod_convolution<mint, montgomery_mint>(a, b);
+    auto c = arbitrary_mod_convolution<mint, algebra::montgomery_mint>(a, b);
     for (int i = 0; i < n + m - 1; i++) {
         cout << c[i] << ' ';
     }

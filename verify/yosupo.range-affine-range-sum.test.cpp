@@ -3,12 +3,12 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-#include "mint/static-mint.hpp"
-#include "data-structures/segment-tree/lazy.hpp"
-#include "algebra/groupoid/common-groups.hpp"
 #include "algebra/domain/affine-function.hpp"
+#include "algebra/groupoid/common-groups.hpp"
+#include "algebra/mint/static_mint.hpp"
+#include "data-structures/segment-tree/lazy.hpp"
 
-using mint = static_mint<998244353>;
+using mint = algebra::static_mint<998244353>;
 using data_structures::lazy_segment_tree;
 
 struct lazy_update {
@@ -25,7 +25,7 @@ struct lazy_update {
 };
 
 struct range_affine_range_sum : public lazy_segment_tree<algebra::sum_monoid<mint>, lazy_update> {
-    template <typename...Args>
+    template <typename... Args>
     range_affine_range_sum(Args &&...args) : lazy_segment_tree<algebra::sum_monoid<mint>, lazy_update>(std::forward<Args>(args)...) {}
 
     void range_affine(int l, int r, algebra::affine_function<mint> f) {
@@ -43,7 +43,8 @@ int main() {
     cin >> n >> q;
 
     vector<mint> a(n);
-    for (auto &x : a) cin >> x;
+    for (auto &x : a)
+        cin >> x;
 
     range_affine_range_sum st(a.begin(), a.end());
 
@@ -52,7 +53,8 @@ int main() {
         cin >> type;
 
         if (type == 0) {
-            int l, r; mint b, c;
+            int l, r;
+            mint b, c;
             cin >> l >> r >> b >> c, --r;
             st.range_affine(l, r, algebra::affine_function<mint>(b, c));
         } else {

@@ -4,6 +4,8 @@
 #include <cstdint>
 #include <iostream>
 
+namespace algebra {
+
 template <uint32_t M>
 struct montgomery_mint {
     static_assert(0 < M, "Modulus must be non-zero");
@@ -168,3 +170,5 @@ struct montgomery_mint {
 
 template <uint32_t M>
 struct _detail::is_static_mint_helper<montgomery_mint<M>> : std::true_type {};
+
+} // namespace algebra
