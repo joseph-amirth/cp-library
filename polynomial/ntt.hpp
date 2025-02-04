@@ -11,8 +11,8 @@ namespace ntt {
 
 template <typename T>
 constexpr T ntt_root(T n) {
-    auto root = math::primitive_root(n);
-    return math::mod_exp(root, (n - 1) >> __builtin_ctz(n - 1), n);
+    auto root = number_theory::primitive_root(n);
+    return number_theory::mod_exp(root, (n - 1) >> __builtin_ctz(n - 1), n);
 }
 
 template <typename T>

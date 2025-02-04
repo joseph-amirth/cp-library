@@ -1,10 +1,10 @@
 #pragma once
 
-#include "../miscellaneous/type-promotion.hpp"
+#include "../miscellaneous/type_promotion.hpp"
 #include <cassert>
 #include <concepts>
 
-namespace math {
+namespace number_theory {
 
 template <std::integral T>
 constexpr T mod_exp(T x, long long n, T m) {
@@ -52,4 +52,4 @@ constexpr T primitive_root(T n) {
     return T(0);
 }
 
-} // namespace math
+} // namespace number_theory
