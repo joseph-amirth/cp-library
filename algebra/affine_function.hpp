@@ -22,4 +22,21 @@ struct affine_function {
     }
 };
 
-}
+namespace monoids {
+
+template <typename T>
+struct affine_function_composition {
+    using value_type = affine_function<T>;
+
+    value_type id() {
+        return affine_function<T>();
+    }
+
+    value_type op(const value_type &f, const value_type &g) {
+        return g(f);
+    }
+};
+
+} // namespace monoids
+
+} // namespace algebra

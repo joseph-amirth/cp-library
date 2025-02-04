@@ -23,6 +23,9 @@ struct extremum {
 };
 
 } // namespace semigroups
+  //
+template <typename T, typename C>
+struct is_commutative<semigroups::extremum<T, C>> : std::true_type {};
 
 template <typename T, typename C>
 struct is_idempotent<semigroups::extremum<T, C>> : std::true_type {};

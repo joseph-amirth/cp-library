@@ -3,17 +3,16 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-#include "algebra/domain/affine-function.hpp"
-#include "algebra/groupoid/function-composition.hpp"
+#include "algebra/affine_function.hpp"
 #include "algebra/mint/static_mint.hpp"
-#include "data-structures/segment-tree/basic.hpp"
 #include "newgraphs/undirected-graph.hpp"
+#include "range_query/segment_tree/basic.hpp"
 #include "trees/dynamic_path_query/general.hpp"
 #include "trees/heavy-light-decomposition.hpp"
 
 using mint = algebra::static_mint<998244353>;
-using monoid = algebra::function_composition_monoid<algebra::affine_function<mint>>;
-using segtree = data_structures::segment_tree<monoid>;
+using monoid = algebra::monoids::affine_function_composition<mint>;
+using segtree = range_query::segment_tree<monoid>;
 using path_query = trees::dynamic_path_query<graphs::undirected_graph<>, segtree>;
 
 int main() {
@@ -35,7 +34,7 @@ int main() {
     }
 
     trees::heavy_light_decomposition hld(g);
-    path_query query(hld, f);
+    path_query query(hld, f.begin(), f.end());
 
     while (q--) {
         int type;

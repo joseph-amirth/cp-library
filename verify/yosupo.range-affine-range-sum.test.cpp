@@ -3,13 +3,13 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-#include "algebra/domain/affine-function.hpp"
-#include "algebra/groupoid/common-groups.hpp"
+#include "algebra/affine_function.hpp"
+#include "algebra/groups/sum.hpp"
 #include "algebra/mint/static_mint.hpp"
-#include "data-structures/segment-tree/lazy.hpp"
+#include "range_query/segment_tree/lazy.hpp"
 
 using mint = algebra::static_mint<998244353>;
-using data_structures::lazy_segment_tree;
+using range_query::lazy_segment_tree;
 
 struct lazy_update {
     using tag_type = algebra::affine_function<mint>;
@@ -24,9 +24,9 @@ struct lazy_update {
     }
 };
 
-struct range_affine_range_sum : public lazy_segment_tree<algebra::sum_monoid<mint>, lazy_update> {
+struct range_affine_range_sum : public lazy_segment_tree<algebra::groups::sum<mint>, lazy_update> {
     template <typename... Args>
-    range_affine_range_sum(Args &&...args) : lazy_segment_tree<algebra::sum_monoid<mint>, lazy_update>(std::forward<Args>(args)...) {}
+    range_affine_range_sum(Args &&...args) : lazy_segment_tree<algebra::groups::sum<mint>, lazy_update>(std::forward<Args>(args)...) {}
 
     void range_affine(int l, int r, algebra::affine_function<mint> f) {
         split_range<true>(l, r, [&f, this](int i, int l, int r) {

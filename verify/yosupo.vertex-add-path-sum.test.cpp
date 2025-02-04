@@ -3,15 +3,15 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-#include "algebra/groupoid/common-monoids.hpp"
-#include "data-structures/segment-tree/basic.hpp"
+#include "algebra/groups/sum.hpp"
 #include "newgraphs/undirected-graph.hpp"
+#include "range_query/segment_tree/basic.hpp"
 #include "trees/dynamic_path_query/commutative.hpp"
 #include "trees/heavy-light-decomposition.hpp"
 
-struct point_add_range_sum : data_structures::segment_tree<algebra::sum_monoid<long long>> {
+struct point_add_range_sum : range_query::segment_tree<algebra::groups::sum<long long>> {
     template <typename... Args>
-    point_add_range_sum(Args &&...args) : data_structures::segment_tree<algebra::sum_monoid<long long>>(std::forward<Args>(args)...) {}
+    point_add_range_sum(Args &&...args) : range_query::segment_tree<algebra::groups::sum<long long>>(std::forward<Args>(args)...) {}
 
     void point_add(int p, int x) {
         visit_point<true>(p, [&x](long long &y) {
@@ -40,7 +40,7 @@ int main() {
     }
 
     trees::heavy_light_decomposition<decltype(g)> hld(g);
-    path_query query(hld, a);
+    path_query query(hld, a.begin(), a.end());
 
     while (q--) {
         int type;

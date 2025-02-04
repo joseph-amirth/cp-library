@@ -1,3 +1,5 @@
+#pragma once
+
 #include <concepts>
 
 namespace range_query {

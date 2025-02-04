@@ -1,22 +1,22 @@
 #pragma once
 
+#include "../../algebra/concepts.hpp"
 #include "basic.hpp"
 
-namespace data_structures {
+namespace range_query {
 
-template <typename Monoid, typename LazyUpdate>
-struct lazy_segment_tree : public basic_segment_tree<Monoid, true> {
-    using groupoid = Monoid;
+template <algebra::Monoid M, typename LazyUpdate>
+struct lazy_segment_tree : public basic_segment_tree<M, true> {
     using lazy_update_type = LazyUpdate;
     using tag_type = typename lazy_update_type::tag_type;
 
-    using basic_segment_tree<groupoid, true>::n;
-    using basic_segment_tree<groupoid, true>::t;
+    using basic_segment_tree<M, true>::n;
+    using basic_segment_tree<M, true>::t;
 
     std::vector<tag_type> tag;
 
-    template <typename...Args>
-    lazy_segment_tree(Args &&...args) : basic_segment_tree<groupoid, true>(std::forward<Args>(args)...) {
+    template <typename... Args>
+    lazy_segment_tree(Args &&...args) : basic_segment_tree<M, true>(std::forward<Args>(args)...) {
         tag.assign(4 * n, lazy_update_type::e());
     }
 
@@ -28,4 +28,4 @@ struct lazy_segment_tree : public basic_segment_tree<Monoid, true> {
     }
 };
 
-}
+} // namespace range_query

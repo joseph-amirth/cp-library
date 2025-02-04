@@ -3,9 +3,9 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-#include "data-structures/segment-tree/merge-sort-tree.hpp"
+#include "range_query/segment_tree/merge_sort_tree.hpp"
 
-using data_structures::merge_sort_tree;
+using range_query::merge_sort_tree;
 
 int main() {
     ios::sync_with_stdio(false);
@@ -22,7 +22,8 @@ int main() {
     }
 
     vector<int> a(n);
-    for (auto &x : a) cin >> x;
+    for (auto &x : a)
+        cin >> x;
 
     merge_sort_tree<int> mst(a.begin(), a.end());
 

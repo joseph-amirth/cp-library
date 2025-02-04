@@ -1,40 +1,48 @@
 #pragma once
 
-#include "../../algebra/type-traits.hpp"
+#include "../../algebra/concepts.hpp"
+#include "../../range_query/concepts.hpp"
 #include "../heavy-light-decomposition.hpp"
 #include "dynamic_path_query.hpp"
-#include <algorithm>
+#include <iterator>
 
 namespace trees {
 
-template <typename Graph, typename RangeQuery>
-struct dynamic_path_query<Graph, RangeQuery,
-                          std::enable_if_t<algebra::is_commutative_v<typename RangeQuery::groupoid>>,
-                          std::enable_if_t<!algebra::is_group_v<typename RangeQuery::groupoid>>> {
+template <typename Graph, range_query::RangeQuery Rq>
+    requires algebra::Commutative<typename Rq::groupoid>
+struct dynamic_path_query<Graph, Rq> {
 
     using graph_type = Graph;
-    using range_query_type = RangeQuery;
 
-    using groupoid = typename range_query_type::groupoid;
+    using groupoid = typename Rq::groupoid;
     using value_type = typename groupoid::value_type;
 
+    groupoid g;
     const heavy_light_decomposition<graph_type> &hld;
-    range_query_type rq;
+    Rq rq;
 
-    template <typename U>
-    dynamic_path_query(const heavy_light_decomposition<graph_type> &hld, const std::vector<U> &a) : hld(hld) {
+    template <std::forward_iterator I>
+    static std::vector<value_type> build_values(const heavy_light_decomposition<graph_type> &hld, I first, I last) {
         int n = hld.g.n;
         std::vector<value_type> values(n);
         for (int u = 0; u < n; u++) {
-            values[hld.tree_pos[u]] = value_type(a[u]);
+            values[hld.tree_pos[u]] = value_type(*first++);
         }
-        rq = range_query_type(values.begin(), values.end());
+        return values;
     }
 
+    dynamic_path_query(groupoid g, const heavy_light_decomposition<graph_type> &hld, const std::vector<value_type> &values) : g(g), hld(hld), rq(values.begin(), values.end()) {}
+
+    template <std::forward_iterator I>
+    dynamic_path_query(groupoid g, const heavy_light_decomposition<graph_type> &hld, I first, I last) : dynamic_path_query(g, hld, build_values(hld, first, last)) {}
+
+    template <std::forward_iterator I>
+    dynamic_path_query(const heavy_light_decomposition<graph_type> &hld, I first, I last) : dynamic_path_query(groupoid(), hld, build_values(hld, first, last)) {}
+
     value_type path_query(int u, int v) {
-        value_type ans = groupoid::e();
+        value_type ans = g.id();
         hld.unordered_visit_path(u, v, [&](int l, int r) {
-            ans = groupoid::op(ans, rq.range_query(l, r));
+            ans = g.op(ans, rq.range_query(l, r));
         });
         return ans;
     }

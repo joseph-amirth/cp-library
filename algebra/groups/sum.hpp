@@ -1,5 +1,8 @@
 #pragma once
 
+#include "../concepts.hpp"
+#include <type_traits>
+
 namespace algebra {
 
 namespace groups {
@@ -22,5 +25,8 @@ struct sum {
 };
 
 } // namespace groups
+
+template <typename T>
+struct is_commutative<groups::sum<T>> : std::true_type {};
 
 } // namespace algebra

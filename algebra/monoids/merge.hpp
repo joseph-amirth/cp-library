@@ -1,20 +1,24 @@
 #pragma once
 
 #include <algorithm>
+#include <concepts>
+#include <ranges>
+#include <vector>
+
+#include "../concepts.hpp"
 
 namespace algebra {
 
-template <typename Container, typename Compare>
-struct merge_monoid {
-    using value_type = Container;
-    using compare_type = Compare;
-    using is_commutative = std::true_type;
+template <std::ranges::range R,
+          std::strict_weak_order<std::ranges::range_value_t<R>, std::ranges::range_value_t<R>> C>
+struct merge {
+    using value_type = R;
 
-    compare_type compare;
+    C compare;
 
-    merge_monoid(compare_type compare = compare_type()) : compare(compare) {}
+    merge(C compare = C()) : compare(compare) {}
 
-    value_type e() {
+    value_type id() {
         return value_type();
     }
 
@@ -25,17 +29,15 @@ struct merge_monoid {
     }
 };
 
-template <typename T, typename Compare>
-struct merge_monoid<std::vector<T>, Compare> {
+template <typename T, std::strict_weak_order<T, T> C>
+struct merge<std::vector<T>, C> {
     using value_type = std::vector<T>;
-    using compare_type = Compare;
-    using is_commutative = std::true_type;
 
-    compare_type compare;
+    C compare;
 
-    merge_monoid(compare_type compare = compare_type()) : compare(compare) {}
+    merge(C compare = C()) : compare(compare) {}
 
-    value_type e() {
+    value_type id() {
         return value_type();
     }
 
@@ -47,4 +49,7 @@ struct merge_monoid<std::vector<T>, Compare> {
     }
 };
 
-}
+template <typename R, typename C>
+struct is_commutative<merge<R, C>> : std::true_type {};
+
+} // namespace algebra

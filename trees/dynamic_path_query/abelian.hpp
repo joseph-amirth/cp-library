@@ -1,24 +1,23 @@
 #pragma once
 
-#include "../../algebra/type-traits.hpp"
+#include "../../algebra/concepts.hpp"
+#include "../../range_query/concepts.hpp"
 #include "../euler-tour-tree.hpp"
 #include "dynamic_path_query.hpp"
 
 namespace trees {
 
-template <typename Graph, typename RangeQuery>
-struct dynamic_path_query<Graph, RangeQuery,
-                          std::enable_if_t<algebra::is_commutative_v<typename RangeQuery::groupoid>>,
-                          std::enable_if_t<algebra::is_group_v<typename RangeQuery::groupoid>>> {
+template <typename Graph, range_query::RangeQuery Rq>
+    requires algebra::Commutative<typename Rq::groupoid> && algebra::Group<typename Rq::groupoid>
+struct dynamic_path_query<Graph, Rq> {
 
     using graph_type = Graph;
-    using range_query_type = RangeQuery;
 
-    using groupoid = typename range_query_type::groupoid;
+    using groupoid = typename Rq::groupoid;
     using value_type = typename groupoid::value_type;
 
     const euler_tour_tree<graph_type> &ett;
-    range_query_type rq;
+    Rq rq;
 
     template <typename U>
     dynamic_path_query(const euler_tour_tree<graph_type> &ett, const std::vector<U> &a) : ett(ett) {
@@ -28,7 +27,7 @@ struct dynamic_path_query<Graph, RangeQuery,
             values[ett.tin[u]] = a[u];
             values[ett.tout[u]] = groupoid::inv(a[u]);
         }
-        rq = range_query_type(values.begin(), values.end());
+        rq = Rq(values.begin(), values.end());
     }
 
     value_type path_query(int u, int v) {

@@ -1,18 +1,16 @@
 #pragma once
 
+#include <concepts>
 #include <iostream>
-#include <algorithm>
 #include <numeric>
 
 namespace algebra {
 
-template <typename Integer>
+template <std::integral I>
 struct fraction {
-    using value_type = Integer;
+    I num, den;
 
-    value_type num, den;
-
-    fraction(value_type num = value_type(0), value_type den = value_type(1)) : num(num), den(den) {
+    fraction(I num = I(0), I den = I(1)) : num(num), den(den) {
         reduce();
         if (den < 0) {
             num *= -1, den *= -1;
@@ -20,7 +18,7 @@ struct fraction {
     }
 
     void reduce() {
-        value_type g = std::gcd(num, den);
+        I g = std::gcd(num, den);
         num /= g, den /= g;
     }
 
@@ -97,4 +95,4 @@ struct fraction {
     }
 };
 
-}
+} // namespace algebra

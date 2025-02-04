@@ -1,18 +1,21 @@
 #pragma once
 
-#include <vector>
 #include <cassert>
+#include <iterator>
+#include <vector>
 
-namespace data_structures {
+#include "../../algebra/concepts.hpp"
 
-template <typename Monoid, bool lazy = false>
+namespace range_query {
+
+template <algebra::Monoid M, bool lazy = false>
 struct basic_segment_tree {
-    using groupoid = Monoid;
-    using value_type = typename groupoid::value_type;
+    using groupoid = M;
+    using value_type = typename M::value_type;
 
+    M monoid;
     int n;
     std::vector<value_type> t;
-    groupoid monoid;
 
     virtual void push_down(int i, int l, int r) {}
 
@@ -31,17 +34,22 @@ struct basic_segment_tree {
         build(build, 1, 0, n - 1);
     }
 
-    basic_segment_tree(int n = 0, groupoid monoid = groupoid()) : n(n), monoid(monoid) {
-        t.assign(4 * n, monoid.e());
-    }
-
-    template <typename Iterator>
-    basic_segment_tree(Iterator first, Iterator last, groupoid monoid = groupoid()) : basic_segment_tree(std::distance(first, last), monoid) {
+    template <std::forward_iterator I>
+    basic_segment_tree(M monoid, I first, I last) : basic_segment_tree(monoid, std::distance(first, last)) {
         build([&first](value_type &leaf) {
             leaf = value_type(*first);
             ++first;
         });
     }
+
+    template <std::forward_iterator I>
+    basic_segment_tree(I first, I last) : basic_segment_tree(M(), first, last) {}
+
+    basic_segment_tree(M monoid, int n) : monoid(monoid), n(n) {
+        t.assign(4 * n, monoid.id());
+    }
+
+    basic_segment_tree(int n) : basic_segment_tree(M(), n) {}
 
     template <bool update = false, typename Function>
     void visit_point(int qi, Function &&f) {
@@ -101,7 +109,7 @@ struct basic_segment_tree {
     }
 
     value_type range_query(int l, int r) {
-        value_type ans = monoid.e();
+        value_type ans = monoid.id();
         split_range<false>(l, r, [&ans, this](int i, ...) {
             ans = monoid.op(ans, t[i]);
         });
@@ -115,10 +123,10 @@ struct basic_segment_tree {
     }
 };
 
-template <typename Monoid>
-struct segment_tree : public basic_segment_tree<Monoid, false> {
-    template <typename...Args>
-    segment_tree(Args &&...args) : basic_segment_tree<Monoid, false>(std::forward<Args>(args)...) {}
+template <algebra::Monoid M>
+struct segment_tree : public basic_segment_tree<M, false> {
+    template <typename... Args>
+    segment_tree(Args &&...args) : basic_segment_tree<M, false>(std::forward<Args>(args)...) {}
 };
 
-}
+} // namespace range_query
