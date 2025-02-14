@@ -2,25 +2,22 @@
 
 #include "../../algebra/concepts.hpp"
 #include "../../range_query/concepts.hpp"
-#include "../euler-tour-tree.hpp"
+#include "../euler_tour_tree.hpp"
 #include "dynamic_path_query.hpp"
 
-namespace trees {
+namespace tree {
 
 template <typename Graph, range_query::RangeQuery Rq>
     requires algebra::Commutative<typename Rq::groupoid> && algebra::Group<typename Rq::groupoid>
 struct dynamic_path_query<Graph, Rq> {
-
-    using graph_type = Graph;
-
     using groupoid = typename Rq::groupoid;
     using value_type = typename groupoid::value_type;
 
-    const euler_tour_tree<graph_type> &ett;
+    const euler_tour_tree<Graph> &ett;
     Rq rq;
 
     template <typename U>
-    dynamic_path_query(const euler_tour_tree<graph_type> &ett, const std::vector<U> &a) : ett(ett) {
+    dynamic_path_query(const euler_tour_tree<Graph> &ett, const std::vector<U> &a) : ett(ett) {
         int n = ett.g.n;
         std::vector<value_type> values(2 * n);
         for (int u = 0; u < n; u++) {
@@ -46,4 +43,4 @@ struct dynamic_path_query<Graph, Rq> {
     }
 };
 
-} // namespace trees
+} // namespace tree

@@ -1,13 +1,16 @@
 #pragma once
 
-#include "../graphs/graph.hpp"
+#include "../newgraphs/undirected-graph.hpp"
 
-struct lowest_common_ancestor {
+namespace tree {
+
+template <typename Edge>
+struct binary_lifting {
     int lg;
     std::vector<int> tin, tout, lvl;
     std::vector<std::vector<int>> up;
 
-    lowest_common_ancestor(const graph &g, int root = 0) : tin(g.n), tout(g.n), lvl(g.n) {
+    binary_lifting(const graphs::undirected_graph<Edge> &g, int root = 0) : tin(g.n), tout(g.n), lvl(g.n) {
         lg = 32 - __builtin_clz(g.n);
         up.assign(g.n, std::vector<int>(lg, -1));
 
@@ -28,29 +31,21 @@ struct lowest_common_ancestor {
             tout[u] = timer++;
         };
 
-        if (root == 0) {
-            for (int u = 0; u < g.n; u++) {
-                if (up[u][0] == -1) {
-                    dfs(u, dfs);
-                }
-            }
-        } else {
-            dfs(root, dfs);
-        }
+        dfs(root, dfs);
     }
 
-    inline bool is_anc(int u, int v) {
-        return tin[u] <= tin[v] && tout[u] >= tout[v];
+    bool is_ancestor(int u, int v) {
+        return tin[u] <= tin[v] && tout[v] <= tout[u];
     }
 
     int lca(int u, int v) {
-        if (is_anc(u, v)) {
+        if (is_ancestor(u, v)) {
             return u;
-        } else if (is_anc(v, u)) {
+        } else if (is_ancestor(v, u)) {
             return v;
         }
         for (int i = lg - 1; i >= 0; i--) {
-            if (up[u][i] != -1 && !is_anc(up[u][i], v)) {
+            if (up[u][i] != -1 && !is_ancestor(up[u][i], v)) {
                 u = up[u][i];
             }
         }
@@ -60,4 +55,27 @@ struct lowest_common_ancestor {
     int dist(int u, int v) {
         return lvl[u] + lvl[v] - 2 * lvl[lca(u, v)];
     }
+
+    int kth_ancestor(int u, int k) {
+        if (k < 0) {
+            return -1;
+        }
+        for (int bit = 0; bit < lg; bit++) {
+            if (k >> bit & 1) {
+                u = up[u][bit];
+            }
+        }
+        return u;
+    }
+
+    int kth_on_path(int u, int v, int k) {
+        int l = lca(u, v);
+        if (k <= lvl[u] - lvl[l]) {
+            return kth_ancestor(u, k);
+        }
+        int dist = lvl[u] + lvl[v] - 2 * lvl[l];
+        return kth_ancestor(v, dist - k);
+    }
 };
+
+} // namespace tree

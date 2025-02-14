@@ -1,9 +1,9 @@
 #pragma once
 
 #include "../range_query/concepts.hpp"
-#include "../tree/euler-tour-tree.hpp"
+#include "../tree/euler_tour_tree.hpp"
 
-namespace trees {
+namespace tree {
 
 template <typename G, range_query::RangeQuery Rq>
 struct dynamic_subtree_query {
@@ -40,4 +40,4 @@ struct dynamic_subtree_query {
     }
 };
 
-} // namespace trees
+} // namespace tree

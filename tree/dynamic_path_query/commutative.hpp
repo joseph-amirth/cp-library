@@ -2,27 +2,24 @@
 
 #include "../../algebra/concepts.hpp"
 #include "../../range_query/concepts.hpp"
-#include "../heavy-light-decomposition.hpp"
+#include "../heavy_light_decomposition.hpp"
 #include "dynamic_path_query.hpp"
 #include <iterator>
 
-namespace trees {
+namespace tree {
 
 template <typename Graph, range_query::RangeQuery Rq>
     requires algebra::Commutative<typename Rq::groupoid>
 struct dynamic_path_query<Graph, Rq> {
-
-    using graph_type = Graph;
-
     using groupoid = typename Rq::groupoid;
     using value_type = typename groupoid::value_type;
 
     groupoid g;
-    const heavy_light_decomposition<graph_type> &hld;
+    const heavy_light_decomposition<Graph> &hld;
     Rq rq;
 
     template <std::forward_iterator I>
-    static std::vector<value_type> build_values(const heavy_light_decomposition<graph_type> &hld, I first, I last) {
+    static std::vector<value_type> build_values(const heavy_light_decomposition<Graph> &hld, I first, I last) {
         int n = hld.g.n;
         std::vector<value_type> values(n);
         for (int u = 0; u < n; u++) {
@@ -31,13 +28,13 @@ struct dynamic_path_query<Graph, Rq> {
         return values;
     }
 
-    dynamic_path_query(groupoid g, const heavy_light_decomposition<graph_type> &hld, const std::vector<value_type> &values) : g(g), hld(hld), rq(values.begin(), values.end()) {}
+    dynamic_path_query(groupoid g, const heavy_light_decomposition<Graph> &hld, const std::vector<value_type> &values) : g(g), hld(hld), rq(values.begin(), values.end()) {}
 
     template <std::forward_iterator I>
-    dynamic_path_query(groupoid g, const heavy_light_decomposition<graph_type> &hld, I first, I last) : dynamic_path_query(g, hld, build_values(hld, first, last)) {}
+    dynamic_path_query(groupoid g, const heavy_light_decomposition<Graph> &hld, I first, I last) : dynamic_path_query(g, hld, build_values(hld, first, last)) {}
 
     template <std::forward_iterator I>
-    dynamic_path_query(const heavy_light_decomposition<graph_type> &hld, I first, I last) : dynamic_path_query(groupoid(), hld, build_values(hld, first, last)) {}
+    dynamic_path_query(const heavy_light_decomposition<Graph> &hld, I first, I last) : dynamic_path_query(groupoid(), hld, build_values(hld, first, last)) {}
 
     value_type path_query(int u, int v) {
         value_type ans = g.id();
@@ -60,4 +57,4 @@ struct dynamic_path_query<Graph, Rq> {
     }
 };
 
-} // namespace trees
+} // namespace tree

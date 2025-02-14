@@ -6,12 +6,12 @@ using namespace std;
 #include "algebra/groups/sum.hpp"
 #include "newgraphs/undirected-graph.hpp"
 #include "range_query/fenwick_tree.hpp"
-#include "tree/dynamic-subtree-query.hpp"
+#include "tree/dynamic_subtree_query.hpp"
 
 namespace groups = algebra::groups;
 
 using point_add_range_sum = range_query::fenwick_tree<groups::sum<long long>>;
-using subtree_query = trees::dynamic_subtree_query<graphs::undirected_graph<>, point_add_range_sum>;
+using subtree_query = tree::dynamic_subtree_query<graphs::undirected_graph<>, point_add_range_sum>;
 
 int main() {
     ios::sync_with_stdio(false);
@@ -30,7 +30,7 @@ int main() {
         g.add_edge(p, i);
     }
 
-    trees::compressed_euler_tour_tree et(g);
+    tree::compressed_euler_tour_tree et(g);
     subtree_query query(et, a);
 
     while (q--) {

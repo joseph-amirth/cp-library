@@ -2,16 +2,14 @@
 
 #include <vector>
 
-namespace trees {
+namespace tree {
 
 template <typename Graph>
 struct compressed_euler_tour_tree {
-    using graph_type = Graph;
-
-    const graph_type &g;
+    const Graph &g;
     std::vector<int> tin, tout;
 
-    explicit compressed_euler_tour_tree(const graph_type &g) : g(g), tin(g.n), tout(g.n) {
+    explicit compressed_euler_tour_tree(const Graph &g) : g(g), tin(g.n), tout(g.n) {
         int timer = -1;
         auto dfs = [&](auto &&self, int u, int p) -> void {
             tin[u] = ++timer;
@@ -37,12 +35,10 @@ struct compressed_euler_tour_tree {
 
 template <typename Graph>
 struct euler_tour_tree {
-    using graph_type = Graph;
-
-    const graph_type &g;
+    const Graph &g;
     std::vector<int> euler_tour, tin, tout;
 
-    explicit euler_tour_tree(const graph_type &g) : g(g), tin(g.n), tout(g.n) {
+    explicit euler_tour_tree(const Graph &g) : g(g), tin(g.n), tout(g.n) {
         int timer = 0;
         auto dfs = [&](auto &&self, int u, int p) -> void {
             tin[u] = timer++;
@@ -60,4 +56,4 @@ struct euler_tour_tree {
     }
 };
 
-} // namespace trees
+} // namespace tree

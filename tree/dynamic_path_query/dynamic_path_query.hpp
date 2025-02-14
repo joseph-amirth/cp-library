@@ -2,7 +2,7 @@
 
 #include "../../range_query/concepts.hpp"
 
-namespace trees {
+namespace tree {
 
 template <typename Graph, range_query::RangeQuery Rq>
 struct dynamic_path_query;

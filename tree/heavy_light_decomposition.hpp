@@ -1,19 +1,22 @@
 #pragma once
 
 #include "../newgraphs/undirected-graph.hpp"
+#include <concepts>
 
-namespace trees {
+namespace tree {
+
+namespace {
+template <typename T>
+concept Visitor = std::invocable<T, int, int>;
+}
 
 template <typename Graph = graphs::undirected_graph<>>
 struct heavy_light_decomposition {
-    using graph_type = Graph;
-
-    const graph_type &g;
+    const Graph &g;
     std::vector<int> parent, head, depth;
     std::vector<int> tree_pos;
 
-    heavy_light_decomposition(const graph_type &g) : g(g), parent(g.n, -1), head(g.n, -1), depth(g.n),
-                                                     tree_pos(g.n, -1) {
+    heavy_light_decomposition(const Graph &g) : g(g), parent(g.n, -1), head(g.n, -1), depth(g.n), tree_pos(g.n, -1) {
         std::vector<int> ptr(g.n, -1);
         auto dfs = [&](auto &&self, int u) -> int {
             int tree_sz = 1, mx_sz = 0;
@@ -43,7 +46,7 @@ struct heavy_light_decomposition {
         }
     }
 
-    template <typename Function>
+    template <Visitor Function>
     void unordered_visit_path(int u, int v, Function &&f) const {
         for (; head[u] != head[v]; u = parent[head[u]]) {
             if (depth[head[u]] < depth[head[v]]) {
@@ -57,7 +60,7 @@ struct heavy_light_decomposition {
         f(tree_pos[u], tree_pos[v]);
     }
 
-    template <typename FunctionUp, typename FunctionDown>
+    template <Visitor FunctionUp, Visitor FunctionDown>
     void semiordered_visit_path(int u, int v, FunctionUp &&f_up, FunctionDown &&f_down) const {
         while (head[u] != head[v]) {
             if (depth[head[u]] >= depth[head[v]]) {
@@ -75,7 +78,7 @@ struct heavy_light_decomposition {
         }
     }
 
-    template <typename FunctionUp, typename FunctionDown>
+    template <Visitor FunctionUp, Visitor FunctionDown>
     void ordered_visit_path(int u, int v, FunctionUp &&f_up, FunctionDown &&f_down) const {
         static std::vector<std::pair<int, int>> right_segments;
         while (head[u] != head[v]) {
@@ -100,4 +103,4 @@ struct heavy_light_decomposition {
     }
 };
 
-}
+} // namespace tree
