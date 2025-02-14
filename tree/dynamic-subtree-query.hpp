@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../range_query/concepts.hpp"
-#include "../trees/euler-tour-tree.hpp"
+#include "../tree/euler-tour-tree.hpp"
 
 namespace trees {
 

@@ -1,12 +1,16 @@
 #pragma once
 
-#include "basic-splay-tree.hpp"
-#include <iterator>
+#include "basic.hpp"
 #include <cassert>
+#include <concepts>
+#include <iterator>
+#include <utility>
 
-template<typename splay_node>
-struct implicit_splay_tree : basic_splay_tree<splay_node> {
-    using basic_splay_tree<splay_node>::splay;
+namespace range_query {
+
+template <typename Node>
+struct implicit_splay_tree : basic_splay_tree<Node> {
+    using basic_splay_tree<Node>::splay;
 
     int size;
 
@@ -14,9 +18,9 @@ struct implicit_splay_tree : basic_splay_tree<splay_node> {
         size = 1 + (this->left ? this->left->size : 0) + (this->right ? this->right->size : 0);
     }
 
-    static splay_node *find_kth(splay_node *root, int k) {
+    static Node *find_kth(Node *root, int k) {
         assert(root != nullptr && k < root->size);
-        splay_node *temp = root;
+        Node *temp = root;
         while (temp != nullptr) {
             temp->push_down();
             if (temp->left != nullptr && temp->left->size > k) {
@@ -37,23 +41,23 @@ struct implicit_splay_tree : basic_splay_tree<splay_node> {
         return temp;
     }
 
-    static splay_node *find_first(splay_node *root) {
+    static Node *find_first(Node *root) {
         return find_kth(root, 0);
     }
 
-    static splay_node *find_last(splay_node *root) {
+    static Node *find_last(Node *root) {
         assert(root != nullptr);
         return find_kth(root, root->size - 1);
     }
 
-    static splay_node *find_root(splay_node *x) {
+    static Node *find_root(Node *x) {
         while (x != nullptr) {
             x = x->parent;
         }
         return x;
     }
 
-    static int order_of(splay_node *x) {
+    static int order_of(Node *x) {
         assert(x != nullptr);
         splay(x);
         if (x->left == nullptr) {
@@ -63,9 +67,9 @@ struct implicit_splay_tree : basic_splay_tree<splay_node> {
         }
     }
 
-    static splay_node *split(splay_node **root, int k) {
+    static Node *split(Node **root, int k) {
         *root = find_kth(*root, k);
-        splay_node *other = (*root)->right;
+        Node *other = (*root)->right;
         (*root)->right = nullptr;
         if (other != nullptr) {
             other->parent = nullptr;
@@ -74,7 +78,7 @@ struct implicit_splay_tree : basic_splay_tree<splay_node> {
         return other;
     }
 
-    static splay_node *join(splay_node *root, splay_node *other) {
+    static Node *join(Node *root, Node *other) {
         if (root == nullptr) {
             return other;
         } else if (other == nullptr) {
@@ -88,10 +92,10 @@ struct implicit_splay_tree : basic_splay_tree<splay_node> {
         }
     }
 
-    template<typename...constructor_args>
-    static splay_node *insert(splay_node *root, int k, constructor_args...args) {
+    template <typename... Args>
+    static Node *insert(Node *root, int k, Args &&...args) {
         assert(k <= (root == nullptr ? 0 : root->size));
-        splay_node *new_root = new splay_node(args...);
+        Node *new_root = new Node(std::forward<Args>(args)...);
         if (root == nullptr) {
 
         } else if (k == 0) {
@@ -101,7 +105,7 @@ struct implicit_splay_tree : basic_splay_tree<splay_node> {
             new_root->left = root;
             root->parent = new_root;
         } else {
-            splay_node *other = split(&root, k - 1);
+            Node *other = split(&root, k - 1);
             new_root->left = root;
             root->parent = new_root;
             new_root->right = other;
@@ -111,9 +115,9 @@ struct implicit_splay_tree : basic_splay_tree<splay_node> {
         return new_root;
     }
 
-    static splay_node *erase(splay_node *root, int k) {
+    static Node *erase(Node *root, int k) {
         root = find_kth(root, k);
-        splay_node *temp = root;
+        Node *temp = root;
         if (temp->left != nullptr) {
             temp->left->parent = nullptr;
         }
@@ -125,10 +129,10 @@ struct implicit_splay_tree : basic_splay_tree<splay_node> {
         return root;
     }
 
-    template<typename F>
-    static splay_node *query(splay_node *root, int l, int r, F &&f) {
+    template <std::invocable<Node *> F>
+    static Node *query(Node *root, int l, int r, F &&f) {
         assert(root != nullptr && l <= r && r < root->size);
-        splay_node *prefix = nullptr, *middle = root, *suffix = nullptr;
+        Node *prefix = nullptr, *middle = root, *suffix = nullptr;
         if (r + 1 != middle->size) {
             suffix = split(&middle, r);
         }
@@ -140,13 +144,13 @@ struct implicit_splay_tree : basic_splay_tree<splay_node> {
         return join(join(prefix, middle), suffix);
     }
 
-    template<typename iterator_t>
-    static splay_node *build_tree(iterator_t first, iterator_t last) {
+    template <std::forward_iterator I>
+    static Node *build_tree(I first, I last) {
         if (first == last) {
             return nullptr;
         } else {
             auto mid = std::next(first, std::distance(first, last) / 2);
-            splay_node *root = new splay_node(*mid);
+            Node *root = new Node(*mid);
             root->left = build_tree(first, mid);
             if (root->left != nullptr) {
                 root->left->parent = root;
@@ -160,3 +164,5 @@ struct implicit_splay_tree : basic_splay_tree<splay_node> {
         }
     }
 };
+
+} // namespace range_query

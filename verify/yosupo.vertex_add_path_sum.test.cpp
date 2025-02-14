@@ -6,8 +6,8 @@ using namespace std;
 #include "algebra/groups/sum.hpp"
 #include "newgraphs/undirected-graph.hpp"
 #include "range_query/segment_tree/basic.hpp"
-#include "trees/dynamic_path_query/commutative.hpp"
-#include "trees/heavy-light-decomposition.hpp"
+#include "tree/dynamic_path_query/commutative.hpp"
+#include "tree/heavy-light-decomposition.hpp"
 
 struct point_add_range_sum : range_query::segment_tree<algebra::groups::sum<long long>> {
     template <typename... Args>

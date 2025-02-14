@@ -4,11 +4,11 @@
 using namespace std;
 
 #include "algebra/mint/static_mint.hpp"
-#include "data-structures/splay-tree/implicit-splay-tree.hpp"
+#include "range_query/splay_tree/implicit.hpp"
 
 using mint = algebra::static_mint<998244353>;
 
-struct splay_node : implicit_splay_tree<splay_node> {
+struct splay_node : range_query::implicit_splay_tree<splay_node> {
     mint value;
     mint aggregate;
 

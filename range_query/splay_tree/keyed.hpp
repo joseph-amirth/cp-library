@@ -1,21 +1,25 @@
 #pragma once
 
-#include "basic-splay-tree.hpp"
+#include "basic.hpp"
+#include <concepts>
 #include <functional>
+#include <utility>
 
-template<typename splay_node, typename key_t, typename compare_t = std::less<>>
-struct keyed_splay_tree : basic_splay_tree<splay_node> {
-    using basic_splay_tree<splay_node>::splay;
+namespace range_query {
 
-    static constexpr auto compare = compare_t();
+template <typename Node, typename Key, std::strict_weak_order<Key, Key> Compare = std::less<>>
+struct keyed_splay_tree : basic_splay_tree<Node> {
+    using basic_splay_tree<Node>::splay;
 
-    key_t key;
+    static constexpr auto compare = Compare();
 
-    static splay_node *find(splay_node *root, const key_t &key) {
+    Key key;
+
+    static Node *find(Node *root, const Key &key) {
         if (root == nullptr) {
             return nullptr;
         }
-        splay_node *prev = nullptr, *temp = root;
+        Node *prev = nullptr, *temp = root;
         while (temp != nullptr) {
             prev = temp;
             if (key == temp->key) {
@@ -31,12 +35,12 @@ struct keyed_splay_tree : basic_splay_tree<splay_node> {
         return prev;
     }
 
-    static splay_node *lower_bound(splay_node *root, const key_t &key) {
+    static Node *lower_bound(Node *root, const Key &key) {
         if (root == nullptr) {
             return nullptr;
         }
-        splay_node *prev = nullptr, *temp = root;
-        splay_node *last_greater = nullptr;
+        Node *prev = nullptr, *temp = root;
+        Node *last_greater = nullptr;
         while (temp != nullptr) {
             prev = temp;
             if (key == temp->key) {
@@ -58,12 +62,12 @@ struct keyed_splay_tree : basic_splay_tree<splay_node> {
         }
     }
 
-    static splay_node *upper_bound(splay_node *root, const key_t &key) {
+    static Node *upper_bound(Node *root, const Key &key) {
         if (root == nullptr) {
             return nullptr;
         }
-        splay_node *prev = nullptr, *temp = root;
-        splay_node *last_greater = nullptr;
+        Node *prev = nullptr, *temp = root;
+        Node *last_greater = nullptr;
         while (temp != nullptr) {
             prev = temp;
             if (compare(key, temp->key)) {
@@ -82,11 +86,11 @@ struct keyed_splay_tree : basic_splay_tree<splay_node> {
         }
     }
 
-    static splay_node *find_minimum(splay_node *root) {
+    static Node *find_minimum(Node *root) {
         if (root == nullptr) {
             return nullptr;
         }
-        splay_node *temp = root;
+        Node *temp = root;
         while (temp->left != nullptr) {
             temp = temp->left;
         }
@@ -94,11 +98,11 @@ struct keyed_splay_tree : basic_splay_tree<splay_node> {
         return temp;
     }
 
-    static splay_node *find_maximum(splay_node *root) {
+    static Node *find_maximum(Node *root) {
         if (root == nullptr) {
             return nullptr;
         }
-        splay_node *temp = root;
+        Node *temp = root;
         while (temp->right != nullptr) {
             temp = temp->right;
         }
@@ -106,12 +110,12 @@ struct keyed_splay_tree : basic_splay_tree<splay_node> {
         return temp;
     }
 
-    static splay_node *split(splay_node **root, const key_t &key) {
+    static Node *split(Node **root, const Key &key) {
         if (*root == nullptr) {
             return nullptr;
         } else {
-            splay_node *prev = nullptr, *temp = *root;
-            splay_node *split_node = nullptr;
+            Node *prev = nullptr, *temp = *root;
+            Node *split_node = nullptr;
             while (temp != nullptr) {
                 prev = temp;
                 if (key == temp->key) {
@@ -129,7 +133,7 @@ struct keyed_splay_tree : basic_splay_tree<splay_node> {
                 split_node = prev;
             }
             splay(split_node);
-            splay_node *other = nullptr;
+            Node *other = nullptr;
             if (split_node->right != nullptr) {
                 other = split_node->right;
                 split_node->right = nullptr;
@@ -140,7 +144,7 @@ struct keyed_splay_tree : basic_splay_tree<splay_node> {
         }
     }
 
-    static splay_node *join(splay_node *root, splay_node *other) {
+    static Node *join(Node *root, Node *other) {
         if (root == nullptr) {
             return other;
         } else if (other == nullptr) {
@@ -154,13 +158,13 @@ struct keyed_splay_tree : basic_splay_tree<splay_node> {
         }
     }
 
-    template<typename...constructor_args>
-    static splay_node *insert(splay_node *root, constructor_args...args) {
+    template <typename... Args>
+    static Node *insert(Node *root, Args &&...args) {
         if (root == nullptr) {
-            return new splay_node(args...);
+            return new Node(std::forward<Args>(args)...);
         } else {
-            splay_node *new_root = new splay_node(args...);
-            splay_node *prev = nullptr, *temp = root;
+            Node *new_root = new Node(args...);
+            Node *prev = nullptr, *temp = root;
             while (temp != nullptr) {
                 prev = temp;
                 if (temp->key == new_root->key) {
@@ -184,7 +188,7 @@ struct keyed_splay_tree : basic_splay_tree<splay_node> {
         }
     }
 
-    static splay_node *erase(splay_node *root, const key_t &key) {
+    static Node *erase(Node *root, const Key &key) {
         if (root = find(root, key), root != nullptr && root->key == key) {
             if (root->left != nullptr) {
                 root->left->parent = nullptr;
@@ -192,7 +196,7 @@ struct keyed_splay_tree : basic_splay_tree<splay_node> {
             if (root->right != nullptr) {
                 root->right->parent = nullptr;
             }
-            splay_node *new_root = join(root->left, root->right);
+            Node *new_root = join(root->left, root->right);
             delete root;
             return new_root;
         } else {
@@ -200,3 +204,5 @@ struct keyed_splay_tree : basic_splay_tree<splay_node> {
         }
     }
 };
+
+} // namespace range_query

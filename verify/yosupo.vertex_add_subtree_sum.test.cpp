@@ -6,7 +6,7 @@ using namespace std;
 #include "algebra/groups/sum.hpp"
 #include "newgraphs/undirected-graph.hpp"
 #include "range_query/fenwick_tree.hpp"
-#include "trees/dynamic-subtree-query.hpp"
+#include "tree/dynamic-subtree-query.hpp"
 
 namespace groups = algebra::groups;
 

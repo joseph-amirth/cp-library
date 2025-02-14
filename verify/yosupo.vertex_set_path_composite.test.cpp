@@ -7,8 +7,8 @@ using namespace std;
 #include "algebra/mint/static_mint.hpp"
 #include "newgraphs/undirected-graph.hpp"
 #include "range_query/segment_tree/basic.hpp"
-#include "trees/dynamic_path_query/general.hpp"
-#include "trees/heavy-light-decomposition.hpp"
+#include "tree/dynamic_path_query/general.hpp"
+#include "tree/heavy-light-decomposition.hpp"
 
 using mint = algebra::static_mint<998244353>;
 using monoid = algebra::monoids::affine_function_composition<mint>;

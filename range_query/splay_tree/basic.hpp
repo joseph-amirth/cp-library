@@ -1,16 +1,22 @@
 #pragma once
 
-template<typename splay_node>
+#include <concepts>
+
+namespace range_query {
+
+template <typename Node>
 struct basic_splay_tree {
-    splay_node *parent;
-    splay_node *left;
-    splay_node *right;
+    Node *parent;
+    Node *left;
+    Node *right;
 
     virtual void pull_up() {}
 
     virtual void push_down() {}
 
-    static void right_rotate(splay_node *x, splay_node *y) {
+    virtual ~basic_splay_tree() {}
+
+    static void right_rotate(Node *x, Node *y) {
         y->left = x->right;
         x->right = y;
         if (y->left != nullptr) {
@@ -27,7 +33,7 @@ struct basic_splay_tree {
         }
     }
 
-    static void left_rotate(splay_node *x, splay_node *y) {
+    static void left_rotate(Node *x, Node *y) {
         y->right = x->left;
         x->left = y;
         if (y->right != nullptr) {
@@ -44,8 +50,8 @@ struct basic_splay_tree {
         }
     }
 
-    static void splay(splay_node *x) {
-        splay_node *y, *z;
+    static void splay(Node *x) {
+        Node *y, *z;
         while (y = x->parent, y != nullptr) {
             if (z = y->parent, z == nullptr) {
                 if (y->left == x) {
@@ -76,12 +82,12 @@ struct basic_splay_tree {
         }
     }
 
-    static void splay_with_push_down(splay_node *x) {
+    static void splay_with_push_down(Node *x) {
         if (x->parent == nullptr) {
             x->push_down();
             return;
         }
-        splay_node *y, *z;
+        Node *y, *z;
         while (y = x->parent, y != nullptr) {
             if (z = y->parent, z == nullptr) {
                 y->push_down();
@@ -117,8 +123,8 @@ struct basic_splay_tree {
         }
     }
 
-    template<typename F>
-    static void visit_preorder(splay_node *root, F &&f) {
+    template <std::invocable<Node *> F>
+    static void visit_preorder(Node *root, F &&f) {
         if (root != nullptr) {
             root->push_down();
             f(root);
@@ -127,8 +133,8 @@ struct basic_splay_tree {
         }
     }
 
-    template<typename F>
-    static void visit_inorder(splay_node *root, F &&f) {
+    template <std::invocable<Node *> F>
+    static void visit_inorder(Node *root, F &&f) {
         if (root != nullptr) {
             root->push_down();
             visit_inorder(root->left, f);
@@ -137,8 +143,8 @@ struct basic_splay_tree {
         }
     }
 
-    template<typename F>
-    static void visit_postorder(splay_node *root, F &&f) {
+    template <std::invocable<Node *> F>
+    static void visit_postorder(Node *root, F &&f) {
         if (root != nullptr) {
             root->push_down();
             visit_postorder(root->left, f);
@@ -147,7 +153,7 @@ struct basic_splay_tree {
         }
     }
 
-    static void delete_tree(splay_node *root) {
+    static void delete_tree(Node *root) {
         if (root != nullptr && root->parent != nullptr) {
             if (root->parent->left == root) {
                 root->parent->left = nullptr;
@@ -155,8 +161,10 @@ struct basic_splay_tree {
                 root->parent->right = nullptr;
             }
         }
-        visit_postorder(root, [](splay_node *x) {
+        visit_postorder(root, [](Node *x) {
             delete x;
         });
     }
 };
+
+} // namespace range_query
