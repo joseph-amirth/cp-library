@@ -1,7 +1,8 @@
-#include <concepts>
-#include <functional>
+#pragma once
 
 #include "../concepts.hpp"
+#include <concepts>
+#include <functional>
 
 namespace algebra {
 
@@ -23,7 +24,7 @@ struct extremum {
 };
 
 } // namespace semigroups
-  //
+
 template <typename T, typename C>
 struct is_commutative<semigroups::extremum<T, C>> : std::true_type {};
 
