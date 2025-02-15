@@ -3,15 +3,15 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-#include "newgraphs/edge.hpp"
-#include "newgraphs/directed-graph.hpp"
-#include "newgraphs/shortest-paths/bellman-ford.hpp"
+#include "graph/directed_graph.hpp"
+#include "graph/edge.hpp"
+#include "graph/shortest_path/bellman_ford.hpp"
 
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
 
-    using namespace graphs;
+    using namespace graph;
 
     int n, m, s;
     cin >> n >> m >> s;
@@ -22,7 +22,7 @@ int main() {
         g.add_edge(a, b, c);
     }
 
-    auto distance = bellman_ford_shortest_paths(g, s).first;
+    auto distance = bellman_ford(g, s);
 
     if (detect_negative_cycle(g, distance)) {
         cout << "NEGATIVE CYCLE\n";

@@ -3,14 +3,14 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-#include "newgraphs/undirected-graph.hpp"
-#include "newgraphs/mst/kruskal.hpp"
+#include "graph/mst/kruskal.hpp"
+#include "graph/undirected_graph.hpp"
 
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
 
-    using namespace graphs;
+    using namespace graph;
 
     int n, m;
     cin >> n >> m;

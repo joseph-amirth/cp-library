@@ -3,23 +3,21 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-#include "newflows/max-flow/ford-fulkerson.hpp"
-#include "newflows/network.hpp"
+#include "network/max_flow/ford_fulkerson.hpp"
+#include "network/network.hpp"
 
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
 
-    using namespace networks;
-
     int n, m;
     cin >> n >> m;
 
-    network g(n, m);
+    network::network g(n, m);
     for (int i = 0, a, b, c; i < m; i++) {
         cin >> a >> b >> c;
         g.add_edge_with_residual_edge(a, b, c);
     }
 
-    cout << ford_fulkerson_max_flow(g, 0, n - 1) << '\n';
+    cout << network::ford_fulkerson_max_flow(g, 0, n - 1) << '\n';
 }

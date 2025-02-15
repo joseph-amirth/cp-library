@@ -4,14 +4,14 @@
 using namespace std;
 
 #include "algebra/groups/sum.hpp"
-#include "newgraphs/undirected-graph.hpp"
+#include "graph/undirected_graph.hpp"
 #include "range_query/fenwick_tree.hpp"
 #include "tree/dynamic_subtree_query.hpp"
 
 namespace groups = algebra::groups;
 
 using point_add_range_sum = range_query::fenwick_tree<groups::sum<long long>>;
-using subtree_query = tree::dynamic_subtree_query<graphs::undirected_graph<>, point_add_range_sum>;
+using subtree_query = tree::dynamic_subtree_query<graph::undirected_graph<>, point_add_range_sum>;
 
 int main() {
     ios::sync_with_stdio(false);
@@ -24,7 +24,7 @@ int main() {
     for (auto &x : a)
         cin >> x;
 
-    graphs::undirected_graph g(n, n - 1);
+    graph::undirected_graph g(n, n - 1);
     for (int i = 1, p; i < n; i++) {
         cin >> p;
         g.add_edge(p, i);

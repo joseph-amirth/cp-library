@@ -5,7 +5,7 @@ using namespace std;
 
 #include "algebra/affine_function.hpp"
 #include "algebra/mint/static_mint.hpp"
-#include "newgraphs/undirected-graph.hpp"
+#include "graph/undirected_graph.hpp"
 #include "range_query/segment_tree/basic.hpp"
 #include "tree/dynamic_path_query/general.hpp"
 #include "tree/heavy_light_decomposition.hpp"
@@ -13,7 +13,7 @@ using namespace std;
 using mint = algebra::static_mint<998244353>;
 using monoid = algebra::monoids::affine_function_composition<mint>;
 using segtree = range_query::segment_tree<monoid>;
-using path_query = tree::dynamic_path_query<graphs::undirected_graph<>, segtree>;
+using path_query = tree::dynamic_path_query<graph::undirected_graph<>, segtree>;
 
 int main() {
     ios::sync_with_stdio(false);
@@ -27,7 +27,7 @@ int main() {
         cin >> f[i].a >> f[i].b;
     }
 
-    graphs::undirected_graph<> g(n, n - 1);
+    graph::undirected_graph<> g(n, n - 1);
     for (int i = 1, u, v; i < n; i++) {
         cin >> u >> v;
         g.add_edge(u, v);

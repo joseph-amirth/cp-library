@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../newgraphs/undirected-graph.hpp"
+#include "../graph/undirected_graph.hpp"
 
 namespace tree {
 
@@ -10,7 +10,7 @@ struct binary_lifting {
     std::vector<int> tin, tout, lvl;
     std::vector<std::vector<int>> up;
 
-    binary_lifting(const graphs::undirected_graph<Edge> &g, int root = 0) : tin(g.n), tout(g.n), lvl(g.n) {
+    binary_lifting(const graph::undirected_graph<Edge> &g, int root = 0) : tin(g.n), tout(g.n), lvl(g.n) {
         lg = 32 - __builtin_clz(g.n);
         up.assign(g.n, std::vector<int>(lg, -1));
 

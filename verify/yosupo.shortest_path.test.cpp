@@ -3,16 +3,16 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-#include "newgraphs/edge.hpp"
-#include "newgraphs/directed-graph.hpp"
-#include "newgraphs/shortest-paths/dijkstra.hpp"
-#include "newgraphs/primitives/get-vertices-on-path.hpp"
+#include "graph/directed_graph.hpp"
+#include "graph/edge.hpp"
+#include "graph/primitives/get_vertices_on_path.hpp"
+#include "graph/shortest_path/dijkstra.hpp"
 
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
 
-    using namespace graphs;
+    using namespace graph;
 
     int n, m, s, t;
     cin >> n >> m >> s >> t;
@@ -31,8 +31,8 @@ int main() {
 
     auto path = get_vertices_on_path(g, s, t, parent);
 
-    cout << distance[t] << ' ' << (int) path.size() - 1 << '\n';
-    for (int i = 1; i < (int) path.size(); i++) {
+    cout << distance[t] << ' ' << (int)path.size() - 1 << '\n';
+    for (int i = 1; i < (int)path.size(); i++) {
         cout << path[i - 1] << ' ' << path[i] << '\n';
     }
     return 0;

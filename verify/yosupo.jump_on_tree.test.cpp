@@ -3,14 +3,14 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-#include "newgraphs/undirected-graph.hpp"
+#include "graph/undirected_graph.hpp"
 #include "tree/binary_lifting.hpp"
 
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
 
-    using graphs::undirected_graph;
+    using graph::undirected_graph;
     using tree::binary_lifting;
 
     int n, q;

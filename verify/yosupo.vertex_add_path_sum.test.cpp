@@ -4,7 +4,7 @@
 using namespace std;
 
 #include "algebra/groups/sum.hpp"
-#include "newgraphs/undirected-graph.hpp"
+#include "graph/undirected_graph.hpp"
 #include "range_query/segment_tree/basic.hpp"
 #include "tree/dynamic_path_query/commutative.hpp"
 #include "tree/heavy_light_decomposition.hpp"
@@ -20,7 +20,7 @@ struct point_add_range_sum : range_query::segment_tree<algebra::groups::sum<long
     }
 };
 
-using path_query = tree::dynamic_path_query<graphs::undirected_graph<>, point_add_range_sum>;
+using path_query = tree::dynamic_path_query<graph::undirected_graph<>, point_add_range_sum>;
 
 int main() {
     ios::sync_with_stdio(false);
@@ -33,7 +33,7 @@ int main() {
     for (auto &x : a)
         cin >> x;
 
-    graphs::undirected_graph<> g(n, n - 1);
+    graph::undirected_graph<> g(n, n - 1);
     for (int i = 0, u, v; i + 1 < n; i++) {
         cin >> u >> v;
         g.add_edge(u, v);
