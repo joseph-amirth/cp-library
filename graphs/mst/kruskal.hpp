@@ -5,7 +5,7 @@
 #include "../undirected_graph.hpp"
 #include <numeric>
 
-namespace graph {
+namespace graphs {
 
 template <typename Edge>
 std::pair<weight_sum_t<Edge>, std::vector<int>> kruskal_mst(const undirected_graph<Edge> &g) {
@@ -33,4 +33,4 @@ std::pair<weight_sum_t<Edge>, std::vector<int>> kruskal_mst(const undirected_gra
     return std::make_pair(mst_weight, mst);
 }
 
-} // namespace graph
+} // namespace graphs

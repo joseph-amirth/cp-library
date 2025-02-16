@@ -3,16 +3,16 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-#include "graph/directed_graph.hpp"
-#include "graph/edge.hpp"
-#include "graph/primitives/get_vertices_on_path.hpp"
-#include "graph/shortest_path/dijkstra.hpp"
+#include "graphs/directed_graph.hpp"
+#include "graphs/edge.hpp"
+#include "graphs/primitives/get_vertices_on_path.hpp"
+#include "graphs/shortest_path/dijkstra.hpp"
 
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
 
-    using namespace graph;
+    using namespace graphs;
 
     int n, m, s, t;
     cin >> n >> m >> s >> t;

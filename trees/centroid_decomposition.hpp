@@ -1,12 +1,12 @@
 #pragma once
 
-#include "../graph/undirected_graph.hpp"
+#include "../graphs/undirected_graph.hpp"
 #include <algorithm>
 
 namespace trees {
 
 template <typename Edge>
-std::vector<int> centroid_decomposition(const graph::undirected_graph<Edge> &g) {
+std::vector<int> centroid_decomposition(const graphs::undirected_graph<Edge> &g) {
     std::vector<int> c(g.n, -1), sz(g.n);
 
     auto dfs = [&](auto &&self, int u, int p) -> void {

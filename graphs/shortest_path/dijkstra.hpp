@@ -7,7 +7,7 @@
 #include <utility>
 #include <vector>
 
-namespace graph {
+namespace graphs {
 
 template <typename Graph>
 std::pair<std::vector<weight_sum_t<edge_t<Graph>>>, std::vector<int>> dijkstra_shortest_paths(const Graph &g, int s = 0) {
@@ -45,4 +45,4 @@ std::pair<std::vector<weight_sum_t<edge_t<Graph>>>, std::vector<int>> dijkstra_s
     return std::make_pair(distance, parent);
 }
 
-} // namespace graph
+} // namespace graphs

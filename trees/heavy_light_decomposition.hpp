@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../graph/undirected_graph.hpp"
+#include "../graphs/undirected_graph.hpp"
 #include <concepts>
 
 namespace trees {
@@ -10,7 +10,7 @@ template <typename T>
 concept Visitor = std::invocable<T, int, int>;
 }
 
-template <typename Graph = graph::undirected_graph<>>
+template <typename Graph = graphs::undirected_graph<>>
 struct heavy_light_decomposition {
     const Graph &g;
     std::vector<int> parent, head, depth;

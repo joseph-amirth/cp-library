@@ -5,7 +5,7 @@
 #include <limits>
 #include <utility>
 
-namespace graph {
+namespace graphs {
 
 template <typename Graph, bool compute_paths = false>
 auto floyd_warshall(const Graph &g) {
@@ -63,4 +63,4 @@ bool detect_negative_cycle(const Graph &g, const std::vector<std::vector<int>> &
     return false;
 }
 
-} // namespace graph
+} // namespace graphs

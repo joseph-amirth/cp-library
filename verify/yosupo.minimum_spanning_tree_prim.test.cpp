@@ -3,17 +3,17 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-#include "graph/edge.hpp"
-#include "graph/mst/prim.hpp"
-#include "graph/undirected_graph.hpp"
+#include "graphs/edge.hpp"
+#include "graphs/mst/prim.hpp"
+#include "graphs/undirected_graph.hpp"
 
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
 
-    using graph::prim_mst;
-    using graph::undirected_graph;
-    using graph::weighted_edge;
+    using graphs::prim_mst;
+    using graphs::undirected_graph;
+    using graphs::weighted_edge;
 
     int n, m;
     cin >> n >> m;

@@ -4,7 +4,7 @@
 #include "../undirected_graph.hpp"
 #include <queue>
 
-namespace graph {
+namespace graphs {
 
 template <typename Edge>
 std::pair<weight_sum_t<Edge>, std::vector<int>> prim_mst(const undirected_graph<Edge> &g, int s = 0) {
@@ -55,4 +55,4 @@ std::pair<weight_sum_t<Edge>, std::vector<int>> prim_mst(const undirected_graph<
     return std::make_pair(mst_weight, mst);
 }
 
-} // namespace graph
+} // namespace graphs

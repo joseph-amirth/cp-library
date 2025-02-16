@@ -1,6 +1,6 @@
 #pragma once
 
-namespace graph {
+namespace graphs {
 
 struct edge {
     int u, v;
@@ -28,4 +28,4 @@ using weight_t = typename Edge::weight_type;
 template <typename Edge>
 using weight_sum_t = typename Edge::weight_sum_type;
 
-} // namespace graph
+} // namespace graphs

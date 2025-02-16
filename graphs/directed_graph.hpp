@@ -4,7 +4,7 @@
 #include "edge.hpp"
 #include "graph.hpp"
 
-namespace graph {
+namespace graphs {
 
 template <typename Edge = edge>
 struct directed_graph : public graph<Edge> {
@@ -36,4 +36,4 @@ struct directed_graph : public graph<Edge> {
 template <typename W, typename WSum>
 struct is_weighted<directed_graph<weighted_edge<W, WSum>>> : std::true_type {};
 
-} // namespace graph
+} // namespace graphs

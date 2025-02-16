@@ -3,7 +3,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-#include "graph/two_sat.hpp"
+#include "graphs/two_sat.hpp"
 
 int main() {
     ios::sync_with_stdio(false);

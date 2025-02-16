@@ -2,7 +2,7 @@
 
 #include <vector>
 
-namespace graph {
+namespace graphs {
 
 template <typename Edge>
 struct graph {
@@ -27,4 +27,4 @@ struct graph {
 template <typename Graph>
 using edge_t = typename Graph::edge_type;
 
-} // namespace graph
+} // namespace graphs

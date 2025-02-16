@@ -3,7 +3,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-#include "graph/undirected_graph.hpp"
+#include "graphs/undirected_graph.hpp"
 #include "trees/euler_tour_tree.hpp"
 #include "trees/lowest_common_ancestor.hpp"
 
@@ -11,7 +11,7 @@ int main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
 
-    using graph::undirected_graph;
+    using graphs::undirected_graph;
     using trees::euler_tour_tree;
     using trees::lowest_common_ancestor;
 

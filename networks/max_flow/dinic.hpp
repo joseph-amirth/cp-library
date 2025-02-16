@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../edge.hpp"
 #include "../network.hpp"
 #include "../primitives/augment_path.hpp"
+#include "../type_traits.hpp"
 
 namespace networks {
 

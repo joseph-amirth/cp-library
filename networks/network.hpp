@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../graph/directed_graph.hpp"
+#include "../graphs/directed_graph.hpp"
 #include "concepts.hpp"
 #include "edge.hpp"
 #include "type_traits.hpp"
@@ -8,10 +8,10 @@
 namespace networks {
 
 template <typename Edge = edge<>>
-struct network : private graph::directed_graph<Edge> {
+struct network : private graphs::directed_graph<Edge> {
     using edge_type = Edge;
     using flow_type = flow_t<edge_type>;
-    using graph_type = graph::directed_graph<edge_type>;
+    using graph_type = graphs::directed_graph<edge_type>;
 
     using graph_type::adj;
     using graph_type::edges;

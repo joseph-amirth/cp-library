@@ -3,7 +3,7 @@
 #include <algorithm>
 #include <vector>
 
-namespace graph {
+namespace graphs {
 
 template <typename Graph, typename ParentFunction>
 std::vector<int> get_vertices_on_path(const Graph &g, int s, int t, ParentFunction &&p) {
@@ -23,4 +23,4 @@ std::vector<int> get_vertices_on_path(const Graph &g, int s, int t, ParentFuncti
     return path;
 }
 
-} // namespace graph
+} // namespace graphs

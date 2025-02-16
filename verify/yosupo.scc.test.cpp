@@ -3,14 +3,14 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-#include "graph/directed_graph.hpp"
-#include "graph/strong_connectivity/tarjan.hpp"
+#include "graphs/directed_graph.hpp"
+#include "graphs/strong_connectivity/tarjan.hpp"
 
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
 
-    using namespace graph;
+    using namespace graphs;
 
     int n, m;
     cin >> n >> m;

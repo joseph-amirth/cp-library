@@ -3,7 +3,7 @@
 #include <algorithm>
 #include <vector>
 
-namespace graph {
+namespace graphs {
 
 template <typename Graph>
 std::vector<std::vector<int>> tarjan_sccs(const Graph &g) {
@@ -47,4 +47,4 @@ std::vector<std::vector<int>> tarjan_sccs(const Graph &g) {
     return sccs;
 }
 
-} // namespace graph
+} // namespace graphs

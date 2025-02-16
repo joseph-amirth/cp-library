@@ -4,7 +4,7 @@
 
 #include "edge.hpp"
 #include "graph.hpp"
-#include "primitives/get-vertices-on-path.hpp"
+#include "primitives/get_vertices_on_path.hpp"
 
 // TODO(Test this)
 
@@ -54,4 +54,4 @@ std::vector<int> diameter(const Graph &g) {
     });
 }
 
-}
+} // namespace graphs

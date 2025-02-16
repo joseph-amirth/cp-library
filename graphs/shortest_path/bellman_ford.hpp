@@ -6,7 +6,7 @@
 #include <utility>
 #include <vector>
 
-namespace graph {
+namespace graphs {
 
 template <typename Graph, bool compute_paths = false>
 auto bellman_ford(const Graph &g, int s = 0) {
@@ -65,4 +65,4 @@ bool detect_negative_cycle(const Graph &g, const std::vector<weight_sum_t<edge_t
     return false;
 }
 
-} // namespace graph
+} // namespace graphs

@@ -3,15 +3,15 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-#include "graph/directed_graph.hpp"
-#include "graph/edge.hpp"
-#include "graph/shortest_path/bellman_ford.hpp"
+#include "graphs/directed_graph.hpp"
+#include "graphs/edge.hpp"
+#include "graphs/shortest_path/bellman_ford.hpp"
 
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
 
-    using namespace graph;
+    using namespace graphs;
 
     int n, m, s;
     cin >> n >> m >> s;
