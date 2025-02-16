@@ -3,9 +3,9 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-#include "tree/link_cut_tree.hpp"
+#include "trees/link_cut_tree.hpp"
 
-struct lct_node : tree::basic_lct_node<lct_node> {
+struct lct_node : trees::basic_lct_node<lct_node> {
     long long value, aggregate;
 
     lct_node(int u) : basic_lct_node<lct_node>(u) {}
@@ -25,7 +25,7 @@ int main() {
     int n, q;
     cin >> n >> q;
 
-    tree::link_cut_tree<lct_node> lct(n);
+    trees::link_cut_tree<lct_node> lct(n);
     for (int i = 0; i < n; i++) {
         cin >> lct[i]->value;
         lct[i]->aggregate = lct[i]->value;

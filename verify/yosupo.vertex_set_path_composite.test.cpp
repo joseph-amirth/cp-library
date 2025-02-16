@@ -7,13 +7,13 @@ using namespace std;
 #include "algebra/mint/static_mint.hpp"
 #include "graph/undirected_graph.hpp"
 #include "range_query/segment_tree/basic.hpp"
-#include "tree/dynamic_path_query/general.hpp"
-#include "tree/heavy_light_decomposition.hpp"
+#include "trees/dynamic_path_query/general.hpp"
+#include "trees/heavy_light_decomposition.hpp"
 
 using mint = algebra::static_mint<998244353>;
 using monoid = algebra::monoids::affine_function_composition<mint>;
 using segtree = range_query::segment_tree<monoid>;
-using path_query = tree::dynamic_path_query<graph::undirected_graph<>, segtree>;
+using path_query = trees::dynamic_path_query<graph::undirected_graph<>, segtree>;
 
 int main() {
     ios::sync_with_stdio(false);
@@ -33,7 +33,7 @@ int main() {
         g.add_edge(u, v);
     }
 
-    tree::heavy_light_decomposition hld(g);
+    trees::heavy_light_decomposition hld(g);
     path_query query(hld, f.begin(), f.end());
 
     while (q--) {

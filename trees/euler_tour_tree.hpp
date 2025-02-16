@@ -2,7 +2,7 @@
 
 #include <vector>
 
-namespace tree {
+namespace trees {
 
 template <typename Graph>
 struct compressed_euler_tour_tree {
@@ -56,4 +56,4 @@ struct euler_tour_tree {
     }
 };
 
-} // namespace tree
+} // namespace trees

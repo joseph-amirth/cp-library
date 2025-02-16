@@ -35,7 +35,7 @@ struct sparse_table {
     sparse_table(const sparse_table &) = delete;
 
     ~sparse_table() {
-        delete table;
+        delete[] table;
     }
 };
 

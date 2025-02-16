@@ -2,7 +2,7 @@
 
 #include "../graph/undirected_graph.hpp"
 
-namespace tree {
+namespace trees {
 
 template <typename Edge>
 struct binary_lifting {
@@ -78,4 +78,4 @@ struct binary_lifting {
     }
 };
 
-} // namespace tree
+} // namespace trees

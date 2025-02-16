@@ -5,7 +5,7 @@
 #include "../euler_tour_tree.hpp"
 #include "dynamic_path_query.hpp"
 
-namespace tree {
+namespace trees {
 
 template <typename Graph, range_query::RangeQuery Rq>
     requires algebra::Commutative<typename Rq::groupoid> && algebra::Group<typename Rq::groupoid>
@@ -43,4 +43,4 @@ struct dynamic_path_query<Graph, Rq> {
     }
 };
 
-} // namespace tree
+} // namespace trees

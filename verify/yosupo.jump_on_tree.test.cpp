@@ -4,14 +4,14 @@
 using namespace std;
 
 #include "graph/undirected_graph.hpp"
-#include "tree/binary_lifting.hpp"
+#include "trees/binary_lifting.hpp"
 
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
 
     using graph::undirected_graph;
-    using tree::binary_lifting;
+    using trees::binary_lifting;
 
     int n, q;
     cin >> n >> q;

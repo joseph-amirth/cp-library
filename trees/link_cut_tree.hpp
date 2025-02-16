@@ -3,7 +3,7 @@
 #include "../range_query/splay_tree/implicit.hpp"
 #include <vector>
 
-namespace tree {
+namespace trees {
 
 template <typename Node>
 struct link_cut_tree {
@@ -119,4 +119,4 @@ struct basic_lct_node : range_query::implicit_splay_tree<Node> {
     }
 };
 
-} // namespace tree
+} // namespace trees

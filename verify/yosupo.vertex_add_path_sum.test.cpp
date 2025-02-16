@@ -6,8 +6,8 @@ using namespace std;
 #include "algebra/groups/sum.hpp"
 #include "graph/undirected_graph.hpp"
 #include "range_query/segment_tree/basic.hpp"
-#include "tree/dynamic_path_query/commutative.hpp"
-#include "tree/heavy_light_decomposition.hpp"
+#include "trees/dynamic_path_query/commutative.hpp"
+#include "trees/heavy_light_decomposition.hpp"
 
 struct point_add_range_sum : range_query::segment_tree<algebra::groups::sum<long long>> {
     template <typename... Args>
@@ -20,7 +20,7 @@ struct point_add_range_sum : range_query::segment_tree<algebra::groups::sum<long
     }
 };
 
-using path_query = tree::dynamic_path_query<graph::undirected_graph<>, point_add_range_sum>;
+using path_query = trees::dynamic_path_query<graph::undirected_graph<>, point_add_range_sum>;
 
 int main() {
     ios::sync_with_stdio(false);
@@ -39,7 +39,7 @@ int main() {
         g.add_edge(u, v);
     }
 
-    tree::heavy_light_decomposition<decltype(g)> hld(g);
+    trees::heavy_light_decomposition<decltype(g)> hld(g);
     path_query query(hld, a.begin(), a.end());
 
     while (q--) {

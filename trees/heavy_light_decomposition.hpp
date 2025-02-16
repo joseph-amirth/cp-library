@@ -3,7 +3,7 @@
 #include "../graph/undirected_graph.hpp"
 #include <concepts>
 
-namespace tree {
+namespace trees {
 
 namespace {
 template <typename T>
@@ -103,4 +103,4 @@ struct heavy_light_decomposition {
     }
 };
 
-} // namespace tree
+} // namespace trees

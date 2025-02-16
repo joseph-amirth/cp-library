@@ -3,7 +3,7 @@
 #include "../graph/undirected_graph.hpp"
 #include <algorithm>
 
-namespace tree {
+namespace trees {
 
 template <typename Edge>
 std::vector<int> centroid_decomposition(const graph::undirected_graph<Edge> &g) {
@@ -48,4 +48,4 @@ std::vector<int> centroid_decomposition(const graph::undirected_graph<Edge> &g) 
     return c;
 }
 
-} // namespace tree
+} // namespace trees

@@ -45,7 +45,7 @@ struct disjoint_sparse_table {
     disjoint_sparse_table(const disjoint_sparse_table &) = delete;
 
     ~disjoint_sparse_table() {
-        delete table;
+        delete[] table;
     }
 };
 

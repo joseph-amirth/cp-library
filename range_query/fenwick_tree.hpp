@@ -50,7 +50,7 @@ struct fenwick_tree {
     fenwick_tree(const fenwick_tree &) = delete;
 
     ~fenwick_tree() {
-        delete data;
+        delete[] data;
     }
 };
 

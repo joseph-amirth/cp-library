@@ -4,7 +4,7 @@
 #include "../range_query/sparse_table.hpp"
 #include "euler_tour_tree.hpp"
 
-namespace tree {
+namespace trees {
 
 namespace {
 using min_tin = algebra::semigroups::extremum_index<int>;
@@ -22,4 +22,4 @@ struct lowest_common_ancestor {
     }
 };
 
-} // namespace tree
+} // namespace trees
