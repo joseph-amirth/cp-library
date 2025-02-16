@@ -4,7 +4,7 @@
 #include "../network.hpp"
 #include "../primitives/augment_path.hpp"
 
-namespace network {
+namespace networks {
 
 template <typename Edge>
 flow_t<Edge> ford_fulkerson_method(network<Edge> &g, int s, int t, flow_t<Edge> target_flow, auto &&f) {
@@ -18,4 +18,4 @@ flow_t<Edge> ford_fulkerson_method(network<Edge> &g, int s, int t, flow_t<Edge> 
     return flow;
 }
 
-} // namespace network
+} // namespace networks

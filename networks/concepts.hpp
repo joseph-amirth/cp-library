@@ -2,9 +2,9 @@
 
 #include "type_traits.hpp"
 
-namespace network {
+namespace networks {
 
 template <typename Edge>
 concept EdgeWithCost = is_edge_with_cost_v<Edge>;
 
-} // namespace network
+} // namespace networks

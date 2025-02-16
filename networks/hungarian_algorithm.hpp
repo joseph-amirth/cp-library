@@ -7,7 +7,7 @@
 #include <utility>
 #include <vector>
 
-namespace network {
+namespace networks {
 
 // https://cp-algorithms.com/graph/hungarian-algorithm.html#implementation-of-the-hungarian-algorithm.
 template <std::integral T>
@@ -74,4 +74,4 @@ std::pair<T, std::vector<int>> hungarian_algorithm(const std::vector<std::vector
     return std::make_pair(cost, ans);
 }
 
-} // namespace network
+} // namespace networks

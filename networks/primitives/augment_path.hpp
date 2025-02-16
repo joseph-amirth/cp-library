@@ -4,7 +4,7 @@
 #include "../network.hpp"
 #include <limits>
 
-namespace network {
+namespace networks {
 
 template <typename Edge>
 flow_t<Edge> augment_path(network<Edge> &g, int s, int t, const std::vector<int> &p, flow_t<Edge> path_flow) {
@@ -23,4 +23,4 @@ flow_t<Edge> augment_path(network<Edge> &g, int s, int t, const std::vector<int>
     return path_flow;
 }
 
-} // namespace network
+} // namespace networks

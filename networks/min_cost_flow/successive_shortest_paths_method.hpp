@@ -7,7 +7,7 @@
 #include <limits>
 #include <utility>
 
-namespace network {
+namespace networks {
 
 template <typename Edge>
 std::pair<flow_t<Edge>, cost_t<Edge>>
@@ -31,4 +31,4 @@ successive_shortest_paths_method(network<Edge> &g, int s, int t, flow_t<Edge> ta
     return std::make_pair(flow, cost);
 }
 
-} // namespace network
+} // namespace networks

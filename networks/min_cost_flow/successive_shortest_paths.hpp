@@ -6,7 +6,7 @@
 #include <limits>
 #include <queue>
 
-namespace network {
+namespace networks {
 
 template <typename Edge>
 std::pair<flow_t<Edge>, cost_t<Edge>>
@@ -52,4 +52,4 @@ successive_shortest_paths_min_cost_flow(network<Edge> &g, int s, int t, flow_t<E
     });
 }
 
-} // namespace network
+} // namespace networks

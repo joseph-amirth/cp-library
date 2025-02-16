@@ -2,7 +2,7 @@
 
 #include <type_traits>
 
-namespace network {
+namespace networks {
 
 template <typename Edge>
 using flow_t = typename Edge::flow_type;
@@ -16,4 +16,4 @@ struct is_edge_with_cost : std::false_type {};
 template <typename Edge>
 constexpr bool is_edge_with_cost_v = is_edge_with_cost<Edge>::value;
 
-} // namespace network
+} // namespace networks

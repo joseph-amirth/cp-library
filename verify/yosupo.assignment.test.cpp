@@ -3,13 +3,13 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-#include "network/hungarian_algorithm.hpp"
+#include "networks/hungarian_algorithm.hpp"
 
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
 
-    using network::hungarian_algorithm;
+    using networks::hungarian_algorithm;
 
     int n;
     cin >> n;

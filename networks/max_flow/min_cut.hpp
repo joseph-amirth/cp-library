@@ -2,6 +2,8 @@
 
 #include "../network.hpp"
 
+// TODO: Test this.
+
 namespace networks {
 
 template <typename Edge>
@@ -14,7 +16,7 @@ std::pair<std::vector<Edge>, std::vector<bool>> min_cut(network<Edge> &g, int s)
     q.push_back(s);
     visited[s] = true;
 
-    for (int qi = 0; qi < (int) q.size(); qi++) {
+    for (int qi = 0; qi < (int)q.size(); qi++) {
         int u = q[qi];
         for (int i : g.adj[u]) {
             int v = g.edges[i].u ^ g.edges[i].v ^ u;
@@ -35,4 +37,4 @@ std::pair<std::vector<Edge>, std::vector<bool>> min_cut(network<Edge> &g, int s)
     return std::make_pair(cut, visited);
 }
 
-}
+} // namespace networks

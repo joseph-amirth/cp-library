@@ -3,21 +3,20 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-#include "network/edge.hpp"
-#include "network/min_cost_flow/successive_shortest_paths.hpp"
-#include "network/network.hpp"
+#include "networks/edge.hpp"
+#include "networks/min_cost_flow/successive_shortest_paths.hpp"
+#include "networks/network.hpp"
 
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
 
-    using network::edge_with_cost;
-    using network::successive_shortest_paths_min_cost_flow;
+    using namespace networks;
 
     int n, m, target_flow;
     cin >> n >> m >> target_flow;
 
-    network::network<edge_with_cost<>> g(n, m);
+    network<edge_with_cost<>> g(n, m);
     for (int i = 0, u, v, c, d; i < m; i++) {
         cin >> u >> v >> c >> d;
         g.add_edge_with_residual_edge(u, v, c, d);

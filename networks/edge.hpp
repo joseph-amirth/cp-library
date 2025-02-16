@@ -2,7 +2,7 @@
 
 #include "../graph/edge.hpp"
 
-namespace network {
+namespace networks {
 
 template <typename Flow = int>
 struct edge : graph::edge {
@@ -15,4 +15,4 @@ struct edge : graph::edge {
     edge(int u, int v, flow_type cap) : graph::edge(u, v), cap(cap), flow(0) {}
 };
 
-} // namespace network
+} // namespace networks

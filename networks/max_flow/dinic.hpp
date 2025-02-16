@@ -4,7 +4,7 @@
 #include "../network.hpp"
 #include "../primitives/augment_path.hpp"
 
-namespace network {
+namespace networks {
 
 template <typename Edge>
 flow_t<Edge> dinic_max_flow(network<Edge> &g, int s, int t, flow_t<Edge> target_flow = -1) {
@@ -63,4 +63,4 @@ flow_t<Edge> dinic_max_flow(network<Edge> &g, int s, int t, flow_t<Edge> target_
     return flow;
 }
 
-} // namespace network
+} // namespace networks

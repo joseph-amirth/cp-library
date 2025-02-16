@@ -4,7 +4,7 @@
 #include "type_traits.hpp"
 #include <type_traits>
 
-namespace network {
+namespace networks {
 
 template <typename Flow = int, typename Cost = int>
 struct edge_with_cost : edge<Flow> {
@@ -21,4 +21,4 @@ struct edge_with_cost : edge<Flow> {
 template <typename Flow, typename Cost>
 struct is_edge_with_cost<edge_with_cost<Flow, Cost>> : std::true_type {};
 
-} // namespace network
+} // namespace networks

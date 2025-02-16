@@ -5,7 +5,7 @@
 #include "edge.hpp"
 #include "type_traits.hpp"
 
-namespace network {
+namespace networks {
 
 template <typename Edge = edge<>>
 struct network : private graph::directed_graph<Edge> {
@@ -58,4 +58,4 @@ struct network : private graph::directed_graph<Edge> {
     }
 };
 
-} // namespace network
+} // namespace networks
