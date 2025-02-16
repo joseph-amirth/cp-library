@@ -3,7 +3,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-#include "strings/pattern-matching/z-function.hpp"
+#include "strings/z_function.hpp"
 
 int main() {
     ios::sync_with_stdio(false);
