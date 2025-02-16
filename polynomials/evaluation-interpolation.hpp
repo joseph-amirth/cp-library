@@ -6,7 +6,7 @@ namespace polynomials {
 
 template <typename T, typename U>
 std::vector<polynomial<T>> product_tree(const std::vector<U> &x) {
-    int n = (int) x.size();
+    int n = (int)x.size();
     std::vector<polynomial<T>> tree(2 * n);
     for (int i = 0; i < n; i++) {
         tree[i + n] = {-T(x[i]), T(1)};
@@ -20,7 +20,7 @@ std::vector<polynomial<T>> product_tree(const std::vector<U> &x) {
 template <typename T, typename U>
 std::enable_if_t<!std::is_same<polynomial<T>, U>::value, std::vector<T>>
 multipoint_evaluation(const polynomial<T> &p, const std::vector<U> &x) {
-    int n = (int) x.size();
+    int n = (int)x.size();
 
     auto tree = product_tree<T>(x);
 
@@ -40,7 +40,7 @@ multipoint_evaluation(const polynomial<T> &p, const std::vector<U> &x) {
 template <typename T, typename U>
 std::enable_if_t<std::is_same<polynomial<T>, U>::value, std::vector<T>>
 multipoint_evaluation(const polynomial<T> &p, const std::vector<U> &tree) {
-    int n = (int) tree.size() / 2;
+    int n = (int)tree.size() / 2;
     std::vector<T> result(n);
     auto recurse = [&](int i, polynomial<T> q, const auto &self) -> void {
         q %= tree[i];
@@ -58,7 +58,7 @@ multipoint_evaluation(const polynomial<T> &p, const std::vector<U> &tree) {
 template <typename T, typename U>
 std::enable_if_t<!std::is_same<polynomial<T>, U>::value, polynomial<T>>
 interpolation(const std::vector<U> &x, const std::vector<U> &y) {
-    int n = (int) x.size();
+    int n = (int)x.size();
 
     auto tree = product_tree<T>(x);
     auto ps = multipoint_evaluation(tree[1].derivative(), tree);
@@ -77,7 +77,7 @@ interpolation(const std::vector<U> &x, const std::vector<U> &y) {
 template <typename T, typename U>
 std::enable_if_t<std::is_same<polynomial<T>, U>::value, polynomial<T>>
 interpolation(const std::vector<U> &tree, const std::vector<U> &y) {
-    int n = (int) tree.size() / 2;
+    int n = (int)tree.size() / 2;
     auto ps = multipoint_evaluation(tree[1].derivative(), tree);
     auto recurse = [&](int i, const auto &self) -> polynomial<T> {
         if (i >= n) {
@@ -89,4 +89,4 @@ interpolation(const std::vector<U> &tree, const std::vector<U> &y) {
     return recurse(1, recurse);
 }
 
-}
+} // namespace polynomials

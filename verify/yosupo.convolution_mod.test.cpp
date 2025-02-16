@@ -4,7 +4,7 @@
 using namespace std;
 
 #include "algebra/mint/static_mint.hpp"
-#include "polynomial/ntt.hpp"
+#include "polynomials/ntt.hpp"
 
 int main() {
     ios::sync_with_stdio(false);

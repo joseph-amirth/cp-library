@@ -4,7 +4,7 @@
 using namespace std;
 
 #include "algebra/mint/static_mint.hpp"
-#include "polynomial/bitwise_convolution.hpp"
+#include "polynomials/bitwise_convolution/xor.hpp"
 
 int main() {
     int n;
@@ -18,7 +18,7 @@ int main() {
     for (auto &x : b)
         cin >> x;
 
-    using polynomial::xor_convolution;
+    using polynomials::xor_convolution;
 
     auto c = xor_convolution(a, b);
     for (auto &x : c)

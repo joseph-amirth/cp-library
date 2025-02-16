@@ -4,7 +4,7 @@
 using namespace std;
 
 #include "algebra/mint/static_mint.hpp"
-#include "polynomial/bitwise_convolution.hpp"
+#include "polynomials/bitwise_convolution/subset.hpp"
 
 int main() {
     int n;
@@ -18,7 +18,7 @@ int main() {
     for (auto &x : b)
         cin >> x;
 
-    using polynomial::subset_convolution;
+    using polynomials::subset_convolution;
 
     auto c = subset_convolution(a, b);
     for (auto &x : c)
