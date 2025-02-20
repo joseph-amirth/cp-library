@@ -11,28 +11,30 @@ using namespace std;
 using mint = algebra::static_mint<998244353>;
 using range_query::lazy_segment_tree;
 
-struct lazy_update {
-    using tag_type = algebra::affine_function<mint>;
+struct range_affine {
+    using value_type = algebra::affine_function<mint>;
+    using target_type = mint;
 
-    static tag_type e() {
-        return tag_type();
+    value_type id() {
+        return value_type();
     }
 
-    static void apply(tag_type &lazy_val, mint &value, tag_type &tag, int l, int r) {
-        value = lazy_val.a * value + (r - l + 1) * lazy_val.b;
-        tag = lazy_val(tag);
+    value_type op(value_type &f, value_type &g) {
+        return f(g);
+    }
+
+    target_type apply(value_type &f, mint x, int size) {
+        return f.a * x + f.b * size;
+    }
+
+    std::pair<value_type, value_type> split(value_type &f, int size) {
+        return std::make_pair(f, f);
     }
 };
 
-struct range_affine_range_sum : public lazy_segment_tree<algebra::groups::sum<mint>, lazy_update> {
+struct range_affine_range_sum : public lazy_segment_tree<algebra::groups::sum<mint>, range_affine> {
     template <typename... Args>
-    range_affine_range_sum(Args &&...args) : lazy_segment_tree<algebra::groups::sum<mint>, lazy_update>(std::forward<Args>(args)...) {}
-
-    void range_affine(int l, int r, algebra::affine_function<mint> f) {
-        split_range<true>(l, r, [&f, this](int i, int l, int r) {
-            lazy_update::apply(f, t[i], tag[i], l, r);
-        });
-    }
+    range_affine_range_sum(Args &&...args) : lazy_segment_tree<algebra::groups::sum<mint>, range_affine>(std::forward<Args>(args)...) {}
 };
 
 int main() {
@@ -56,7 +58,7 @@ int main() {
             int l, r;
             mint b, c;
             cin >> l >> r >> b >> c, --r;
-            st.range_affine(l, r, algebra::affine_function<mint>(b, c));
+            st.range_update(l, r, algebra::affine_function<mint>(b, c));
         } else {
             int l, r;
             cin >> l >> r, --r;

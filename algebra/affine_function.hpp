@@ -20,6 +20,8 @@ struct affine_function {
     T operator()(const T &x) const {
         return a * x + b;
     }
+
+    auto operator<=>(const affine_function &) const = default;
 };
 
 namespace monoids {
