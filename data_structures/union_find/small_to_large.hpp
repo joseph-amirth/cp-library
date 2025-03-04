@@ -2,6 +2,8 @@
 
 #include <vector>
 
+namespace data_structures {
+
 struct union_find {
     int n, c;
     std::vector<int> p;
@@ -32,7 +34,7 @@ struct union_find {
         if (v[s2].size() > v[s1].size()) {
             std::swap(s1, s2);
         }
-        for (int i: v[s2]) {
+        for (int i : v[s2]) {
             v[s1].push_back(i);
             p[i] = s1;
         }
@@ -41,3 +43,5 @@ struct union_find {
         return true;
     }
 };
+
+} // namespace data_structures

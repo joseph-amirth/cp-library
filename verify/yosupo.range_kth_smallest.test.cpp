@@ -3,7 +3,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-#include "data-structures/static-wavelet-tree.hpp"
+#include "data_structures/static_wavelet_tree.hpp"
 
 using data_structures::static_wavelet_tree;
 
@@ -15,7 +15,8 @@ int main() {
     cin >> n >> q;
 
     vector<int> a(n);
-    for (auto &x : a) cin >> x;
+    for (auto &x : a)
+        cin >> x;
 
     static_wavelet_tree wt(a.begin(), a.end());
 

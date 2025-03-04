@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../../data-structures/union-find/union-find.hpp"
-#include "../edge.hpp"
-#include "../undirected_graph.hpp"
+#include "data_structures/union_find/basic.hpp"
+#include "graphs/edge.hpp"
+#include "graphs/undirected_graph.hpp"
 #include <numeric>
 
 namespace graphs {
@@ -17,7 +17,7 @@ std::pair<weight_sum_t<Edge>, std::vector<int>> kruskal_mst(const undirected_gra
         return g.edges[i].w < g.edges[j].w;
     });
 
-    union_find uf(g.n);
+    data_structures::union_find uf(g.n);
 
     weight_sum_type mst_weight = 0;
 
