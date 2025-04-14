@@ -1,10 +1,10 @@
 #pragma once
 
+#include <array>
 #include <bitset>
 #include <vector>
-#include <array>
 
-template<int N>
+template <int N>
 struct bitwise_trie {
     struct node {
         int cnt;
@@ -24,7 +24,7 @@ struct bitwise_trie {
         t[cur].cnt += freq;
         for (int i = N - 1; i >= 0; i--) {
             if (t[cur].next[b[i]] == -1) {
-                t[cur].next[b[i]] = (int) t.size();
+                t[cur].next[b[i]] = (int)t.size();
                 t.emplace_back();
             }
             cur = t[cur].next[b[i]];
