@@ -1,7 +1,7 @@
-/cmake-build-debug/
-/.idea/
+*.cpp
+!template.cpp
+*.txt
+/build
+
 /.verify-helper
 !.verify-helper/config.toml
-main
-main.cpp
-expand.cpp
