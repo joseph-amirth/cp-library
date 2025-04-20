@@ -125,8 +125,7 @@ struct basic_segment_tree {
 
 template <algebra::Monoid M>
 struct segment_tree : public basic_segment_tree<M, false> {
-    template <typename... Args>
-    segment_tree(Args &&...args) : basic_segment_tree<M, false>(std::forward<Args>(args)...) {}
+    using basic_segment_tree<M, false>::basic_segment_tree;
 };
 
 } // namespace range_query
