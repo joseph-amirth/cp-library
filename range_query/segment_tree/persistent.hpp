@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../../algebra/concepts.hpp"
+#include "algebra/concepts.hpp"
+
 #include <cassert>
-#include <utility>
 #include <vector>
 
 namespace range_query {
@@ -142,8 +142,7 @@ struct basic_persistent_segment_tree {
 
 template <algebra::Monoid M>
 struct persistent_segment_tree : public basic_persistent_segment_tree<M, false> {
-    template <typename... Args>
-    persistent_segment_tree(Args &&...args) : basic_persistent_segment_tree<M, false>(std::forward<Args>(args)...) {}
+    using basic_persistent_segment_tree<M, false>::basic_persistent_segment_tree;
 };
 
 } // namespace range_query

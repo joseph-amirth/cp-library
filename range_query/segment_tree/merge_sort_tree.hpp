@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../algebra/monoids/merge.hpp"
+#include "algebra/monoids/merge.hpp"
 #include "basic.hpp"
 
 #include <algorithm>
@@ -18,8 +18,6 @@ struct merge_sort_tree : segment_tree<algebra::merge<R, C>> {
     using segment_tree<M>::n;
     using segment_tree<M>::t;
     using segment_tree<M>::build;
-
-    merge_sort_tree() {}
 
     template <std::forward_iterator I>
     merge_sort_tree(C compare, I first, I last) : segment_tree<M>(M(compare), std::distance(first, last)) {

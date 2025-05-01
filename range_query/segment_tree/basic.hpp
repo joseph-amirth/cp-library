@@ -1,10 +1,10 @@
 #pragma once
 
+#include "algebra/concepts.hpp"
+
 #include <cassert>
 #include <iterator>
 #include <vector>
-
-#include "../../algebra/concepts.hpp"
 
 namespace range_query {
 
@@ -114,6 +114,10 @@ struct basic_segment_tree {
             ans = monoid.op(ans, t[i]);
         });
         return ans;
+    }
+
+    value_type all() {
+        return t[1];
     }
 
     void point_assign(int p, const value_type &x) {

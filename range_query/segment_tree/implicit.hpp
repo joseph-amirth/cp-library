@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../../algebra/concepts.hpp"
+#include "algebra/concepts.hpp"
+
 #include <cassert>
-#include <utility>
 #include <vector>
 
 namespace range_query {
@@ -131,12 +131,15 @@ struct basic_implicit_segment_tree {
         });
         return ans;
     }
+
+    value_type all() {
+        return nodes.front().val;
+    }
 };
 
 template <algebra::Monoid M, Initializer<typename M::value_type> I>
 struct implicit_segment_tree : public basic_implicit_segment_tree<M, I, false> {
-    template <typename... Args>
-    implicit_segment_tree(Args &&...args) : basic_implicit_segment_tree<M, I, false>(std::forward<Args>(args)...) {}
+    using basic_implicit_segment_tree<M, I, false>::basic_implicit_segment_tree;
 };
 
 } // namespace range_query
