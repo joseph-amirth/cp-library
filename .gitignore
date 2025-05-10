@@ -1,6 +1,6 @@
-*.cpp
-!template.cpp
-*.txt
+/*.cpp
+!/template.cpp
+/*.txt
 /build
 
 /.verify-helper
