@@ -1,6 +1,7 @@
 #pragma once
 
 #include "data_structures/tensor.hpp"
+#include <cstdint>
 #include <initializer_list>
 
 namespace linear_algebra {
@@ -21,6 +22,14 @@ struct matrix : public data_structures::tensor<T, 2> {
             }
             i += 1;
         }
+    }
+
+    static matrix eye(int n) {
+        matrix result(n, n);
+        for (int i = 0; i < n; i++) {
+            result[i][i] = T(1);
+        }
+        return result;
     }
 
     matrix &operator+=(const matrix &other) {
@@ -44,7 +53,7 @@ struct matrix : public data_structures::tensor<T, 2> {
     }
 
     matrix &operator*=(const matrix &other) {
-        return (*this = *this + other);
+        return (*this = *this * other);
     }
 
     matrix operator+(const matrix &other) const {
@@ -63,12 +72,25 @@ struct matrix : public data_structures::tensor<T, 2> {
         matrix result(m1, n2);
         for (int i = 0; i < m1; i++) {
             for (int j = 0; j < n1; j++) {
-                for (int kk = 0; kk < n2; kk++) {
-                    result[i][kk] += (*this)[i][j] * other[j][kk];
+                for (int k = 0; k < n2; k++) {
+                    result[i][k] += (*this)[i][j] * other[j][k];
                 }
             }
         }
         return result;
+    }
+
+    matrix pow(std::uint64_t k) const {
+        auto [m, n] = shape;
+        assert(m == n);
+
+        matrix ans = eye(m), x(*this);
+        for (; k > 0; k /= 2) {
+            if (k & 1)
+                ans *= x;
+            x *= x;
+        }
+        return ans;
     }
 };
 

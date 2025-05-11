@@ -102,7 +102,7 @@ class tensor {
         return tensor_view<T, D - 1>(&shape[1], &strides[1], const_cast<T *>(&data[offset]));
     }
 
-    const std::array<int, D> shape;
+    std::array<int, D> shape;
 
   private:
     static std::array<int, D> get_strides(const std::array<int, D> &shape) {
@@ -114,7 +114,7 @@ class tensor {
         return strides;
     }
 
-    const std::array<int, D> strides;
+    std::array<int, D> strides;
     std::vector<T> data;
 };
 
