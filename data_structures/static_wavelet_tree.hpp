@@ -1,9 +1,8 @@
 #pragma once
 
-#include <vector>
+#include "misc/coordinate-compress.hpp"
 #include <cassert>
-
-#include "../miscellaneous/coordinate-compress.hpp"
+#include <vector>
 
 namespace data_structures {
 
@@ -110,4 +109,4 @@ struct static_wavelet_tree {
     }
 };
 
-}
+} // namespace data_structures

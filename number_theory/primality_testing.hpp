@@ -1,13 +1,11 @@
 #pragma once
 
+#include "misc/type_promotion.hpp"
+#include "modular_arithmetic.hpp"
 #include <cassert>
 #include <chrono>
 #include <concepts>
-#include <iostream>
 #include <random>
-
-#include "../miscellaneous/type_promotion.hpp"
-#include "modular_arithmetic.hpp"
 
 namespace number_theory {
 

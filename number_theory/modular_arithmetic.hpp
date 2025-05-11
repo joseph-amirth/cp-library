@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../miscellaneous/type_promotion.hpp"
+#include "misc/type_promotion.hpp"
 #include <cassert>
 #include <concepts>
 
