@@ -7,66 +7,114 @@
 namespace data_structures {
 
 template <typename T, int D>
-struct tensor_view {
+class tensor_view {
     static_assert(0 < D, "Dimension should be positive");
 
     template <typename T1, int D1>
-    friend struct tensor_view;
+    friend class tensor_view;
 
+    template <typename T1, int D1>
+    friend class tensor;
+
+  public:
     int size() const {
-        return *dims_ptr;
+        return shape[0];
     }
 
     T &operator[](int i)
         requires(D == 1)
     {
-        return data_ptr[i];
+        assert(0 <= i && i < shape[0]);
+        return data[i];
     }
 
     const T &operator[](int i) const
         requires(D == 1)
     {
-        return data_ptr[i];
+        assert(0 <= i && i < shape[0]);
+        return data[i];
     }
 
-    tensor_view<T, D - 1> operator[](int i) {
-        int offset = (*strides_ptr) * i;
-        return tensor_view<T, D - 1>(dims_ptr + 1, strides_ptr + 1, data_ptr + offset);
+    tensor_view<T, D - 1> operator[](int i)
+        requires(D > 1)
+    {
+        assert(0 <= i && i < shape[0]);
+        int offset = strides[0] * i;
+        return tensor_view<T, D - 1>(&shape[1], &strides[1], &data[offset]);
     }
 
     const tensor_view<T, D - 1> operator[](int i) const
         requires(D > 1)
     {
-        int offset = (*strides_ptr) * i;
-        return tensor_view<T, D - 1>(dims_ptr + 1, strides_ptr + 1, data_ptr + offset);
-    }
-
-  protected:
-    const int *dims_ptr, *strides_ptr;
-    T *data_ptr;
-
-    tensor_view() {}
-    tensor_view(const int *dims_ptr, const int *strides_ptr, T *data_ptr) : dims_ptr(dims_ptr), strides_ptr(strides_ptr), data_ptr(data_ptr) {}
-};
-
-template <typename T, int D>
-struct tensor : public tensor_view<T, D> {
-    static_assert(0 < D, "Dimension should be positive");
-
-    tensor(const std::array<int, D> &dims) : tensor_view<T, D>(), dims(dims), strides() {
-        int prod = 1;
-        for (int i = D - 1; i >= 0; i--) {
-            strides[i] = prod;
-            prod *= dims[i];
-        }
-        data.assign(prod, T());
-        this->dims_ptr = this->dims.data();
-        this->strides_ptr = this->strides.data();
-        this->data_ptr = this->data.data();
+        assert(0 <= i && i < shape[0]);
+        int offset = strides[0] * i;
+        return tensor_view<T, D - 1>(&shape[1], &strides[1], &data[offset]);
     }
 
   private:
-    std::array<int, D> dims, strides;
+    const int *shape, *strides;
+    T *data;
+
+    tensor_view(const int *shape, const int *strides, T *data) : shape(shape), strides(strides), data(data) {}
+};
+
+template <typename T, int D>
+class tensor {
+    static_assert(0 < D, "Dimension should be positive");
+
+  public:
+    tensor(const std::array<int, D> &shape, const T &val = T()) : shape(shape), strides(get_strides(shape)) {
+        int prod = shape.front() * strides.front();
+        data.assign(prod, val);
+    }
+
+    int size() const {
+        return shape[0];
+    }
+
+    T &operator[](int i)
+        requires(D == 1)
+    {
+        assert(0 <= i && i < shape[0]);
+        return data[i];
+    }
+
+    const T &operator[](int i) const
+        requires(D == 1)
+    {
+        assert(0 <= i && i < shape[0]);
+        return data[i];
+    }
+
+    tensor_view<T, D - 1> operator[](int i)
+        requires(D > 1)
+    {
+        assert(0 <= i && i < shape[0]);
+        int offset = strides[0] * i;
+        return tensor_view<T, D - 1>(&shape[1], &strides[1], &data[offset]);
+    }
+
+    const tensor_view<T, D - 1> operator[](int i) const
+        requires(D > 1)
+    {
+        assert(0 <= i && i < shape[0]);
+        int offset = strides[0] * i;
+        return tensor_view<T, D - 1>(&shape[1], &strides[1], const_cast<T *>(&data[offset]));
+    }
+
+    const std::array<int, D> shape;
+
+  private:
+    static std::array<int, D> get_strides(const std::array<int, D> &shape) {
+        std::array<int, D> strides;
+        for (int i = D - 1, prod = 1; i >= 0; i--) {
+            strides[i] = prod;
+            prod *= shape[i];
+        }
+        return strides;
+    }
+
+    const std::array<int, D> strides;
     std::vector<T> data;
 };
 

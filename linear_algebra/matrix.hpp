@@ -7,7 +7,7 @@ namespace linear_algebra {
 
 template <typename T>
 struct matrix : public data_structures::tensor<T, 2> {
-    using data_structures::tensor<T, 2>::size;
+    using data_structures::tensor<T, 2>::shape;
 
     matrix(int m, int n) : data_structures::tensor<T, 2>({m, n}) {}
 
@@ -23,16 +23,8 @@ struct matrix : public data_structures::tensor<T, 2> {
         }
     }
 
-    int rows() const {
-        return size();
-    }
-
-    int cols() const {
-        return size() ? (*this)[0].size() : 0;
-    }
-
     matrix &operator+=(const matrix &other) {
-        int m = rows(), n = cols();
+        auto [m, n] = shape;
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
                 (*this)[i][j] += other[i][j];
@@ -42,7 +34,7 @@ struct matrix : public data_structures::tensor<T, 2> {
     }
 
     matrix &operator-=(const matrix &other) {
-        int m = rows(), n = cols();
+        auto [m, n] = shape;
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
                 (*this)[i][j] -= other[i][j];
@@ -64,13 +56,14 @@ struct matrix : public data_structures::tensor<T, 2> {
     }
 
     matrix operator*(const matrix &other) const {
-        int m = rows(), n = cols(), k = other.cols();
-        assert(n == other.rows());
+        auto [m1, n1] = shape;
+        auto [m2, n2] = other.shape;
+        assert(n1 == m2);
 
-        matrix result(m, k);
-        for (int i = 0; i < m; i++) {
-            for (int j = 0; j < n; j++) {
-                for (int kk = 0; kk < k; kk++) {
+        matrix result(m1, n2);
+        for (int i = 0; i < m1; i++) {
+            for (int j = 0; j < n1; j++) {
+                for (int kk = 0; kk < n2; kk++) {
                     result[i][kk] += (*this)[i][j] * other[j][kk];
                 }
             }
