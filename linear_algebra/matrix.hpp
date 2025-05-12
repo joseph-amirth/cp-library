@@ -32,6 +32,17 @@ struct matrix : public data_structures::tensor<T, 2> {
         return result;
     }
 
+    matrix transpose() const {
+        auto [m, n] = shape;
+        matrix result(n, m);
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                result[j][i] = (*this)[i][j];
+            }
+        }
+        return result;
+    }
+
     matrix &operator+=(const matrix &other) {
         auto [m, n] = shape;
         for (int i = 0; i < m; i++) {
