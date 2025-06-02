@@ -1,6 +1,8 @@
 #pragma once
 
-template<typename T>
+namespace geometry {
+
+template <typename T>
 struct point {
     T x, y;
 
@@ -76,7 +78,7 @@ struct point {
         return !(*this < p);
     }
 
-    template<typename U>
+    template <typename U>
     operator point<U>() {
         return point<U>(x, y);
     }
@@ -85,3 +87,5 @@ struct point {
         return a.x * b.x + a.y * b.y;
     }
 };
+
+} // namespace geometry
