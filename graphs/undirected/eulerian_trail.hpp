@@ -14,12 +14,12 @@ std::optional<trail<Edge>> find_eulerian_trail(const undirected_graph<Edge> &g) 
 
     int start = g.n;
     if (odd_degs == 0) {
-        start = find_if(g.adj.begin(), g.adj.end(), [](auto &v) { return !v.empty(); }) - g.adj.begin();
+        start = std::find_if(g.adj.begin(), g.adj.end(), [](auto &v) { return !v.empty(); }) - g.adj.begin();
         if (start == g.n) {
             start = 0;
         }
     } else if (odd_degs == 2) {
-        start = find_if(g.adj.begin(), g.adj.end(), [](auto &v) { return v.size() % 2 != 0; }) - g.adj.begin();
+        start = std::find_if(g.adj.begin(), g.adj.end(), [](auto &v) { return v.size() % 2 != 0; }) - g.adj.begin();
     }
 
     if (start == g.n) {
