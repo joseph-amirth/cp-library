@@ -1,14 +1,14 @@
 #pragma once
 
+#include <concepts>
 #include <functional>
-#include <vector>
-#include <limits>
 
-template<typename range_t, typename result_t = range_t>
+namespace geometry {
+
+template <std::floating_point T, std::floating_point R = T>
 struct li_chao_tree {
-    static_assert(std::is_floating_point<range_t>::value, "Range type must be floating-point");
-
-    using F = std::function<result_t(range_t)>;
+    // TODO: Avoid using std::function somehow.
+    using F = std::function<R(T)>;
 
     static F default_f;
 
@@ -22,17 +22,17 @@ struct li_chao_tree {
     std::vector<node> t;
 
     int new_node() {
-        int i = (int) t.size();
+        int i = (int)t.size();
         t.emplace_back();
         return i;
     }
 
-    range_t min_l, max_r;
-    range_t epsilon;
+    T min_l, max_r;
+    T epsilon;
 
     li_chao_tree() {}
 
-    li_chao_tree(range_t min_l, range_t max_r, range_t epsilon = range_t(1)) {
+    li_chao_tree(T min_l, T max_r, T epsilon = T(1)) {
         assert(max_r - min_l >= epsilon);
         this->min_l = min_l;
         this->max_r = max_r;
@@ -42,10 +42,10 @@ struct li_chao_tree {
 
     void insert_function(F f) {
         int i = 0;
-        range_t l = min_l, r = max_r;
+        T l = min_l, r = max_r;
 
         while (r - l >= epsilon) {
-            range_t m = (l + r) / 2;
+            T m = (l + r) / 2;
             bool left = f(l) < t[i].f(l);
             bool mid = f(m) < t[i].f(m);
             if (mid) {
@@ -67,15 +67,15 @@ struct li_chao_tree {
         }
     }
 
-    result_t get_minimum(range_t x) {
-        result_t result = std::numeric_limits<result_t>::max();
+    R get_minimum(T x) {
+        R result = std::numeric_limits<R>::max();
 
         int i = 0;
-        range_t l = min_l, r = max_r;
+        T l = min_l, r = max_r;
 
         while (i != -1) {
             result = std::min(result, t[i].f(x));
-            range_t m = (l + r) / 2;
+            T m = (l + r) / 2;
             if (m - x > epsilon) {
                 i = t[i].left;
                 r = m;
@@ -89,7 +89,9 @@ struct li_chao_tree {
     }
 };
 
-template<typename range_t, typename result_t>
-typename li_chao_tree<range_t, result_t>::F li_chao_tree<range_t, result_t>::default_f = [](range_t x) -> result_t {
-    return std::numeric_limits<result_t>::max();
+template <std::floating_point T, std::floating_point R>
+typename li_chao_tree<T, R>::F li_chao_tree<T, R>::default_f = [](T x) -> R {
+    return std::numeric_limits<R>::max();
 };
+
+} // namespace geometry
