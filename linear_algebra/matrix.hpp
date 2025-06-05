@@ -83,8 +83,9 @@ struct matrix : public data_structures::tensor<T, 2> {
         matrix result(m1, n2);
         for (int i = 0; i < m1; i++) {
             for (int j = 0; j < n1; j++) {
+                T x = (*this)[i][j];
                 for (int k = 0; k < n2; k++) {
-                    result[i][k] += (*this)[i][j] * other[j][k];
+                    result[i][k] += x * other[j][k];
                 }
             }
         }
