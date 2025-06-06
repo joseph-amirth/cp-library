@@ -1,51 +1,49 @@
 #pragma once
 
-#include "../graphs/undirected_graph.hpp"
-#include <algorithm>
+#include "graphs/undirected_graph.hpp"
 
 namespace trees {
 
 template <typename Edge>
-std::vector<int> centroid_decomposition(const graphs::undirected_graph<Edge> &g) {
-    std::vector<int> c(g.n, -1), sz(g.n);
+void centroid_decomposition(const graphs::undirected_graph<Edge> &g, auto &&f) {
+    std::vector<bool> visited(g.n);
+    std::vector<int> sz(g.n);
 
-    auto dfs = [&](auto &&self, int u, int p) -> void {
+    auto find_szs = [&](auto &&self, int u, int p) -> void {
         sz[u] = 1;
         for (int i : g.adj[u]) {
             int v = g.edges[i].u ^ g.edges[i].v ^ u;
-            if (c[v] == -1 && v != p) {
+            if (!visited[v] && v != p) {
                 self(self, v, u);
                 sz[u] += sz[v];
             }
         }
     };
 
-    auto find_centroid = [&](auto &&self, int u, int p, int x) -> int {
+    auto find_centroid = [&](auto &&self, int x, int u, int p) -> int {
         for (int i : g.adj[u]) {
             int v = g.edges[i].u ^ g.edges[i].v ^ u;
-            if (c[v] == -1 && v != p && 2 * sz[v] > sz[x]) {
-                return self(self, v, u, x);
+            if (!visited[v] && v != p && 2 * sz[v] > sz[x]) {
+                return self(self, x, v, u);
             }
         }
         return u;
     };
 
-    auto decompose = [&](auto &&self, int x, int p) -> void {
-        dfs(dfs, x, -1);
-        int cen = find_centroid(find_centroid, x, -1, x);
-        c[cen] = p;
-        for (int i : g.adj[cen]) {
-            int v = g.edges[i].u ^ g.edges[i].v ^ cen;
-            if (c[v] == -1) {
-                self(self, v, cen);
+    auto decompose = [&](auto &&self, int x) -> void {
+        find_szs(find_szs, x, -1);
+        int c = find_centroid(find_centroid, x, x, -1);
+        f(c, visited);
+        visited[c] = true;
+        for (int i : g.adj[c]) {
+            int v = g.edges[i].u ^ g.edges[i].v ^ c;
+            if (!visited[v]) {
+                self(self, v);
             }
         }
     };
 
-    decompose(decompose, 0, -2);
-
-    *std::find(c.begin(), c.end(), -2) = -1;
-    return c;
+    decompose(decompose, 0);
 }
 
 } // namespace trees

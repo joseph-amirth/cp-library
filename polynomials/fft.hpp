@@ -1,13 +1,11 @@
 #pragma once
 
-#include <vector>
 #include <cmath>
+#include <vector>
 
 namespace polynomials {
 
 namespace fft {
-
-const static double pi = acos(-1.0);
 
 struct my_complex {
     double x, y;
@@ -42,14 +40,15 @@ std::vector<int> rev = {0, 1 << 30};
 
 void compute(int lg) {
     static int computed = 1;
-    if (lg <= computed) return;
+    if (lg <= computed)
+        return;
     rev.resize(1 << lg);
     for (int i = (1 << computed); i < (1 << lg); i++) {
         rev[i] = (rev[i >> 1] >> 1) | ((i & 1) << 30);
     }
     root.resize(1 << lg);
     for (int k = computed; k < lg; k++) {
-        double angle = pi / (1 << k);
+        double angle = std::numbers::pi / (1 << k);
         my_complex z(cos(angle), sin(angle));
         for (int i = (1 << (k - 1)); i < (1 << k); i++) {
             root[i << 1] = root[i];
@@ -81,13 +80,15 @@ void fft(std::vector<my_complex> &a) {
 
 template <typename T_in, typename T_out = T_in>
 std::vector<T_out> convolution(const std::vector<T_in> &a, const std::vector<T_in> &b) {
-    int n = 1;
-    while (n < a.size() + b.size()) {
+    int n = 1, szs = (int)(a.size() + b.size());
+    while (n < szs) {
         n <<= 1;
     }
     std::vector<my_complex> f(n), g(n);
     for (int i = 0; i < n; i++) {
-        f[i] = my_complex(i < a.size() ? a[i] : 0, i < b.size() ? b[i] : 0);
+        double real = (double)(i < (int)a.size() ? a[i] : 0);
+        double imag = (double)(i < (int)b.size() ? b[i] : 0);
+        f[i] = my_complex(real, imag);
     }
     fft(f);
     for (int i = 0; i < n; i++) {
@@ -114,8 +115,10 @@ std::vector<T_out> convolution_mod(const std::vector<T_in> &a, const std::vector
     }
     std::vector<my_complex> f(n), g(n);
     for (int i = 0; i < n; i++) {
-        if (i < a.size()) f[i] = my_complex(a[i] % S, a[i] / S);
-        if (i < b.size()) g[i] = my_complex(b[i] % S, b[i] / S);
+        if (i < a.size())
+            f[i] = my_complex(a[i] % S, a[i] / S);
+        if (i < b.size())
+            g[i] = my_complex(b[i] % S, b[i] / S);
     }
     fft(f), fft(g);
     std::vector<my_complex> h0(n), h1(n);
@@ -135,14 +138,16 @@ std::vector<T_out> convolution_mod(const std::vector<T_in> &a, const std::vector
         T_out t2 = llround(h0[i].y) % M * S % M;
         T_out t3 = llround(h1[i].x) % M * S * S % M;
         res[i] = t1;
-        if ((res[i] += t2) >= M) res[i] -= M;
-        if ((res[i] += t3) >= M) res[i] -= M;
+        if ((res[i] += t2) >= M)
+            res[i] -= M;
+        if ((res[i] += t3) >= M)
+            res[i] -= M;
     }
     return res;
 }
 
 template <typename T>
-void normalize(const std::vector<T> &a) {
+void normalize(std::vector<T> &a) {
     for (int i = int(a.size()) - 1; i >= 0; i--) {
         if (a[i]) {
             a.resize(i + 1);
@@ -152,6 +157,6 @@ void normalize(const std::vector<T> &a) {
     a.clear();
 }
 
-}
+} // namespace fft
 
-}
+} // namespace polynomials
