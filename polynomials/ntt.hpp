@@ -1,7 +1,8 @@
 #pragma once
 
-#include "../algebra/mint/concepts.hpp"
-#include "../number_theory/modular_arithmetic.hpp"
+#include "algebra/mint/concepts.hpp"
+#include "number_theory/mod_exp.hpp"
+#include "number_theory/primitive_root.hpp"
 #include <algorithm>
 #include <vector>
 

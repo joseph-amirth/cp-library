@@ -1,0 +1,25 @@
+#define PROBLEM "https://judge.yosupo.jp/problem/primitive_root"
+
+#include <bits/stdc++.h>
+using namespace std;
+
+#include "number_theory/primitive_root.hpp"
+
+using ll = long long;
+using number_theory::primitive_root;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int q;
+    cin >> q;
+
+    while (q--) {
+        ll n;
+        cin >> n;
+
+        cout << primitive_root(n) << '\n';
+    }
+    return 0;
+}

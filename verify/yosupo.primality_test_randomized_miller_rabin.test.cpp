@@ -3,13 +3,13 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-#include "number_theory/primality_testing.hpp"
+#include "number_theory/primality/miller_rabin.hpp"
 
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
 
-    using number_theory::randomized_miller_rabin;
+    using number_theory::is_prime;
 
     int q;
     cin >> q;
@@ -18,6 +18,6 @@ int main() {
         long long n;
         cin >> n;
 
-        cout << (randomized_miller_rabin<30>(n) ? "Yes" : "No") << '\n';
+        cout << (is_prime(n, 30) ? "Yes" : "No") << '\n';
     }
 }
