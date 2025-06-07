@@ -1,8 +1,10 @@
 #pragma once
 
 #include "algebra/mint/concepts.hpp"
+#include "number_theory/factorize/naive.hpp"
 #include "number_theory/mod_exp.hpp"
 #include "number_theory/primitive_root.hpp"
+
 #include <algorithm>
 #include <vector>
 
@@ -12,7 +14,9 @@ namespace ntt {
 
 template <typename T>
 constexpr T ntt_root(T n) {
-    auto root = number_theory::primitive_root(n);
+    auto root = number_theory::primitive_root(n, [](T x) {
+        return number_theory::factorize(x);
+    });
     return number_theory::mod_exp(root, (n - 1) >> __builtin_ctz(n - 1), n);
 }
 

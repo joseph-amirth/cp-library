@@ -1,6 +1,6 @@
 #pragma once
 
-#include "number_theory/factorize/pollard_rho.hpp"
+#include "number_theory/concepts.hpp"
 #include "number_theory/mod_exp.hpp"
 
 #include <cassert>
@@ -9,11 +9,10 @@
 namespace number_theory {
 
 template <std::integral T>
-constexpr T primitive_root(T n) {
+constexpr T primitive_root(T n, Factorizer<T> auto factorize) {
     assert(1 < n);
 
     auto factors = factorize(n - 1);
-    factors.erase(unique(factors.begin(), factors.end()), factors.end());
 
     for (T i = 1; i < n; i++) {
         bool is_primitive_root = true;

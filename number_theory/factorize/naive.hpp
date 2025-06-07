@@ -6,7 +6,7 @@
 namespace number_theory {
 
 template <std::integral T>
-std::vector<T> factorize(T n) {
+constexpr std::vector<T> factorize(T n) {
     std::vector<T> factors;
     for (T i = 2; i * i <= n; i++) {
         while (n % i == 0) {

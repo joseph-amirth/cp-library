@@ -3,9 +3,11 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+#include "number_theory/factorize/pollard_rho.hpp"
 #include "number_theory/primitive_root.hpp"
 
 using ll = long long;
+using number_theory::factorize;
 using number_theory::primitive_root;
 
 int main() {
@@ -19,7 +21,9 @@ int main() {
         ll n;
         cin >> n;
 
-        cout << primitive_root(n) << '\n';
+        cout << primitive_root(n, [](ll x) {
+            return factorize(x);
+        }) << '\n';
     }
     return 0;
 }
