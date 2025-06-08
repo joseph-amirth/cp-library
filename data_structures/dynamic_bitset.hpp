@@ -2,6 +2,8 @@
 
 #include <cassert>
 #include <cstddef>
+#include <iostream>
+#include <string>
 #include <vector>
 
 namespace data_structures {
@@ -15,6 +17,16 @@ struct dynamic_bitset {
     std::vector<word_type> words;
 
     dynamic_bitset(int n) : n(n), words((n + W - 1) / W) {}
+
+    static dynamic_bitset from_bitstring(const std::string &s) {
+        int sz = (int)s.size();
+        dynamic_bitset bitset(sz);
+        for (int i = 0; i < sz; i++) {
+            word_type b = s[i] - '0';
+            bitset.words[i / W] |= b << (i % W);
+        }
+        return bitset;
+    }
 
     std::size_t size() const {
         return n;
@@ -83,6 +95,20 @@ struct dynamic_bitset {
 
     friend dynamic_bitset operator^(const dynamic_bitset &lhs, const dynamic_bitset &rhs) {
         return dynamic_bitset(lhs) ^= rhs;
+    }
+
+    friend std::ostream &operator<<(std::ostream &os, const dynamic_bitset &bitset) {
+        for (int i = 0; i < (int)bitset.n; i++) {
+            os << bitset.test(i);
+        }
+        return os;
+    }
+
+    friend std::istream &operator>>(std::istream &is, dynamic_bitset &bitset) {
+        std::string s;
+        is >> s;
+        bitset = dynamic_bitset::from_bitstring(s);
+        return is;
     }
 };
 
