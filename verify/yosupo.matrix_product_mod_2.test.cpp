@@ -6,7 +6,7 @@ using namespace std;
 #include "linear_algebra/mod2/matrix.hpp"
 
 using ll = long long;
-using linear_algebra::matrix_mod2;
+using linear_algebra::mod2::matrix;
 
 int main() {
     ios::sync_with_stdio(false);
@@ -15,17 +15,17 @@ int main() {
     int n, m, k;
     cin >> n >> m >> k;
 
-    matrix_mod2 a(n, m), b(m, k);
+    matrix a(n, m), b(m, k);
     for (int i = 0; i < n; i++) {
-        cin >> a.data[i];
+        cin >> a[i];
     }
     for (int i = 0; i < m; i++) {
-        cin >> b.data[i];
+        cin >> b[i];
     }
 
     auto c = a * b;
     for (int i = 0; i < n; i++) {
-        cout << c.data[i] << '\n';
+        cout << c[i] << '\n';
     }
     return 0;
 }

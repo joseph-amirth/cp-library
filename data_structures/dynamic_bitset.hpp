@@ -1,7 +1,9 @@
 #pragma once
 
+#include <bit>
 #include <cassert>
 #include <cstddef>
+#include <cstdint>
 #include <iostream>
 #include <string>
 #include <vector>
@@ -9,9 +11,9 @@
 namespace data_structures {
 
 struct dynamic_bitset {
-    static constexpr int W = 64;
+    using word_type = std::uint64_t;
 
-    using word_type = unsigned long long;
+    static constexpr int W = 8 * sizeof(word_type);
 
     std::size_t n;
     std::vector<word_type> words;
@@ -36,16 +38,6 @@ struct dynamic_bitset {
         return words[i / W] >> (i % W) & 1;
     }
 
-    std::size_t find_first() const {
-        for (int i = 0; i < (int)words.size(); i++) {
-            if (words[i]) {
-                word_type lsb = words[i] & -words[i];
-                return i * W + __builtin_ctzll(lsb);
-            }
-        }
-        return size();
-    }
-
     dynamic_bitset &set(std::size_t i) {
         words[i / W] |= 1ull << (i % W);
         return *this;
@@ -59,6 +51,30 @@ struct dynamic_bitset {
     dynamic_bitset &flip(std::size_t i) {
         words[i / W] ^= 1ull << (i % W);
         return *this;
+    }
+
+    std::size_t find_first() const {
+        for (int i = 0; i < (int)words.size(); i++) {
+            if (words[i]) {
+                word_type lsb = words[i] & -words[i];
+                return i * W + __builtin_ctzll(lsb);
+            }
+        }
+        return size();
+    }
+
+    bool any() const {
+        for (int i = 0; i < (int)words.size(); i++) {
+            if (words[i]) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    void swap(dynamic_bitset &other) {
+        std::swap(n, other.n);
+        words.swap(other.words);
     }
 
     dynamic_bitset &operator&=(const dynamic_bitset &other) {
