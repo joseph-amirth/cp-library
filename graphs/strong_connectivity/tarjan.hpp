@@ -25,7 +25,7 @@ std::vector<std::vector<int>> tarjan_sccs(const Graph &g) {
             low[u] = std::min(low[u], low[v]);
         }
         if (low[u] == tin[u]) {
-            int sz = std::find(all.rbegin(), all.rend(), u) - all.rbegin();
+            int sz = (int)(std::find(all.rbegin(), all.rend(), u) - all.rbegin());
             sccs.emplace_back(sz + 1);
             for (int i = 0; i < sz; i++) {
                 low[all.back()] = g.n;

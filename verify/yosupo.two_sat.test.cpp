@@ -5,6 +5,8 @@ using namespace std;
 
 #include "graphs/two_sat.hpp"
 
+using graphs::two_sat;
+
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
@@ -22,15 +24,16 @@ int main() {
         y = y < 0 ? -y - 1 + n : y - 1;
     }
 
-    auto assignment = two_sat(n, clauses);
+    auto maybe_sol = two_sat(n, clauses);
 
-    if (assignment.empty()) {
+    if (!maybe_sol.has_value()) {
         cout << "s UNSATISFIABLE\n";
     } else {
+        auto &sol = maybe_sol.value();
         cout << "s SATISFIABLE\n";
         cout << "v ";
         for (int i = 0; i < n; i++) {
-            cout << (assignment[i] ? i + 1 : -i - 1) << ' ';
+            cout << (sol[i] ? i + 1 : -i - 1) << ' ';
         }
         cout << 0 << '\n';
     }
