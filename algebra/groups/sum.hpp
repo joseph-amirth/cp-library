@@ -1,6 +1,8 @@
 #pragma once
 
-#include "../concepts.hpp"
+#include "algebra/concepts.hpp"
+#include "algebra/monoids/sum.hpp"
+
 #include <type_traits>
 
 namespace algebra {
@@ -8,16 +10,8 @@ namespace algebra {
 namespace groups {
 
 template <typename T>
-struct sum {
-    using value_type = T;
-
-    sum() {}
-
-    value_type id() { return value_type(0); }
-
-    value_type op(value_type a, value_type b) {
-        return a + b;
-    }
+struct sum : public monoids::sum<T> {
+    using typename monoids::sum<T>::value_type;
 
     value_type inv(value_type a) {
         return -a;
