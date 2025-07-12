@@ -12,9 +12,13 @@ template <typename T>
 struct product {
     using value_type = T;
 
-    product() {}
+    value_type _id;
 
-    value_type id() { return value_type(1); }
+    product() : _id(1) {}
+
+    product(value_type _id) : _id(_id) {}
+
+    value_type id() { return _id; }
 
     value_type op(value_type a, value_type b) {
         return a * b;

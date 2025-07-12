@@ -12,9 +12,13 @@ template <typename T>
 struct sum {
     using value_type = T;
 
-    sum() {}
+    value_type _id;
 
-    value_type id() { return value_type(0); }
+    sum() : _id(0) {}
+
+    sum(value_type _id) : _id(_id) {}
+
+    value_type id() { return _id; }
 
     value_type op(value_type a, value_type b) {
         return a + b;
