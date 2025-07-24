@@ -3,6 +3,7 @@
 #include "algebra/concepts.hpp"
 
 #include <cassert>
+#include <concepts>
 #include <iterator>
 #include <vector>
 
@@ -106,6 +107,50 @@ struct basic_segment_tree {
                 return false;
             }
         });
+    }
+
+    int find_leftmost(auto &&f) {
+        if (!f(all())) {
+            return n;
+        }
+        auto find = [&](auto &&self, int i, int l, int r) {
+            if (l == r) {
+                return l;
+            } else {
+                if constexpr (lazy) {
+                    push_down(i, l, r);
+                }
+                int m = (l + r) / 2;
+                if (f(t[i << 1])) {
+                    return self(self, i << 1, l, m);
+                } else {
+                    return self(self, i << 1 | 1, m + 1, r);
+                }
+            }
+        };
+        return find(find, 1, 0, n - 1);
+    }
+
+    int find_rightmost(auto &&f) {
+        if (!f(all())) {
+            return -1;
+        }
+        auto find = [&](auto &&self, int i, int l, int r) {
+            if (l == r) {
+                return l;
+            } else {
+                if constexpr (lazy) {
+                    push_down(i, l, r);
+                }
+                int m = (l + r) / 2;
+                if (f(t[i << 1 | 1])) {
+                    return self(self, i << 1 | 1, m + 1, r);
+                } else {
+                    return self(self, i << 1, l, m);
+                }
+            }
+        };
+        return find(find, 1, 0, n - 1);
     }
 
     value_type range_query(int l, int r) {
