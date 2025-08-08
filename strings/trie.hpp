@@ -1,16 +1,23 @@
-#pragma
+#pragma once
 
+#include "concepts.hpp"
+
+#include <array>
 #include <string>
 #include <vector>
-#include <array>
 
-template<char f = 'a', int K = 26>
+namespace strings {
+
+template <CharSet CS>
 struct trie {
-    struct node {
-        bool leaf;
-        std::array<int, K> next;
+    using char_set = CS;
+    using char_type = typename char_set::char_type;
 
-        node() : leaf(false) {
+    struct node {
+        int cnt;
+        std::array<int, char_set::size()> next;
+
+        node() : cnt(0) {
             next.fill(-1);
         }
     };
@@ -21,28 +28,30 @@ struct trie {
 
     void insert(const std::string &s) {
         int cur = 0;
-        for (char ch: s) {
-            if (t[cur].next[ch - f] == -1) {
-                t[cur].next[ch - f] = (int) t.size();
+        for (char ch : s) {
+            if (t[cur].next[char_set::index_of(ch)] == -1) {
+                t[cur].next[char_set::index_of(ch)] = (int)t.size();
                 t.emplace_back();
             }
-            cur = t[cur].next[ch - f];
+            cur = t[cur].next[char_set::index_of(ch)];
         }
-        t[cur].leaf = true;
+        t[cur].cnt += 1;
     }
 
-    bool search(const std::string &s) {
+    int count(const std::string &s) {
         int cur = 0;
-        for (char ch: s) {
-            if (t[cur].next[ch - f] == -1) {
+        for (char ch : s) {
+            if (t[cur].next[char_set::index_of(ch)] == -1) {
                 return false;
             }
-            cur = t[cur].next[ch - f];
+            cur = t[cur].next[char_set::index_of(ch)];
         }
-        return t[cur].leaf;
+        return t[cur].cnt;
     }
 
     node &operator[](int i) {
         return t[i];
     }
 };
+
+} // namespace strings

@@ -44,7 +44,7 @@ struct char_range {
     }
 };
 
-template <typename...CharSets>
+template <typename... CharSets>
 struct char_set_union {
     using char_type = char;
 
@@ -69,13 +69,13 @@ struct char_set_union {
     }
 };
 
-template <typename Char, Char...chars>
+template <typename Char, Char... chars>
 using char_set = char_set_union<char_singleton<Char, chars>...>;
 
-using ascii = char_range<char, 0, 1 << 7>;
 using digits = char_range<char, '0', 10>;
-using lowercase_latin_alphabet = char_range<char, 'a', 26>;
-using uppercase_latin_alphabet = char_range<char, 'A', 26>;
-using latin_alphabet = char_set_union<lowercase_latin_alphabet, uppercase_latin_alphabet>;
+using lowercase_alphabet = char_range<char, 'a', 26>;
+using uppercase_alphabet = char_range<char, 'A', 26>;
+using alphabet = char_set_union<lowercase_alphabet, uppercase_alphabet>;
+using alphanumericals = char_set_union<lowercase_alphabet, uppercase_alphabet, digits>;
 
-}
+} // namespace strings
