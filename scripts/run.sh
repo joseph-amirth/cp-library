@@ -1,4 +1,4 @@
 #!/bin/bash
 
 FILE=${1:-main}
-make build/$FILE && exec build/$FILE
+make build/$FILE && echo "Running..." && exec build/$FILE

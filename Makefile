@@ -8,3 +8,6 @@ build/%: %.cpp $(CP_LIBRARY)
 
 help:
 	@echo "To build xyz.cpp, enter 'make build/xyz'"
+
+clean:
+	rm -rf build
