@@ -109,15 +109,16 @@ std::vector<T_out> convolution(const std::vector<T_in> &a, const std::vector<T_i
 
 template <typename T_in, typename T_out = T_in>
 std::vector<T_out> convolution_mod(const std::vector<T_in> &a, const std::vector<T_in> &b, int M) {
-    int S = int(sqrt(M)), n = 1;
-    while (n < a.size() + b.size()) {
+    int S = int(sqrt(M));
+    int n = 1, szs = (int)a.size() + (int)b.size();
+    while (n < szs) {
         n <<= 1;
     }
     std::vector<my_complex> f(n), g(n);
     for (int i = 0; i < n; i++) {
-        if (i < a.size())
+        if (i < (int)a.size())
             f[i] = my_complex(a[i] % S, a[i] / S);
-        if (i < b.size())
+        if (i < (int)b.size())
             g[i] = my_complex(b[i] % S, b[i] / S);
     }
     fft(f), fft(g);
